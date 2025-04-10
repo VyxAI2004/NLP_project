@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Từ đồng nghĩa - NLP Helper</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-language me-2"></i>
+                NLP Tool 
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/synonyms">
+                            <i class="fas fa-exchange-alt me-1"></i> Từ đồng nghĩa
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1 class="display-4">Công cụ tìm từ đồng nghĩa</h1>
+            <p class="lead">Tìm kiếm từ đồng nghĩa cho từ tiếng Việt</p>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-search me-2 text-primary"></i>
+                            <h5 class="mb-0">Tìm từ đồng nghĩa</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="synonyms-form">
+                            <div class="mb-3">
+                                <label for="word-input" class="form-label">Nhập từ cần tìm</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="word-input" placeholder="Nhập từ tiếng Việt (ví dụ: đẹp, nhanh, chạy...)" maxlength="50" required>
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-search me-1"></i> Tìm
+                                    </button>
+                                </div>
+                                <div class="form-text">Nhập một từ đơn tiếng Việt để tìm các từ đồng nghĩa</div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="result-card" class="card mb-4" style="display: none;">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-list-alt me-2 text-primary"></i>
+                            <h5 class="mb-0">Kết quả tìm kiếm</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span class="fw-bold">Từ gốc:</span>
+                            <span id="original-word" class="ms-2"></span>
+                        </div>
+                        <div class="mb-3">
+                            <span class="fw-bold">Từ đồng nghĩa:</span>
+                            <div id="synonyms-list" class="mt-2"></div>
+                        </div>
+                        <div class="text-muted small">
+                            <i class="fas fa-info-circle me-1"></i>
+                            <span id="processing-time"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-lightbulb me-2 text-primary"></i>
+                            <h5 class="mb-0">Tìm nhiều từ cùng lúc</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form id="batch-form">
+                            <div class="mb-3">
+                                <label for="batch-input" class="form-label">Nhập danh sách từ cần tìm</label>
+                                <textarea class="form-control" id="batch-input" rows="4" placeholder="Nhập các từ cách nhau bởi dấu phẩy hoặc xuống dòng (tối đa 50 từ)" required></textarea>
+                                <div class="form-text">Ví dụ: đẹp, nhanh, chạy, học</div>
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search-plus me-1"></i> Tìm nhiều từ
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="batch-result-card" class="card" style="display: none;">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-th-list me-2 text-primary"></i>
+                            <h5 class="mb-0">Kết quả tìm nhiều từ</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="batch-results" class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Từ gốc</th>
+                                        <th scope="col">Từ đồng nghĩa</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="batch-results-body">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-muted small mt-2">
+                            <i class="fas fa-info-circle me-1"></i>
+                            <span id="batch-processing-time"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle me-2 text-primary"></i>
+                            <h5 class="mb-0">Hướng dẫn</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p>Công cụ này giúp bạn tìm kiếm từ đồng nghĩa cho các từ tiếng Việt, giúp:</p>
+                        <ul>
+                            <li>Làm phong phú nội dung bài viết</li>
+                            <li>Tránh lặp từ trong văn bản</li>
+                            <li>Tạo dữ liệu cho tăng cường dữ liệu NLP</li>
+                        </ul>
+                        <div class="alert alert-info">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            <strong>Mẹo:</strong> Bạn nên nhập từ đơn để có kết quả chính xác nhất.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-history me-2 text-primary"></i>
+                            <h5 class="mb-0">Tìm kiếm gần đây</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="recent-searches">
+                            <div class="text-center text-muted">
+                                <i class="fas fa-search me-1"></i>
+                                Các từ bạn tìm kiếm sẽ xuất hiện ở đây
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-5 py-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <span> NLP tool | Công cụ xử lý ngôn ngữ tự nhiên tiếng Việt | Nguyễn Hoàng Vỹ - MSSV : 22110275 (UTE) </span>
+                <span>Phiên bản: 1.0.0</span>
+            </div>
+        </div>
+    </footer>
+    
+    <div class="dark-mode-toggle" id="dark-mode-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Các phần tử DOM
+            const synonymsForm = document.getElementById('synonyms-form');
+            const wordInput = document.getElementById('word-input');
+            const resultCard = document.getElementById('result-card');
+            const originalWord = document.getElementById('original-word');
+            const synonymsList = document.getElementById('synonyms-list');
+            const processingTime = document.getElementById('processing-time');
+            
+            const batchForm = document.getElementById('batch-form');
+            const batchInput = document.getElementById('batch-input');
+            const batchResultCard = document.getElementById('batch-result-card');
+            const batchResultsBody = document.getElementById('batch-results-body');
+            const batchProcessingTime = document.getElementById('batch-processing-time');
+            
+            const recentSearches = document.getElementById('recent-searches');
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            
+            // Lịch sử tìm kiếm
+            let searchHistory = JSON.parse(localStorage.getItem('synonymsSearchHistory') || '[]');
+            
+            // Hiển thị lịch sử tìm kiếm
+            function displaySearchHistory() {
+                if (searchHistory.length === 0) {
+                    recentSearches.innerHTML = `
+                        <div class="text-center text-muted">
+                            <i class="fas fa-search me-1"></i>
+                            Các từ bạn tìm kiếm sẽ xuất hiện ở đây
+                        </div>`;
+                    return;
+                }
+                
+                let historyHTML = '<div class="d-flex flex-wrap gap-2">';
+                const recentItems = searchHistory.slice(0, 10); // Chỉ hiển thị 10 từ gần nhất
+                
+                for (const item of recentItems) {
+                    historyHTML += `
+                        <a href="#" class="recent-item badge bg-light text-dark" data-word="${item}">${item}</a>
+                    `;
+                }
+                
+                historyHTML += '</div>';
+                recentSearches.innerHTML = historyHTML;
+                
+                // Gắn sự kiện click cho các từ tìm kiếm gần đây
+                document.querySelectorAll('.recent-item').forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const word = this.getAttribute('data-word');
+                        wordInput.value = word;
+                        synonymsForm.dispatchEvent(new Event('submit'));
+                    });
+                });
+            }
+            
+            // Thêm từ vào lịch sử tìm kiếm
+            function addToSearchHistory(word) {
+                // Xóa từ khỏi lịch sử nếu đã tồn tại (để đưa lên đầu)
+                searchHistory = searchHistory.filter(item => item !== word);
+                
+                // Thêm từ mới vào đầu danh sách
+                searchHistory.unshift(word);
+                
+                // Giới hạn lịch sử tối đa 20 từ
+                if (searchHistory.length > 20) {
+                    searchHistory = searchHistory.slice(0, 20);
+                }
+                
+                // Lưu vào localStorage
+                localStorage.setItem('synonymsSearchHistory', JSON.stringify(searchHistory));
+                
+                // Cập nhật hiển thị
+                displaySearchHistory();
+            }
+            
+            // Tìm từ đồng nghĩa
+            synonymsForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const word = wordInput.value.trim();
+                if (!word) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Chưa nhập từ',
+                        text: 'Vui lòng nhập từ cần tìm đồng nghĩa'
+                    });
+                    return;
+                }
+                
+                // Hiển thị loading
+                Swal.fire({
+                    title: 'Đang tìm...',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false
+                });
+                
+                // Gọi API
+                fetch('/api/find_synonyms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        word: word
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        Swal.close();
+                        
+                        if (data.success) {
+                            // Hiển thị kết quả
+                            resultCard.style.display = 'block';
+                            originalWord.textContent = data.word;
+                            
+                            // Thêm vào lịch sử tìm kiếm
+                            addToSearchHistory(data.word);
+                            
+                            if (data.synonyms && data.synonyms.length > 0) {
+                                const chips = data.synonyms.map(syn => 
+                                    `<span class="badge bg-primary me-2 mb-2">${syn}</span>`
+                                ).join('');
+                                synonymsList.innerHTML = chips;
+                            } else {
+                                synonymsList.innerHTML = '<div class="alert alert-warning">Không tìm thấy từ đồng nghĩa cho từ này.</div>';
+                            }
+                            
+                            processingTime.textContent = `Thời gian xử lý: ${data.processing_time}s`;
+                            
+                            // Cuộn đến kết quả
+                            resultCard.scrollIntoView({ behavior: 'smooth' });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: data.error || 'Đã xảy ra lỗi khi tìm từ đồng nghĩa'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.close();
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Đã xảy ra lỗi khi kết nối với máy chủ'
+                        });
+                    });
+            });
+            
+            // Tìm nhiều từ cùng lúc
+            batchForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const input = batchInput.value.trim();
+                if (!input) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Chưa nhập từ',
+                        text: 'Vui lòng nhập danh sách từ cần tìm đồng nghĩa'
+                    });
+                    return;
+                }
+                
+                // Phân tích danh sách từ
+                const words = input.split(/[,\n]/)
+                    .map(word => word.trim())
+                    .filter(word => word !== '');
+                
+                if (words.length === 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Danh sách trống',
+                        text: 'Vui lòng nhập ít nhất một từ'
+                    });
+                    return;
+                }
+                
+                if (words.length > 50) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Quá nhiều từ',
+                        text: 'Vui lòng nhập tối đa 50 từ mỗi lần'
+                    });
+                    return;
+                }
+                
+                // Hiển thị loading
+                Swal.fire({
+                    title: 'Đang tìm...',
+                    html: 'Đang xử lý ' + words.length + ' từ, quá trình này có thể mất một chút thời gian',
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false
+                });
+                
+                // Gọi API
+                fetch('/api/batch_crawl', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        words: words
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        Swal.close();
+                        
+                        if (data.success) {
+                            // Hiển thị kết quả
+                            batchResultsBody.innerHTML = '';
+                            const results = data.results;
+                            
+                            let index = 1;
+                            for (const word in results) {
+                                const synonyms = results[word];
+                                
+                                // Thêm vào lịch sử tìm kiếm
+                                addToSearchHistory(word);
+                                
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                    <td>${index}</td>
+                                    <td>${word}</td>
+                                    <td>${synonyms.length > 0 ? 
+                                        synonyms.map(syn => `<span class="badge bg-primary me-1">${syn}</span>`).join(' ') : 
+                                        '<span class="text-muted">Không tìm thấy</span>'}
+                                    </td>
+                                `;
+                                batchResultsBody.appendChild(row);
+                                index++;
+                            }
+                            
+                            batchResultCard.style.display = 'block';
+                            batchProcessingTime.textContent = `Đã xử lý ${Object.keys(results).length} từ trong ${data.processing_time}s`;
+                            
+                            // Cuộn đến kết quả
+                            batchResultCard.scrollIntoView({ behavior: 'smooth' });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Lỗi',
+                                text: data.error || 'Đã xảy ra lỗi khi tìm từ đồng nghĩa'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        Swal.close();
+                        console.error('Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi',
+                            text: 'Đã xảy ra lỗi khi kết nối với máy chủ'
+                        });
+                    });
+            });
+            
+            // Dark mode toggle
+            darkModeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                const icon = this.querySelector('i');
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.classList.replace('fa-moon', 'fa-sun');
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    icon.classList.replace('fa-sun', 'fa-moon');
+                    localStorage.setItem('darkMode', 'disabled');
+                }
+            });
+            
+            // Kiểm tra Dark Mode khi tải trang
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                document.querySelector('#dark-mode-toggle i').classList.replace('fa-moon', 'fa-sun');
+            }
+            
+            // Hiển thị lịch sử tìm kiếm
+            displaySearchHistory();
+        });
+    </script>
+</body>
+</html> 

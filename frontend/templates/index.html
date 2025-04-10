@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ứng dụng Xử lý Ngôn ngữ Tự nhiên</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+    <meta name="theme-color" content="#4285f4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-language me-2"></i>
+                NLP Tool 
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="fas fa-home me-1"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/train_model">
+                            <i class="fas fa-brain me-1"></i> Đào tạo mô hình
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/synonyms">
+                            <i class="fas fa-exchange-alt me-1"></i> Từ đồng nghĩa
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/recommendation">
+                            <i class="fas fa-exchange-alt me-1"></i> Hệ thống gợi ý
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-book me-1"></i> Hướng dẫn
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-info-circle me-1"></i> Về ứng dụng</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1 class="display-4">Ứng dụng Xử lý Ngôn ngữ Tự nhiên</h1>
+            <p class="lead">Công cụ giúp bạn phân tích và xử lý văn bản </p>
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <div class="row mb-4">
+            <div class="col-lg-6">
+                <div class="card input-card mb-4">
+                    <div class="card-header sticky-top">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-edit me-2 text-primary animated-icon"></i>
+                            <h5 class="mb-0">Văn bản đầu vào</h5>
+                            <div class="ms-auto d-md-none">
+                                <button class="btn btn-sm btn-outline-secondary" id="toggle-options-btn">
+                                    <i class="fas fa-cog"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="position-relative">
+                            <textarea id="input-text" class="form-control" rows="8" placeholder="Nhập văn bản cần xử lý ở đây..."></textarea>
+                            <input type="file" id="file-upload" class="d-none" accept=".txt,.doc,.docx,.pdf,.xlsx,.xls,.csv">
+                            <label for="file-upload" class="btn file-upload-btn" title="Tải file lên">
+                                <i class="fas fa-file-upload"></i>
+                            </label>
+                        </div>
+                        <div class="btn-toolbar mt-3">
+                            <button id="clear-btn" class="btn btn-light me-2">
+                                <i class="fas fa-eraser me-1"></i> Xóa
+                            </button>
+                            <button id="sample-btn" class="btn btn-info text-white">
+                                <i class="fas fa-magic me-1"></i> Dùng văn bản mẫu
+                            </button>
+                            <button id="history-btn" class="btn btn-secondary text-white ms-2" data-bs-toggle="modal" data-bs-target="#historyModal">
+                                <i class="fas fa-history me-1"></i> Lịch sử
+                            </button>
+                            <div class="ms-auto">
+                                <select id="category-select" class="form-select form-select-sm">
+                                    <option value="">-- Chọn danh mục mẫu --</option>
+                                    <option value="tích_cực">Văn bản tích cực</option>
+                                    <option value="tiêu_cực">Văn bản tiêu cực</option>
+                                    <option value="công_nghệ">Công nghệ</option>
+                                    <option value="thể_thao">Thể thao</option>
+                                    <option value="kinh_tế">Kinh tế</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card settings-card">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-sliders-h me-2 text-primary"></i>
+                            <h5 class="mb-0">Tùy chọn xử lý</h5>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        <!-- Tabs cho các nhóm xử lý -->
+                        <ul class="nav nav-tabs mt-3" id="processingTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="augmentation-tab" data-bs-toggle="tab" data-bs-target="#augmentation-content" type="button" role="tab">
+                                    <i class="fas fa-plus-circle me-1"></i> Tăng cường
+                                    <span class="option-badge" id="augmentation-badge">5</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="cleaning-tab" data-bs-toggle="tab" data-bs-target="#cleaning-content" type="button" role="tab">
+                                    <i class="fas fa-broom me-1"></i> Làm sạch
+                                    <span class="option-badge" id="cleaning-badge">0</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="vectorization-tab" data-bs-toggle="tab" data-bs-target="#vectorization-content" type="button" role="tab">
+                                    <i class="fas fa-vector-square me-1"></i> Vector hóa
+                                    <span class="option-badge" id="vectorization-badge">0</span>
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="analysis-tab" data-bs-toggle="tab" data-bs-target="#analysis-content" type="button" role="tab">
+                                    <i class="fas fa-chart-pie me-1"></i> Phân loại
+                                    <span class="option-badge" id="analysis-badge">1</span>
+                                </button>
+                            </li>
+                        </ul>
+                        
+                        <!-- Nội dung của các tab -->
+                        <div class="tab-content p-3 border border-top-0 rounded-bottom" id="processingTabContent">
+                            <!-- Tab tăng cường dữ liệu -->
+                            <div class="tab-pane fade show active" id="augmentation-content" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="option-actions">
+                                        <button class="btn btn-sm btn-outline-primary select-all-btn" data-group="augmentation">
+                                            <i class="fas fa-check-double me-1"></i> Chọn tất cả
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary ms-2 clear-all-btn" data-group="augmentation">
+                                            <i class="fas fa-times me-1"></i> Bỏ chọn tất cả
+                                        </button>
+                                    </div>
+                                    <div class="view-mode-toggle">
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-outline-secondary active" data-view="grid">
+                                                <i class="fas fa-th"></i>
+                                            </button>
+                                            <button class="btn btn-outline-secondary" data-view="list">
+                                                <i class="fas fa-list"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="option-group mb-3">
+                                    <div class="option-group-header" data-bs-toggle="collapse" data-bs-target="#augmentation-base-options">
+                                        <span><i class="fas fa-random me-2"></i> Tùy chọn cơ bản</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="option-group-content collapse show" id="augmentation-base-options">
+                                        <div class="options-grid">
+                                            <div class="form-check option-card">
+                                                <input class="form-check-input" type="checkbox" id="add-random-words" checked>
+                                                <label class="form-check-label" for="add-random-words" data-bs-toggle="tooltip" data-bs-placement="top" title="Thêm từ phổ biến vào văn bản để tăng tính đa dạng">
+                                                    <div class="option-card-title">Thêm từ ngẫu nhiên</div>
+                                                    <div class="option-card-desc">Thêm từ phổ biến vào văn bản</div>
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="form-check option-card">
+                                                <input class="form-check-input" type="checkbox" id="swap-random-words" checked>
+                                                <label class="form-check-label" for="swap-random-words" data-bs-toggle="tooltip" data-bs-placement="top" title="Hoán đổi vị trí các từ để tăng tính đa dạng">
+                                                    <div class="option-card-title">Đổi chỗ từ</div>
+                                                    <div class="option-card-desc">Hoán đổi vị trí từ</div>
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="form-check option-card">
+                                                <input class="form-check-input" type="checkbox" id="delete-random-words">
+                                                <label class="form-check-label" for="delete-random-words" data-bs-toggle="tooltip" data-bs-placement="top" title="Xóa bỏ một số từ ngẫu nhiên để tạo biến thể">
+                                                    <div class="option-card-title">Xóa từ</div>
+                                                    <div class="option-card-desc">Xóa từ văn bản ngẫu nhiên</div>
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="form-check option-card">
+                                                <input class="form-check-input" type="checkbox" id="use-synonyms" checked>
+                                                <label class="form-check-label" for="use-synonyms" data-bs-toggle="tooltip" data-bs-placement="top" title="Thay thế từ bằng từ đồng nghĩa khác">
+                                                    <div class="option-card-title">Từ đồng nghĩa</div>
+                                                    <div class="option-card-desc">Thay thế bằng từ tương tự</div>
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="form-check option-card">
+                                                <input class="form-check-input" type="checkbox" id="back-translation" checked>
+                                                <label class="form-check-label" for="back-translation" data-bs-toggle="tooltip" data-bs-placement="top" title="Dịch sang ngôn ngữ khác và dịch lại tiếng Việt">
+                                                    <div class="option-card-title">Dịch ngược</div>
+                                                    <div class="option-card-desc">Viết lại văn bản theo ý tương tự</div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="option-group">
+                                    <div class="option-group-header" data-bs-toggle="collapse" data-bs-target="#noise-options-group">
+                                        <span><i class="fas fa-signal me-2"></i> Tùy chọn nhiễu</span>
+                                        <i class="fas fa-chevron-down"></i>
+                                    </div>
+                                    <div class="option-group-content collapse show" id="noise-options-group">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="data-noise">
+                                            <label class="form-check-label" for="data-noise">
+                                                Thêm nhiễu dữ liệu
+                                            </label>
+                                        </div>
+                                        <div id="noise-options" class="ms-3 mt-2" style="display: none;">
+                                            <div class="mb-2">
+                                                <label for="noise-percent" class="form-label">Tỷ lệ nhiễu (%): <span id="noise-percent-value">10</span>%</label>
+                                                <input type="range" class="form-range" min="1" max="30" value="10" id="noise-percent">
+                                            </div>
+                                            <div class="d-flex flex-wrap gap-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="noise-add" checked>
+                                                    <label class="form-check-label" for="noise-add">
+                                                        Thêm ký tự
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="noise-remove" checked>
+                                                    <label class="form-check-label" for="noise-remove">
+                                                        Xóa ký tự
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="noise-replace" checked>
+                                                    <label class="form-check-label" for="noise-replace">
+                                                        Thay thế ký tự
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Tab làm sạch dữ liệu -->
+                            <div class="tab-pane fade" id="cleaning-content" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="option-actions">
+                                        <button class="btn btn-sm btn-outline-primary select-all-btn" data-group="cleaning">
+                                            <i class="fas fa-check-double me-1"></i> Chọn tất cả
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary ms-2 clear-all-btn" data-group="cleaning">
+                                            <i class="fas fa-times me-1"></i> Bỏ chọn tất cả
+                                        </button>
+                                    </div>
+                                    <div class="view-mode-toggle">
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-outline-secondary active" data-view="grid">
+                                                <i class="fas fa-th"></i>
+                                            </button>
+                                            <button class="btn btn-outline-secondary" data-view="list">
+                                                <i class="fas fa-list"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="options-grid">
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="lowercase" data-bs-toggle="tooltip" data-bs-placement="top" title="Chuyển đổi tất cả văn bản thành chữ thường để đồng nhất">
+                                        <label class="form-check-label" for="lowercase">
+                                            <div class="option-card-title">Chuyển thành chữ thường</div>
+                                            <div class="option-card-desc">Chuyển đổi tất cả các ký tự thành chữ thường</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="abbreviation-correction">
+                                        <label class="form-check-label" for="abbreviation-correction">
+                                            <div class="option-card-title">Sửa từ viết tắt</div>
+                                            <div class="option-card-desc">Chuyển đổi các từ viết tắt thành dạng đầy đủ</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="remove-special-chars">
+                                        <label class="form-check-label" for="remove-special-chars">
+                                            <div class="option-card-title">Loại bỏ ký tự đặc biệt</div>
+                                            <div class="option-card-desc">Xóa các ký tự đặc biệt như !@#$%^&*()</div>
+                                        </label>
+                                        <div class="mt-2 custom-special-chars" style="display: none;">
+                                            <input type="text" class="form-control form-control-sm" id="custom-special-chars" 
+                                                   placeholder="Nhập ký tự đặc biệt cần loại bỏ "
+                                                   title="Để trống để xóa tất cả ký tự đặc biệt">
+                                            <small class="form-text text-muted">Ví dụ: !@#$%^&*()</small>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="remove-extra-spaces">
+                                        <label class="form-check-label" for="remove-extra-spaces">
+                                            <div class="option-card-title">Loại bỏ khoảng trắng thừa</div>
+                                            <div class="option-card-desc">Xóa khoảng trắng dư thừa và chuẩn hóa khoảng trắng</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="sentence-tokenization">
+                                        <label class="form-check-label" for="sentence-tokenization">
+                                            <div class="option-card-title">Tách thành câu</div>
+                                            <div class="option-card-desc">Phân tách văn bản thành các câu riêng biệt</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="word-tokenization">
+                                        <label class="form-check-label" for="word-tokenization">
+                                            <div class="option-card-title">Tách thành từ</div>
+                                            <div class="option-card-desc">Phân tách văn bản thành các từ riêng biệt</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="stopwords-removal">
+                                        <label class="form-check-label" for="stopwords-removal">
+                                            <div class="option-card-title">Loại bỏ stopwords</div>
+                                            <div class="option-card-desc">Loại bỏ các từ phổ biến không mang nhiều ý nghĩa</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="pos-tagging">
+                                        <label class="form-check-label" for="pos-tagging">
+                                            <div class="option-card-title">Gán nhãn từ loại</div>
+                                            <div class="option-card-desc">Xác định từ loại cho mỗi từ trong văn bản</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="syntax-parsing">
+                                        <label class="form-check-label" for="syntax-parsing">
+                                            <div class="option-card-title">Phân tích cú pháp</div>
+                                            <div class="option-card-desc">Phân tích cấu trúc ngữ pháp của câu</div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Tab vector hóa văn bản -->
+                            <div class="tab-pane fade" id="vectorization-content" role="tabpanel">
+                                <!-- Tương tự như trên nhưng cho tùy chọn vector hóa -->
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="option-actions">
+                                        <button class="btn btn-sm btn-outline-primary select-all-btn" data-group="vectorization">
+                                            <i class="fas fa-check-double me-1"></i> Chọn tất cả
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary ms-2 clear-all-btn" data-group="vectorization">
+                                            <i class="fas fa-times me-1"></i> Bỏ chọn tất cả
+                                        </button>
+                                    </div>
+                                    <div class="view-mode-toggle">
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-outline-secondary active" data-view="grid">
+                                                <i class="fas fa-th"></i>
+                                            </button>
+                                            <button class="btn btn-outline-secondary" data-view="list">
+                                                <i class="fas fa-list"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="options-grid">
+                                    <div class="option-card">
+                                        <input class="form-check-input" type="checkbox" id="one-hot">
+                                        <label class="form-check-label" for="one-hot">
+                                            <div class="option-card-title">One-Hot Encoding</div>
+                                            <div class="option-card-desc">Biểu diễn mỗi từ dưới dạng vector với 1 ở vị trí index của từ và 0 ở các vị trí khác</div>
+                                        </label>
+                                    </div>
+                                    <div class="option-card">
+                                        <input class="form-check-input" type="checkbox" id="bow">
+                                        <label class="form-check-label" for="bow">
+                                            <div class="option-card-title">Bag of Words</div>
+                                            <div class="option-card-desc">Biểu diễn văn bản dưới dạng vector đếm tần suất của mỗi từ</div>
+                                        </label>
+                                    </div>
+                                    <div class="option-card">
+                                        <input class="form-check-input" type="checkbox" id="tfidf">
+                                        <label class="form-check-label" for="tfidf">
+                                            <div class="option-card-title">TF-IDF</div>
+                                            <div class="option-card-desc">Đánh giá tầm quan trọng của từ trong văn bản</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="option-card">
+                                        <input class="form-check-input" type="checkbox" id="ngrams">
+                                        <label class="form-check-label" for="ngrams">
+                                            <div class="option-card-title">Bag of N-Grams</div>
+                                            <div class="option-card-desc">Biểu diễn văn bản dưới dạng vector của chuỗi n từ liên tiếp</div>
+                                        </label>
+                                        <div class="mt-2 ngrams-options" style="display: none;">
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <label for="ngram-min" class="form-label small">n nhỏ nhất</label>
+                                                    <input type="number" class="form-control form-control-sm" id="ngram-min" min="1" max="5" value="2">
+                                                </div>
+                                                <div class="col-6">
+                                                    <label for="ngram-max" class="form-label small">n lớn nhất</label>
+                                                    <input type="number" class="form-control form-control-sm" id="ngram-max" min="1" max="5" value="3">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="word-embedding">
+                                        <label class="form-check-label" for="word-embedding">
+                                            <div class="option-card-title">Word Embedding</div>
+                                            <div class="option-card-desc">Biểu diễn từ trong không gian vector nhiều chiều</div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="bert">
+                                        <label class="form-check-label" for="bert">
+                                            <div class="option-card-title">BERT</div>
+                                            <div class="option-card-desc">Sử dụng mô hình BERT cho biểu diễn từ ngữ cảnh</div>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="word2vec">
+                                        <label class="form-check-label" for="word2vec">
+                                            <div class="option-card-title">Word2Vec</div>
+                                            <div class="option-card-desc">Sử dụng embedding từ pre-trained Word2Vec</div>
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check option-card">
+                                        <input class="form-check-input" type="checkbox" id="fasttext">
+                                        <label class="form-check-label" for="fasttext">
+                                            <div class="option-card-title">FastText</div>
+                                            <div class="option-card-desc">Sử dụng embedding từ pre-trained FastText</div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Tab phân loại văn bản -->
+                            <div class="tab-pane fade" id="analysis-content" role="tabpanel" aria-labelledby="analysis-tab">
+                                <div class="card mb-4">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="alert alert-info classification-status-message" role="alert">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <span id="classification-status-text">Mô hình được xử dụng là mô hình mới nhất được huấn luyện ở trang Train Mô Hình</span>
+                                        </div>
+                                        
+                                        <!-- Thêm dropdown chọn thể loại mô hình -->
+                                        <div class="mb-3">
+                                            <label for="model-category-select" class="form-label">Thể loại mô hình:</label>
+                                            <select class="form-select" id="model-category-select">
+                                                <option value="">Tự động (Mô hình mới nhất)</option>
+                                                <option value="sentiment_analysis">Phân loại cảm xúc</option>
+                                                <option value="entity_recognition">Nhận diện thực thể</option>
+                                                <option value="topic_classification">Phân loại chủ đề</option>
+                                                <option value="spam_detection">Phát hiện spam</option>
+                                                <option value="general">Thể loại chung</option>
+                                            </select>
+                                            <div class="form-text">Chọn thể loại mô hình phù hợp với văn bản cần phân loại</div>
+                                        </div>
+                                        
+                                        <!-- Dropdown cho thể loại tùy chỉnh khi chọn Thể loại chung -->
+                                        <div class="mb-3" id="custom-category-dropdown-container" style="display: none;">
+                                            <label for="custom-category-dropdown" class="form-label">Chọn thể loại tùy chỉnh:</label>
+                                            <select class="form-select" id="custom-category-dropdown">
+                                                <option value="">Đang tải danh sách thể loại...</option>
+                                            </select>
+                                            <div class="form-text">Chọn một thể loại tùy chỉnh đã được tạo trước đó</div>
+                                        </div>
+                                        
+                                        <div class="options-grid">
+                                            <div class="option-card classification-option">
+                                                <input type="checkbox" id="use-latest-model" class="hidden-checkbox">
+                                                <label for="use-latest-model">
+                                                    <span class="option-card-title">Sử dụng mô hình</span>
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="option-card classification-option">
+                                                <input type="checkbox" id="clean-before-classify" class="hidden-checkbox">
+                                                <label for="clean-before-classify">
+                                                    <span class="option-card-title">Làm sạch văn bản</span>
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="option-card classification-option">
+                                                <input type="checkbox" id="show-probabilities" class="hidden-checkbox">
+                                                <label for="show-probabilities">
+                                                    <span class="option-card-title">Hiển thị xác suất</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="option-actions mt-3 d-flex justify-content-between">
+                                            <div>
+                                                <button class="btn btn-sm btn-outline-primary select-all-btn" data-group="analysis">
+                                                    <i class="fas fa-check-double me-1"></i> Chọn tất cả
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary clear-all-btn" data-group="analysis">
+                                                    <i class="fas fa-times me-1"></i> Bỏ chọn tất cả
+                                                </button>
+                                            </div>
+                                            <a href="/train_model" class="btn btn-sm btn-outline-success" target="_blank">
+                                                <i class="fas fa-brain me-1"></i> Huấn luyện mô hình mới
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <div class="d-flex align-items-center">
+                            <div class="selected-options me-auto">
+                                <span class="selected-count">0</span> tùy chọn đã chọn
+                            </div>
+                            <button id="process-btn" class="btn btn-primary">
+                                <i class="fas fa-play me-1"></i> Xử lý
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <!-- Kết quả xử lý -->
+                <div class="results card mb-4">
+                    <div class="card-header sticky-top">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-chart-bar me-2 text-primary animated-icon"></i>
+                            <h5 class="mb-0">Kết quả xử lý</h5>
+                            <div class="ms-auto">
+                                <div class="btn-group btn-group-sm d-none d-md-flex">
+                                    <button class="btn btn-outline-secondary" id="download-results-btn" disabled>
+                                        <i class="fas fa-download me-1"></i> Tải xuống
+                                    </button>
+                                    <button class="btn btn-outline-secondary" id="clear-results-btn" disabled>
+                                        <i class="fas fa-trash-alt me-1"></i> Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" id="results-container">
+                        <div class="empty-state">
+                            <i class="fas fa-chart-line empty-icon"></i>
+                            <p class="text-muted">Các kết quả xử lý sẽ hiển thị ở đây...</p>
+                            <small>Chọn các tùy chọn xử lý và nhấn nút "Xử lý" để bắt đầu</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Kết quả huấn luyện mô hình -->
+                <div class="card mt-4" id="model-training-results" style="display: none;">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-brain me-2 text-primary"></i>
+                            <h5 class="mb-0">Kết quả huấn luyện mô hình</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="model-metrics" class="row mb-4">
+                            <!-- Các chỉ số đánh giá mô hình sẽ hiển thị ở đây -->
+                        </div>
+                        <div id="confusion-matrix-container" class="mb-4">
+                            <!-- Ma trận nhầm lẫn sẽ hiển thị ở đây -->
+                        </div>
+                        
+                        <h6 class="mb-3">Thử nghiệm mô hình</h6>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="test-model-input" 
+                                   placeholder="Nhập văn bản để thử nghiệm mô hình...">
+                            <button class="btn btn-primary" type="button" id="test-model-btn">
+                                <i class="fas fa-magic me-1"></i> Dự đoán
+                            </button>
+                        </div>
+                        <div id="model-prediction-result" class="mt-3" style="display: none;">
+                            <!-- Kết quả dự đoán sẽ hiển thị ở đây -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xem trước dataset -->
+    <div class="modal fade" id="preview-dataset-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xem trước dataset</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="dataset-stats mb-4">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card">
+                                    <h6>Tổng số mẫu</h6>
+                                    <div class="stat-value" id="dataset-total-samples">0</div>
+                                </div>
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                <div class="stat-card">
+                                    <h6>Phân phối nhãn</h6>
+                                    <div id="dataset-labels-distribution">
+                                        <!-- Phân phối nhãn sẽ hiển thị ở đây -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="mb-3">Dữ liệu mẫu (10 dòng đầu)</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped" id="dataset-preview-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Text</th>
+                                    <th>Label</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dữ liệu mẫu sẽ hiển thị ở đây -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 py-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <span> NLP tool | Công cụ xử lý ngôn ngữ tự nhiên tiếng Việt | Nguyễn Hoàng Vỹ - MSSV : 22110275 (UTE) </span>
+                <span>Phiên bản: 1.0.0</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js (dùng cho biểu đồ) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Tùy chỉnh JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+
+    <!-- Thêm ngay trước đóng thẻ body -->
+    <div class="dark-mode-toggle" id="dark-mode-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <script>
+    // Thêm xử lý Dark Mode
+    document.getElementById('dark-mode-toggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const icon = this.querySelector('i');
+        if (document.body.classList.contains('dark-mode')) {
+            icon.classList.replace('fa-moon', 'fa-sun');
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            icon.classList.replace('fa-sun', 'fa-moon');
+            localStorage.setItem('darkMode', 'disabled');
+        }
+    });
+
+    // Kiểm tra trạng thái Dark Mode khi tải trang
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('#dark-mode-toggle i').classList.replace('fa-moon', 'fa-sun');
+        }
+    });
+    </script>
+
+    <!-- Modal Lịch sử xử lý -->
+    <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="historyModalLabel">
+                        <i class="fas fa-history me-2"></i> Lịch sử xử lý văn bản
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="history-container" class="history-container">
+                        <!-- Nội dung lịch sử sẽ được điền ở đây -->
+                        <div class="empty-history text-center p-4">
+                            <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Đang tải lịch sử xử lý...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast container cho thông báo -->
+    <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+</body>
+</html> 

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huấn luyện mô hình phân loại văn bản</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-language me-2"></i>
+                NLP Tool 
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/train_model">
+                            <i class="fas fa-brain me-1"></i> Đào tạo mô hình
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <h1 class="display-4">Huấn luyện mô hình ngôn ngữ</h1>
+            <p class="lead">Công cụ giúp bạn phân tích và xử lý văn bản</p>
+        </div>
+    </div>
+    
+    <div class="container my-4">
+        
+        <div class="row">
+            <!-- Cột bên trái: Các tùy chọn đào tạo mô hình -->
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body p-4">
+                        <form id="train-model-form" enctype="multipart/form-data">
+                            <!-- Step 1: Choose dataset -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <span class="step-number">1</span>
+                                        <span class="step-title">Tải dataset</span>
+                                    </h5>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="mb-3">
+                                        <label for="dataset-file" class="form-label">Chọn file dataset (.csv)</label>
+                                        <input class="form-control form-control-lg" type="file" id="dataset-file" name="dataset" accept=".csv">
+                                        <div class="form-text">File CSV phải có ít nhất hai cột: văn bản và nhãn.</div>
+                                    </div>
+                                    
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="text-column" class="form-label">Tên cột văn bản</label>
+                                            <input type="text" class="form-control" id="text-column" name="text_column" value="content">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="label-column" class="form-label">Tên cột nhãn</label>
+                                            <input type="text" class="form-control" id="label-column" name="label_column" value="label">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-outline-primary" id="preview-dataset-btn">
+                                            <i class="fas fa-eye me-1"></i> Xem trước dataset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2: Vectorization method -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <span class="step-number">2</span>
+                                        <span class="step-title">Phương pháp vector hóa</span>
+                                    </h5>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-vector-square me-2 text-primary"></i>
+                                            <h6 class="mb-0 small">Phương pháp vector hóa</h6>
+                                        </div>
+                                        
+                                        <p class="small mb-2">Chọn một phương pháp biểu diễn văn bản:</p>
+                                        
+                                        <div class="row g-1">
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input vectorization-option" type="radio" name="vectorization" id="onehot" value="onehot">
+                                                            <label class="form-check-label algo-name fw-bold" for="onehot">
+                                                                One-Hot Encoding
+                                                            </label>
+                                                            <div>Biểu diễn từ bằng vector nhị phân (0/1)</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input vectorization-option" type="radio" name="vectorization" id="bow" value="bow" checked>
+                                                            <label class="form-check-label algo-name fw-bold" for="bow">
+                                                                Bag of Words (BoW)
+                                                            </label>
+                                                            <div>Đếm số lần xuất hiện của từng từ</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input vectorization-option" type="radio" name="vectorization" id="tfidf" value="tfidf">
+                                                            <label class="form-check-label algo-name fw-bold" for="tfidf">
+                                                                TF-IDF
+                                                            </label>
+                                                            <div>Cân bằng tần suất và độc đáo của từng từ</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input vectorization-option" type="radio" name="vectorization" id="ngrams" value="ngrams">
+                                                            <label class="form-check-label algo-name fw-bold" for="ngrams">
+                                                                N-Grams
+                                                            </label>
+                                                            <div>Sử dụng chuỗi n từ liên tiếp để nắm bắt ngữ cảnh</div>
+                                                        </div>
+                                                        <div id="ngrams-options" class="mt-1" style="display: none;">
+                                                            <div class="row g-1">
+                                                                <div class="col-6">
+                                                                    <label for="ngram-min" class="form-label small">Min:</label>
+                                                                    <input type="number" class="form-control form-control-sm" id="ngram-min" min="1" max="5" value="1">
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label for="ngram-max" class="form-label small">Max:</label>
+                                                                    <input type="number" class="form-control form-control-sm" id="ngram-max" min="1" max="5" value="3">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="card mt-2">
+                                            <div class="card-body p-1">
+                                                <h6 class="card-title small">Tùy chọn vector hóa</h6>
+                                                <div class="row g-2">
+                                                    <div class="col-md-6">
+                                                        <label for="max-features" class="form-label small">Số đặc trưng tối đa:</label>
+                                                        <input type="range" class="form-range" id="max-features-range" min="100" max="20000" step="100" value="5000">
+                                                        <div class="d-flex justify-content-between">
+                                                            <small class="small">100</small>
+                                                            <small class="small" id="max-features-value">5000</small>
+                                                            <small class="small">20000</small>
+                                                        </div>
+                                                        <input type="hidden" name="max_features" id="max-features" value="5000">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 3: Classification method -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <span class="step-number">3</span>
+                                        <span class="step-title">Phương pháp phân loại</span>
+                                    </h5>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-tag me-2 text-primary"></i>
+                                            <h6 class="mb-0 small">Phương pháp phân loại</h6>
+                                        </div>
+                                        
+                                        <p class="small mb-2">Chọn một hoặc nhiều phương pháp phân loại văn bản:</p>
+                                        
+                                        <div class="row g-1">
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input classification-option" type="radio" name="classification" id="naive_bayes" value="naive_bayes" checked>
+                                                            <label class="form-check-label algo-name fw-bold" for="naive_bayes">
+                                                                Naive Bayes
+                                                            </label>
+                                                            <div>Phân loại văn bản sử dụng xác suất thống kê</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input classification-option" type="radio" name="classification" id="logistic_regression" value="logistic_regression">
+                                                            <label class="form-check-label algo-name fw-bold" for="logistic_regression">
+                                                                Logistic Regression
+                                                            </label>
+                                                            <div>Mô hình hồi quy logistic cho phân loại</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input classification-option" type="radio" name="classification" id="svm" value="svm">
+                                                            <label class="form-check-label algo-name fw-bold" for="svm">
+                                                                SVM
+                                                            </label>
+                                                            <div>Support Vector Machine phân loại tuyến tính/phi tuyến</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input classification-option" type="radio" name="classification" id="knn" value="knn">
+                                                            <label class="form-check-label algo-name fw-bold" for="knn">
+                                                                K-Nearest Neighbors
+                                                            </label>
+                                                            <div>Phân loại dựa trên các điểm dữ liệu lân cận</div>
+                                                            <div class="knn-params mt-2" style="display: none;">
+                                                                <div class="input-group input-group-sm">
+                                                                    <span class="input-group-text" id="knn-k-label">k =</span>
+                                                                    <input type="number" class="form-control form-control-sm" id="knn-neighbors" name="knn_neighbors" value="5" min="1" aria-describedby="knn-k-label">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input classification-option" type="radio" name="classification" id="decision_tree" value="decision_tree">
+                                                            <label class="form-check-label algo-name fw-bold" for="decision_tree">
+                                                                Decision Tree
+                                                            </label>
+                                                            <div>Cây quyết định phân loại dựa trên các đặc trưng</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Thêm section mới: Thể loại mô hình -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <span class="step-number">4</span>
+                                        <span class="step-title">Thể loại mô hình</span>
+                                    </h5>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-folder me-2 text-primary"></i>
+                                            <h6 class="mb-0 small">Chọn thể loại của mô hình</h6>
+                                        </div>
+                                        
+                                        <p class="small mb-2">Phân loại mô hình để quản lý và sử dụng:</p>
+                                        
+                                        <div class="row g-2">
+                                            <div class="col-md-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input model-category-option" type="radio" name="model_category" id="sentiment_analysis" value="sentiment_analysis" checked>
+                                                    <label class="form-check-label" for="sentiment_analysis">
+                                                        Phân loại cảm xúc
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input model-category-option" type="radio" name="model_category" id="entity_recognition" value="entity_recognition">
+                                                    <label class="form-check-label" for="entity_recognition">
+                                                        Nhận diện thực thể
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input model-category-option" type="radio" name="model_category" id="topic_classification" value="topic_classification">
+                                                    <label class="form-check-label" for="topic_classification">
+                                                        Phân loại chủ đề
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input model-category-option" type="radio" name="model_category" id="spam_detection" value="spam_detection">
+                                                    <label class="form-check-label" for="spam_detection">
+                                                        Phát hiện spam
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input model-category-option" type="radio" name="model_category" id="custom_category" value="custom">
+                                                    <label class="form-check-label" for="custom_category">
+                                                        Thể loại tùy chỉnh
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" id="custom-category-input-container" style="display: none;">
+                                                <input type="text" class="form-control form-control-sm" id="custom-category-input" placeholder="Nhập tên thể loại">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 4: Training settings -->
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0">
+                                        <span class="step-number">5</span>
+                                        <span class="step-title">Cài đặt huấn luyện</span>
+                                    </h5>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="row mb-2">
+                                        <div class="col-md-8 mb-2">
+                                            <label for="train-test-split" class="form-label small">Tỷ lệ tập huấn luyện/kiểm thử:</label>
+                                            <div class="d-flex align-items-center">
+                                                <input type="range" class="form-range flex-grow-1" id="train-test-split" min="70" max="95" step="5" value="80">
+                                                <span class="ms-2 train-split-value badge bg-primary bg-opacity-75">80%</span>
+                                                <span class="mx-2">/</span>
+                                                <span class="test-split-value badge bg-secondary">20%</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-4 mb-2">
+                                            <label for="random-state" class="form-label small">Random State:</label>
+                                            <input type="number" class="form-control form-control-sm" id="random-state" name="random_state" value="42" min="0">
+                                            <div class="form-text small">Giá trị để tái tạo kết quả.</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-2">
+                                        <label for="model-name" class="form-label small">Tên mô hình:</label>
+                                        <input type="text" class="form-control form-control-sm" id="model-name" name="model_name" placeholder="my_model">
+                                        <div class="form-text small">Tên để lưu mô hình. Mặc định sẽ sinh tự động từ loại mô hình và thời gian.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Train button -->
+                            <div class="d-grid gap-2">
+                                <button type="button" id="train-model-btn" class="btn btn-primary btn-lg p-3">
+                                    <i class="fas fa-brain me-2"></i> Đào tạo mô hình
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Cột bên phải: Hiển thị kết quả -->
+            <div class="col-lg-6">
+                <div class="card mb-4" id="results-wrapper">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-chart-line me-2 text-primary"></i>
+                            <h5 class="mb-0">Kết quả đào tạo mô hình</h5>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Empty state -->
+                        <div id="empty-state-card">
+                            <div class="empty-state text-center py-5">
+                                <i class="fas fa-chart-line empty-icon fa-4x mb-3 text-primary text-opacity-50"></i>
+                                <h5 class="mb-3">Chưa có kết quả</h5>
+                                <p class="fs-6">Kết quả đào tạo mô hình sẽ hiển thị ở đây</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Training results -->
+                        <div id="training-results" style="display: none;">
+                            <div id="results-container">
+                                <!-- Training results will be displayed here -->
+                            </div>
+                            
+                            <!-- Models comparison charts -->
+                            <div id="metrics-comparison-container" style="display: none;">
+                                <div class="card mt-4">
+                                    <div class="card-header">
+                                        <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i> So sánh các chỉ số</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <canvas id="accuracy-precision-chart" height="250"></canvas>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <canvas id="recall-f1-chart" height="250"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Model testing section -->
+                <div class="card mt-4" id="model-testing" style="display: none !important;">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-flask me-2"></i>
+                            <h5 class="mb-0">Thử nghiệm mô hình</h5>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <label for="test-input" class="form-label">Nhập văn bản để phân loại:</label>
+                            <textarea class="form-control" id="test-input" rows="4" placeholder="Nhập văn bản cần phân loại..."></textarea>
+                        </div>
+                        <div class="d-flex">
+                            <button class="btn btn-primary" id="test-model-btn">
+                                <i class="fas fa-play-circle me-1"></i> <span class="btn-text">Phân loại</span>
+                            </button>
+                            <button class="btn btn-outline-secondary ms-2" id="clear-test-btn">
+                                <i class="fas fa-eraser me-1"></i> <span class="btn-text">Xóa</span>
+                            </button>
+                        </div>
+                        <div class="mt-4 p-3 border rounded" id="test-result" style="display: none;">
+                            <!-- Classification results will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Model information -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <h5 class="mb-0">Thông tin và hướng dẫn</h5>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="mb-3">
+                            <h6><i class="fas fa-file-csv me-2 text-primary"></i>Yêu cầu Dataset</h6>
+                            <ul class="small">
+                                <li>File CSV có ít nhất hai cột: văn bản và nhãn</li>
+                                <li>Hỗ trợ dữ liệu tiếng Việt có dấu</li>
+                            </ul>
+                        </div>
+                        <div class="mb-3">
+                            <h6><i class="fas fa-brain me-2 text-primary"></i>Các thuật toán phân loại</h6>
+                            <ul class="small">
+                                <li><strong>Naive Bayes</strong>: Phù hợp với bộ dữ liệu nhỏ</li>
+                                <li><strong>Logistic Regression</strong>: Cân bằng hiệu suất và tốc độ</li>
+                                <li><strong>SVM</strong>: Độ chính xác cao với dữ liệu đặc trưng nhiều chiều</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Preview dataset modal with proper dark mode support -->
+    <div class="modal fade" id="preview-dataset-modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header text-white">
+                    <h5 class="modal-title"><i class="fas fa-table me-2"></i>Xem trước dataset</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="dataset-stats mb-4">
+                        <div class="row g-3">
+                            <div class="col-md-3 mb-3">
+                                <div class="stat-card rounded p-3 shadow-sm">
+                                    <h6>Tổng số mẫu</h6>
+                                    <div class="stat-value display-6" id="dataset-total-samples">0</div>
+                                </div>
+                            </div>
+                            <div class="col-md-9 mb-3">
+                                <div class="stat-card rounded p-3 shadow-sm">
+                                    <h6>Phân phối nhãn</h6>
+                                    <div id="dataset-labels-distribution" class="d-flex flex-wrap gap-2 mt-2">
+                                        <!-- Phân phối nhãn sẽ hiển thị ở đây -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="fas fa-list me-2"></i>Dữ liệu mẫu</h6>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                                <table class="table table-sm table-striped table-hover mb-0" id="dataset-preview-table">
+                                    <thead class="sticky-top">
+                                        <tr>
+                                            <th style="width: 50px;">#</th>
+                                            <th width="70%">Văn bản</th>
+                                            <th>Nhãn</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Dữ liệu mẫu sẽ hiển thị ở đây -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="p-3 border-top d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span id="dataset-preview-info" class="small">
+                                        <span class="d-flex align-items-center">
+                                            <span>Hiển thị <span id="samples-loaded">0</span> / <span id="total-samples-count">0</span> mẫu</span>
+                                            <small class="ms-2 fst-italic">(Cuộn xuống để tải thêm)</small>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div>
+                                    <button type="button" class="btn btn-sm btn-primary d-none" id="load-more-samples">
+                                        <i class="fas fa-sync-alt me-1"></i> Tải thêm mẫu
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-5 py-3">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <span> NLP tool | Công cụ xử lý ngôn ngữ tự nhiên tiếng Việt | Nguyễn Hoàng Vỹ - MSSV : 22110275 (UTE) </span>
+                <span>Phiên bản: 1.0.0</span>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle" id="dark-mode-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/train_model.js') }}"></script>
+    <script>
+        // Tự động xóa loading overlay khi trang được load và sau 20 giây
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                console.log('Kiểm tra và xóa loading overlays tự động khi tải trang...');
+                
+                // Hàm xóa tất cả overlay loading và khôi phục trạng thái body
+                function cleanupAllOverlays() {
+                    // Xóa tất cả overlay loading
+                    const overlays = document.querySelectorAll('[id^="loading-overlay"]');
+                    if (overlays.length > 0) {
+                        console.log(`Phát hiện ${overlays.length} loading overlays, đang xóa...`);
+                        overlays.forEach(overlay => {
+                            if (overlay.parentNode) {
+                                overlay.parentNode.removeChild(overlay);
+                            }
+                        });
+                    }
+                    
+                    // Xóa tất cả backdrop không cần thiết
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(backdrop => {
+                        if (backdrop.parentNode && !document.querySelector('.modal.show')) {
+                            backdrop.parentNode.removeChild(backdrop);
+                        }
+                    });
+
+                    // Khôi phục trạng thái body
+                    document.body.classList.remove('modal-open');
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                }
+                
+                // Xóa ngay khi trang load
+                cleanupAllOverlays();
+                
+                // Thiết lập bộ đếm để kiểm tra định kỳ
+                setInterval(cleanupAllOverlays, 5000);
+                
+                // Thiết lập timeout dài hơn cho bảo vệ
+                setTimeout(function() {
+                    cleanupAllOverlays();
+                    console.log('Kiểm tra lần cuối và xóa tất cả loading overlays sau 20 giây');
+                }, 20000);
+                
+            } catch (e) {
+                console.error('Lỗi khi thực hiện xóa loading overlays:', e);
+            }
+        });
+        
+        // Dark mode functionality
+        document.getElementById('dark-mode-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                document.querySelector('#dark-mode-toggle i').classList.replace('fa-moon', 'fa-sun');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                document.querySelector('#dark-mode-toggle i').classList.replace('fa-sun', 'fa-moon');
+            }
+        });
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('#dark-mode-toggle i').classList.replace('fa-moon', 'fa-sun');
+        }
+    </script>
+</body>
+</html> 

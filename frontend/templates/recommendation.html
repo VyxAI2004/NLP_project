@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Đề xuất Thông minh</title> <!-- Changed Title -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Link to your preferred CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+    <meta name="theme-color" content="#4285f4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+
+    <style>
+        /* Styles from the previous liked structure */
+        /* Style to hide/show input sections based on radio selection */
+        .input-section {
+            display: none;
+            padding-top: 1rem; /* Add some space */
+            /* border-top: 1px solid #dee2e6; */ /* Optional separator */
+            /* margin-top: 1rem; */ /* Optional space */
+        }
+        .input-section.active {
+            display: block;
+        }
+
+        /* Style for the recommendation method selection cards */
+        .method-selection-card {
+            padding: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius, 8px); /* Use CSS var or default */
+            transition: box-shadow 0.2s ease-in-out;
+            cursor: pointer;
+            margin-bottom: 0.75rem;
+        }
+        .method-selection-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary-color, #4285f4);
+        }
+        .method-selection-card input[type="radio"] {
+            margin-top: 0.3rem;
+        }
+        .method-selection-card label {
+            width: 100%;
+            margin-left: 0.5rem;
+            cursor: pointer;
+        }
+         .method-selection-card h6 { /* Method title */
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: var(--dark-color, #202124);
+            font-size: 1rem;
+        }
+         .method-selection-card p { /* Method description */
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-bottom: 0;
+            line-height: 1.4;
+         }
+        .method-selection-container .form-check {
+             padding-left: 1rem;
+        }
+         .method-card { /* Keep styles if referenced from original CSS */
+            padding: 1rem; border: 1px solid #e0e0e0; border-radius: 0.25rem; transition: box-shadow 0.2s ease-in-out;
+         }
+         .method-card:hover { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+         .method-card label { width: 100%; cursor: pointer; }
+         .method-card .form-check-input { margin-top: 0.5rem; margin-right: 1rem; float: left; }
+
+         /* Recommendation Flow Diagram Styles (from original recommendation code) */
+        .recommendation-flow .flow-diagram { display: flex; align-items: center; justify-content: space-around; text-align: center; flex-wrap: wrap; }
+        .recommendation-flow .flow-step { display: flex; flex-direction: column; align-items: center; margin: 0.5rem; }
+        .recommendation-flow .step-icon { font-size: 1.5rem; margin-bottom: 0.5rem; width: 40px; height: 40px; background-color: #e3f2fd; color: #4285f4; border-radius: 50%; display: flex; justify-content: center; align-items: center; }
+        .recommendation-flow .step-label { font-size: 0.8rem; }
+        .recommendation-flow .flow-arrow { font-size: 1.2rem; color: #bdbdbd; margin: 0 0.5rem; }
+        @media (max-width: 767px) {
+            .recommendation-flow .flow-diagram { flex-direction: column; }
+            .recommendation-flow .flow-arrow { transform: rotate(90deg); margin: 0.5rem 0; }
+        }
+
+         /* Dark mode adaptations */
+         body.dark-mode .method-selection-card { background-color: #2d2d2d; border-color: #444; }
+         body.dark-mode .method-selection-card h6 { color: #e0e0e0; }
+         body.dark-mode .method-selection-card p { color: #b0b0b0; }
+         body.dark-mode .recommendation-flow .step-icon { background-color: rgba(66, 133, 244, 0.2); color: #8ab4f8; }
+         body.dark-mode .recommendation-flow .flow-arrow { color: #555; }
+
+        /* Add other necessary styles from your 'style.css' if they are not global */
+
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-language me-2"></i>
+                NLP Tool 
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                 <ul class="navbar-nav ms-auto">
+                     <li class="nav-item">
+                        <a class="nav-link" href="/"> <!-- Link to homepage -->
+                            <i class="fas fa-home me-1"></i> Trang chủ 
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/recommendation"> <!-- Active link -->
+                            <i class="fas fa-lightbulb me-1"></i> Đề xuất
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="container">
+            <h1 class="display-4">Hệ thống Đề xuất Thông minh</h1> <!-- Changed Title -->
+            <p class="lead">Nhận đề xuất phim hoặc địa điểm dựa trên sở thích và ngữ cảnh</p> <!-- Changed Subtitle -->
+        </div>
+    </div>
+
+    <div class="container main-content">
+        <div class="row mb-4">
+            <!-- Cột Trái: Chọn Phương pháp và Thông tin đầu vào -->
+            <div class="col-lg-6">
+                <!-- Card Chọn Phương pháp Đề xuất -->
+                <div class="card settings-card mb-4"> <!-- Renamed class potentially -->
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <h5 class="mb-0">Chọn Phương pháp Đề xuất</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="method-selection-container">
+                             <!-- Radio button cho Content-Based -->
+                            <div class="form-check method-selection-card">
+                                <input class="form-check-input" type="radio" name="recommendation_method" id="method-content-based" value="content-based" checked>
+                                <label class="form-check-label" for="method-content-based">
+                                     <div class="d-flex align-items-start"> <!-- Use start align for potentially multi-line text -->
+                                        <div>
+                                            <h6>Content-Based </h6>
+                                            <p>Dựa trên mô tả phim hoặc thể loại bạn thích.</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                             <!-- Radio button cho Collaborative Filtering -->
+                             <div class="form-check method-selection-card">
+                                <input class="form-check-input" type="radio" name="recommendation_method" id="method-collaborative" value="collaborative">
+                                <label class="form-check-label" for="method-collaborative">
+                                    <div class="d-flex align-items-start">
+                                        <div>
+                                            <h6>Collaborative Filtering </h6>
+                                            <p>Dựa trên người dùng có sở thích xem phim tương tự.</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+
+                            <!-- Radio button cho Context-Aware -->
+                            <div class="form-check method-selection-card">
+                                <input class="form-check-input" type="radio" name="recommendation_method" id="method-context-aware" value="context-aware">
+                                <label class="form-check-label" for="method-context-aware">
+                                     <div class="d-flex align-items-start">
+                                        <div>
+                                            <h6>Context-Aware </h6>
+                                            <p>Dựa trên vị trí và thời gian mong muốn của bạn.</p>
+                                        </div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info classification-status-message" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <span id="classification-status-text">Mỗi phương pháp đề xuất sẽ có một đầu vào khác nhau để nhận đề xuất</span>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Card Thông tin đầu vào (Dynamic) -->
+                <div class="card input-card mb-4"> <!-- Renamed class potentially -->
+                    <div class="card-header sticky-top">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-edit me-2 text-primary animated-icon"></i>
+                            <h5 class="mb-0">Thông tin đầu vào</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                         <!-- Container for dynamic inputs -->
+                         <div id="input-container">
+                             <!-- Input cho Content-Based -->
+                             <div id="input-content-based" class="input-section active">
+                                 <label for="cb-movie-input" class="form-label">Nhập tên phim bạn thích hoặc mô tả thể loại:</label>
+                                <textarea id="cb-movie-input" class="form-control mb-3" rows="4" placeholder="Ví dụ: Phim hành động viễn tưởng giống Inception, phim hài lãng mạn Hàn Quốc..."></textarea>
+                                <button class="btn btn-sm btn-light clear-input-btn" data-target="#cb-movie-input"><i class="fas fa-eraser me-1"></i> Xóa</button>
+                            </div>
+
+                             <!-- Input cho Collaborative Filtering -->
+                            <div id="input-collaborative" class="input-section">
+                                <label for="cf-user-id" class="form-label">Nhập User ID của bạn để nhận đề xuất phim:</label>
+                                <input type="text" id="cf-user-id" class="form-control mb-3" placeholder="Ví dụ: user123">
+                                 <button class="btn btn-sm btn-light clear-input-btn" data-target="#cf-user-id"><i class="fas fa-eraser me-1"></i> Xóa</button>
+                                 <small class="form-text text-muted d-block mt-2">Hệ thống sẽ tìm những người dùng có sở thích giống bạn.</small>
+                            </div>
+
+                             <!-- Input cho Context-Aware -->
+                            <div id="input-context-aware" class="input-section">
+                                <div class="mb-3">
+                                    <label for="ca-location" class="form-label">Vị trí của bạn (để tìm rạp gần):</label>
+                                    <input type="text" id="ca-location" class="form-control" placeholder="Ví dụ: Quận Thủ Đức, TP.HCM; gần Vincom...">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="ca-time" class="form-label">Thời gian mong muốn xem phim (tùy chọn):</label>
+                                    <input type="text" id="ca-time" class="form-control" placeholder="Ví dụ: Tối nay khoảng 7-8h; Cuối tuần này">
+                                </div>
+                                 <button class="btn btn-sm btn-light clear-input-btn" data-target="#ca-location, #ca-time"><i class="fas fa-eraser me-1"></i> Xóa</button>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button id="get-recommendations" class="btn btn-primary btn-lg">
+                               <i class="fas fa-lightbulb me-2"></i> Nhận đề xuất
+                           </button>
+                        </div>
+                         <!-- Common buttons like history could go here if needed -->
+                         <!-- <button id="history-btn" class="btn btn-secondary text-white ms-2" data-bs-toggle="modal" data-bs-target="#historyModal"><i class="fas fa-history me-1"></i> Lịch sử</button> -->
+                    </div>
+                </div>
+
+            </div> <!-- End col-lg-6 Left -->
+
+            <!-- Cột Phải: Kết quả và Thông tin Hệ thống -->
+             <div class="col-lg-6">
+                <!-- Card Kết quả đề xuất -->
+                <div class="results card mb-4">
+                    <div class="card-header sticky-top">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-chart-bar me-2 text-primary animated-icon"></i>
+                            <h5 class="mb-0">Kết quả xử lý</h5>
+                            <div class="ms-auto">
+                                <div class="btn-group btn-group-sm d-none d-md-flex">
+                                    <button class="btn btn-outline-secondary" id="download-results-btn" disabled>
+                                        <i class="fas fa-download me-1"></i> Tải xuống
+                                    </button>
+                                    <button class="btn btn-outline-secondary" id="clear-results-btn" disabled>
+                                        <i class="fas fa-trash-alt me-1"></i> Xóa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" id="results-container">
+                        <div class="empty-state">
+                            <i class="fas fa-chart-line empty-icon"></i>
+                            <p class="text-muted">Các kết quả xử lý sẽ hiển thị ở đây...</p>
+                            <small>Chọn các tùy chọn xử lý và nhấn nút "Xử lý" để bắt đầu</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Thông tin hệ thống (From original recommendation code) -->
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-info-circle me-2 text-primary"></i>
+                            <h5 class="mb-0">Thông tin hệ thống</h5>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="recommendation-flow">
+                            <h6 class="mb-3">Quy trình đề xuất</h6> <!-- Use h6 for sub-heading -->
+                            <div class="flow-diagram">
+                                <div class="flow-step">
+                                    <div class="step-icon"><i class="fas fa-user"></i></div>
+                                    <div class="step-label">Thông tin đầu vào</div>
+                                </div>
+                                <i class="fas fa-arrow-right flow-arrow"></i>
+                                <div class="flow-step">
+                                    <div class="step-icon"><i class="fas fa-cogs"></i></div>
+                                    <div class="step-label">Xử lý & Phân tích</div>
+                                </div>
+                                <i class="fas fa-arrow-right flow-arrow"></i>
+                                <div class="flow-step">
+                                    <div class="step-icon"><i class="fas fa-calculator"></i></div>
+                                    <div class="step-label">Tính toán độ tương đồng</div>
+                                </div>
+                                <i class="fas fa-arrow-right flow-arrow"></i>
+                                <div class="flow-step">
+                                    <div class="step-icon"><i class="fas fa-gift"></i></div>
+                                    <div class="step-label">Kết quả đề xuất</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> <!-- End col-lg-6 Right -->
+        </div> <!-- End row -->
+    </div> <!-- End container main-content -->
+
+     <!-- Modals and Footer (Keep from previous versions) -->
+     <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">...</div>
+     <footer class="footer mt-5 py-3">...</footer>
+     <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3"></div>
+     <div class="dark-mode-toggle" id="dark-mode-toggle"><i class="fas fa-moon"></i></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+
+    <script src="{{ url_for('static', filename='js/recommendation.js') }}"></script>
+
+</body>
+</html>
