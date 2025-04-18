@@ -1,119 +1,81 @@
-# Ứng dụng Xử lý Văn bản Tiếng Việt
+# Chatbot AI - NLP Tool
 
-Đây là ứng dụng web cho phép xử lý văn bản tiếng Việt với nhiều tính năng khác nhau.
-
-## Cấu trúc dự án
-
-### Frontend
-- Chứa các template HTML, CSS và JavaScript
-- Nằm trong thư mục `frontend/`
-  - `frontend/templates/`: Chứa các file HTML
-  - `frontend/static/css/`: Chứa các file CSS
-  - `frontend/static/js/`: Chứa các file JavaScript
-
-### Backend
-- Chứa các file Python xử lý logic của ứng dụng
-- Nằm trong thư mục `backend/`
-  - `backend/app.py`: File chính khởi động Flask server
-  - `backend/text_cleaning.py`: Module xử lý và làm sạch văn bản
-  - `backend/text_vectorization.py`: Module vector hóa văn bản
-  - `backend/text_classification.py`: Module phân loại văn bản
-  - `backend/data_augmentation.py`: Module tăng cường dữ liệu
-  - `backend/crawler_synonyms.py`: Module tìm từ đồng nghĩa
-  - `backend/prediction_service.py`: Module dự đoán sử dụng mô hình
-  - `backend/file_processor.py`: Module xử lý các loại file
-  - `backend/data/`: Thư mục chứa dữ liệu và mô hình
-  - `backend/uploads/`: Thư mục lưu trữ file tải lên
-  - `backend/temp/`: Thư mục chứa file tạm thời
+## Giới thiệu
+Dự án này là một ứng dụng web NLP có tích hợp chatbot AI sử dụng mô hình ngôn ngữ từ Hugging Face. Chatbot có khả năng trả lời các câu hỏi và duy trì cuộc hội thoại với người dùng.
 
 ## Các tính năng chính
+- Giao diện chatbot thân thiện với người dùng
+- Xử lý ngôn ngữ tự nhiên với mô hình blenderbot từ Facebook/Hugging Face
+- API RESTful cho tích hợp với các ứng dụng khác
+- Cải thiện độ chính xác của phản hồi thông qua các kỹ thuật xử lý văn bản
+- Hỗ trợ lưu trữ và quản lý lịch sử cuộc trò chuyện
 
-- **Làm sạch văn bản** - Loại bỏ HTML, URL, email, số điện thoại, ký tự đặc biệt...
-- **Tách câu** - Phân tách văn bản thành các câu riêng biệt
-- **Tách từ** - Phân tách văn bản thành các từ
-- **Gán nhãn từ loại** - Xác định từ loại cho các từ trong văn bản
-- **Tìm từ đồng nghĩa** - Tìm kiếm từ đồng nghĩa tiếng Việt
-- **Tăng cường dữ liệu** - Tạo thêm mẫu dữ liệu từ văn bản gốc
-- **Vector hóa văn bản** - Chuyển đổi văn bản thành dạng vector 
-- **Phân loại văn bản** - Đào tạo và sử dụng mô hình phân loại văn bản
-
-## Cách chạy ứng dụng
-
-1. Clone repository về máy
-2. Cài đặt các gói phụ thuộc:
-```
-pip install -r requirements.txt
-```
-3. Chạy ứng dụng:
-```
-python run.py
+## Cài đặt
+1. Clone repository này về máy local:
+```bash
+git clone <repository-url>
+cd <repository-folder>
 ```
 
-Ứng dụng sẽ chạy tại địa chỉ http://localhost:5000/
-
-## API Endpoints
-
-- `GET /`: Trang chủ
-- `POST /api/process_text`: Xử lý văn bản
-- `POST /api/clean_text`: Làm sạch văn bản
-- `POST /api/tokenize_sentences`: Tách câu
-- `POST /api/process_with_options`: Xử lý văn bản với các tùy chọn
-- `POST /api/vectorize`: Vector hóa văn bản
-- `POST /api/predict`: Dự đoán phân loại văn bản
-- `POST /api/train_model`: Đào tạo mô hình phân loại
-- `GET /train_model`: Trang đào tạo mô hình
-- `GET /synonyms`: Trang tìm từ đồng nghĩa
-
-## Tài liệu API
-
-### POST /api/process_text
-Xử lý văn bản cơ bản
-
-**Body Request:**
-```json
-{
-  "text": "Văn bản tiếng Việt cần xử lý"
-}
+2. Cài đặt các thư viện phụ thuộc:
+```bash
+pip install -r backend/requirements.txt
 ```
 
-### POST /api/clean_text
-Làm sạch văn bản
+3. Tải mô hình ngôn ngữ:
+Mô hình sẽ được tự động tải xuống khi chạy ứng dụng lần đầu tiên.
 
-**Body Request:**
-```json
-{
-  "text": "Văn bản tiếng Việt cần làm sạch"
-}
+## Chạy ứng dụng
+```bash
+python backend/app.py
 ```
 
-### POST /api/process_with_options
-Xử lý văn bản với nhiều tùy chọn
+Sau khi khởi chạy, ứng dụng sẽ được triển khai tại `http://localhost:5000`.
 
-**Body Request:**
-```json
-{
-  "text": "Văn bản tiếng Việt cần xử lý",
-  "options": {
-    "cleaning": {
-      "lowercase": true,
-      "remove-special-chars": true
-    },
-    "augmentation": {
-      "use-synonyms": true
-    },
-    "vectorization": {
-      "bow": true
-    },
-    "classification": {}
+## Sử dụng API
+API chatbot có thể được truy cập tại các endpoint sau:
+
+- **POST /api/chat**: Gửi tin nhắn đến chatbot và nhận phản hồi
+  ```json
+  {
+    "message": "Xin chào, bạn khỏe không?"
   }
-}
+  ```
+  Phản hồi:
+  ```json
+  {
+    "reply": "Chào bạn! Tôi khỏe, cảm ơn bạn đã hỏi. Tôi có thể giúp gì cho bạn không?"
+  }
+  ```
+
+- **GET /api/chatbot/health**: Kiểm tra trạng thái hoạt động của chatbot
+  Phản hồi:
+  ```json
+  {
+    "status": "healthy",
+    "model": "facebook/blenderbot-400M-distill"
+  }
+  ```
+
+## Cấu trúc dự án
+```
+project/
+├── backend/
+│   ├── chatbot.py         # Module xử lý chatbot
+│   ├── app.py             # Ứng dụng Flask chính
+│   ├── requirements.txt   # Các thư viện cần thiết
+│   └── ...                # Các module khác
+├── frontend/
+│   ├── templates/         # Các file HTML
+│   │   └── chatbot.html   # Giao diện chatbot
+│   └── static/            # Các file tĩnh (CSS, JS, images)
+│       └── js/
+│           └── chatbot.js # JavaScript cho chatbot
+└── README.md              # Tài liệu hướng dẫn
 ```
 
-## Tạo môi trường riêng (tuỳ chọn)
+## Tùy chỉnh mô hình
+Bạn có thể thay đổi mô hình mặc định trong file `backend/chatbot.py` bằng cách chỉnh sửa biến `model_name`.
 
-```
-python -m venv env
-source env/bin/activate  # Trên Linux/Mac
-env\Scripts\activate     # Trên Windows
-pip install -r requirements.txt
-```
+## Đóng góp
+Mọi đóng góp đều được hoan nghênh! Vui lòng tạo issue trước khi gửi pull request.

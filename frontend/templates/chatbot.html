@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot - NLP Tool</title>
+    <!-- Thêm Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css">
+    <meta name="theme-color" content="#4285f4">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <style>
+        /* Thêm CSS cho nút context switcher */
+        .context-switcher-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 18px;
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        
+        .context-switcher-btn:hover {
+            background-color: #e9e9e9;
+            border-color: #ccc;
+        }
+        
+        .context-switcher-btn i {
+            margin-right: 6px;
+            font-size: 1rem;
+        }
+        
+        /* Style cho thông báo thay đổi ngữ cảnh trong khung chat */
+        .system-message {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 10px auto;
+            font-size: 0.85rem;
+            color: #666;
+            text-align: center;
+            max-width: 80%;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .context-switcher-btn span {
+                display: none;
+            }
+            
+            .context-switcher-btn {
+                padding: 0.5rem;
+            }
+            
+            .context-switcher-btn i {
+                margin-right: 0;
+            }
+        }
+        
+        /* Dark mode support */
+        .dark-mode .context-switcher-btn {
+            background-color: #333;
+            color: #f5f5f5;
+            border-color: #444;
+        }
+        
+        .dark-mode .context-switcher-btn:hover {
+            background-color: #444;
+            border-color: #555;
+        }
+        
+        .dark-mode .system-message {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #aaa;
+        }
+
+        /* CSS cho dialog chọn ngữ cảnh */
+        .swal2-title {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #4285f4;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+            padding: 0.5rem 0.75rem;
+            background-color: rgba(240, 245, 255, 0.7);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            display: inline-block;
+            box-shadow: 0 2px 6px rgba(66, 133, 244, 0.12);
+        }
+        
+        .swal2-title:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: #4285f4;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        
+        /* CSS cho container chứa radio buttons */
+        .swal2-radio {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 1rem 0 !important;
+            padding: 0 !important;
+            width: 100%;
+        }
+        
+        /* Style cho từng radio input và label */
+        .swal2-radio label {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            margin: 0 !important;
+            padding: 12px 8px !important;
+            border-radius: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            text-align: center;
+            min-height: 100px;
+        }
+        
+        .swal2-radio label:hover {
+            border-color: #4285f4;
+            background-color: #f0f5ff;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(66, 133, 244, 0.15);
+        }
+        
+        /* Ẩn radio button mặc định */
+        .swal2-radio input {
+            position: absolute !important;
+            opacity: 0 !important;
+            margin: 0 !important;
+            z-index: -1 !important;
+        }
+        
+        /* Thêm check mark cho radio button được chọn */
+        .swal2-radio input:checked + span:before {
+            content: '\f058';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            color: #4285f4;
+            font-size: 1.25rem;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        /* Style cho radio button được chọn */
+        .swal2-radio input:checked + span {
+            border-color: #4285f4;
+            background-color: #f0f5ff;
+            box-shadow: 0 3px 10px rgba(66, 133, 244, 0.2);
+        }
+        
+        /* Thêm icon cho mỗi lựa chọn ngữ cảnh */
+        .swal2-radio label span:before {
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: #4285f4;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        /* Icon tùy chỉnh cho mỗi loại ngữ cảnh - sửa lại icon chính xác hơn */
+        .swal2-radio label:nth-child(1) span:before { content: '\f015'; } /* Default - Home */
+        .swal2-radio label:nth-child(2) span:before { content: '\f5fc'; } /* Expert - Diagram */
+        .swal2-radio label:nth-child(3) span:before { content: '\f303'; } /* Creative - Pen fancy */
+        .swal2-radio label:nth-child(4) span:before { content: '\f05a'; } /* Concise - Info */
+        .swal2-radio label:nth-child(5) span:before { content: '\f1c9'; } /* Technical - Code file */
+        .swal2-radio label:nth-child(6) span:before { content: '\f51c'; } /* Educational - Chalkboard */
+        .swal2-radio label:nth-child(7) span:before { content: '\f4ad'; } /* Conversational - Comment dots */
+        .swal2-radio label:nth-child(8) span:before { content: '\f303'; } /* Custom - Pen fancy */
+        
+        /* Container SweetAlert */
+        .context-switcher-popup {
+            max-width: 450px !important;
+            width: 100% !important;
+            padding: 1rem !important;
+            border-radius: 15px !important;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15) !important;
+        }
+        
+        /* Nút xác nhận và hủy */
+        .swal2-actions {
+            gap: 8px;
+            margin-top: 0.5rem !important;
+        }
+        
+        .swal2-confirm {
+            background-color: #4285f4 !important;
+            border-radius: 15px !important;
+            font-weight: 500 !important;
+            padding: 8px 20px !important;
+            box-shadow: 0 3px 5px rgba(66, 133, 244, 0.3) !important;
+            font-size: 0.9rem !important;
+        }
+        
+        .swal2-cancel {
+            background-color: #f5f5f5 !important;
+            color: #333 !important;
+            border-radius: 15px !important;
+            font-weight: 500 !important;
+            padding: 8px 20px !important;
+            box-shadow: none !important;
+            border: 1px solid #e0e0e0 !important;
+            font-size: 0.9rem !important;
+        }
+        
+        /* Dark mode support */
+        .dark-mode .swal2-popup {
+            background: #2a2a2a !important;
+            color: #f5f5f5 !important;
+        }
+        
+        .dark-mode .swal2-title {
+            color: #78aeff !important;
+            background-color: rgba(25, 35, 55, 0.7) !important;
+        }
+        
+        .dark-mode .swal2-title:after {
+            background-color: #78aeff;
+        }
+        
+        .dark-mode .swal2-radio label {
+            background-color: #333;
+            border-color: #444;
+            color: #f5f5f5;
+        }
+        
+        .dark-mode .swal2-radio label:hover,
+        .dark-mode .swal2-radio input:checked + span {
+            background-color: #2c3e50;
+            border-color: #78aeff;
+        }
+        
+        .dark-mode .swal2-radio input:checked + span:before {
+            color: #78aeff;
+            background-color: #333;
+            border-color: #333;
+        }
+        
+        .dark-mode .swal2-radio label span:before {
+            color: #78aeff;
+        }
+        
+        .dark-mode .swal2-cancel {
+            background-color: #333 !important;
+            color: #f5f5f5 !important;
+            border-color: #444 !important;
+        }
+        
+        /* Form tùy chỉnh ngữ cảnh */
+        .swal2-input, .swal2-textarea {
+            border-radius: 10px !important;
+            border: 1px solid #e0e0e0 !important;
+            padding: 10px !important;
+            margin-bottom: 12px !important;
+            font-size: 0.9rem !important;
+        }
+        
+        .swal2-input:focus, .swal2-textarea:focus {
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.25) !important;
+            border-color: #4285f4 !important;
+        }
+        
+        .dark-mode .swal2-input, 
+        .dark-mode .swal2-textarea {
+            background-color: #333 !important;
+            color: #f5f5f5 !important;
+            border-color: #444 !important;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .swal2-radio {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .context-switcher-popup {
+                width: 90% !important;
+                max-width: 400px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .swal2-radio {
+                grid-template-columns: 1fr;
+            }
+            
+            .swal2-title {
+                font-size: 1.2rem;
+                padding: 0.4rem 0.6rem;
+            }
+            
+            .context-switcher-popup {
+                width: 85% !important;
+            }
+        }
+
+        /* Toast notifications */
+        .swal2-toast {
+            padding: 0.6rem 1rem !important;
+            font-size: 0.9rem !important;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15) !important;
+            border-radius: 8px !important;
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        .swal2-toast .swal2-title {
+            font-size: 0.9rem !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            color: inherit !important;
+            font-weight: 500 !important;
+        }
+
+        .swal2-toast .swal2-title:after {
+            display: none;
+        }
+
+        .swal2-toast .swal2-icon {
+            margin: 0 0.5rem 0 0 !important;
+            height: 1.5rem !important;
+            width: 1.5rem !important;
+            font-size: 0.9rem !important;
+        }
+
+        .dark-mode .swal2-toast {
+            background: #333 !important;
+            color: #f5f5f5 !important;
+        }
+
+        .dark-mode .swal2-toast.swal2-icon-success {
+            background: #285e34 !important;
+        }
+
+        .dark-mode .swal2-toast.swal2-icon-error {
+            background: #6c1a1a !important;
+        }
+
+        .dark-mode .swal2-toast.swal2-icon-info {
+            background: #164e77 !important;
+        }
+
+        /* Swal2 overrides for smaller dialog */
+        .context-switcher-popup {
+            margin: 0.5rem !important;
+            overflow: hidden !important;
+        }
+
+        .swal2-container.swal2-top {
+            align-items: flex-start !important;
+            padding-top: 0.5rem !important;
+        }
+
+        /* Tùy chỉnh cho hover trạng thái */
+        .swal2-radio label span {
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .swal2-radio label:hover span {
+            transform: scale(1.05);
+        }
+
+        /* Fix CSS cho không có gạch chân trong title */
+        .context-switcher-title:after {
+            display: none !important;
+        }
+
+        /* Context Dropdown Styles */
+        .context-dropdown {
+            position: relative;
+            margin-right: 0;
+        }
+
+        .context-dropdown-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            border-radius: 50%;
+            background-color: transparent;
+            color: #555;
+            border: none;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .context-dropdown-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: #4285f4;
+        }
+
+        .context-dropdown-menu {
+            position: fixed;
+            display: none;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            max-width: 260px;
+            z-index: 1000;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .context-dropdown-item {
+            padding: 10px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .context-dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .context-dropdown-item:hover {
+            background-color: #f0f5ff;
+        }
+
+        .context-dropdown-item.active {
+            background-color: #f0f5ff;
+            color: #4285f4;
+        }
+
+        .context-dropdown-item i {
+            margin-right: 8px;
+            color: #4285f4;
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .context-dropdown-loading {
+            padding: 12px;
+            text-align: center;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .context-dropdown-loading i {
+            margin-right: 5px;
+            color: #4285f4;
+        }
+
+        .context-dropdown-divider {
+            height: 1px;
+            background-color: #f0f0f0;
+            margin: 5px 0;
+        }
+        
+        /* Dark mode support */
+        .dark-mode .context-dropdown-menu {
+            background-color: #2a2a2a;
+            border-color: #444;
+        }
+
+        .dark-mode .context-dropdown-item {
+            color: #f5f5f5;
+            border-bottom-color: #444;
+        }
+
+        .dark-mode .context-dropdown-item:hover {
+            background-color: #444;
+        }
+
+        .dark-mode .context-dropdown-item.active {
+            background-color: #2c3e50;
+            color: #78aeff;
+        }
+
+        .dark-mode .context-dropdown-item i {
+            color: #78aeff;
+        }
+
+        .dark-mode .context-dropdown-divider {
+            background-color: #444;
+        }
+
+        .dark-mode .context-dropdown-loading {
+            color: #aaa;
+        }
+
+        /* Styles for code blocks with highlight.js */
+        pre {
+            margin: 12px 0;
+            padding: 0;
+            max-width: 100%;
+            overflow-x: auto;
+            border-radius: 4px;
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+        }
+
+        pre code {
+            display: block;
+            padding: 12px 16px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            background-color: transparent !important;
+            border: none !important;
+        }
+
+        /* The hljs class is added by highlight.js automatically */
+        .hljs {
+            background-color: transparent !important;
+            color: #333;
+        }
+
+        /* Colors for specific syntax elements */
+        .hljs-keyword, .hljs-selector-tag, .hljs-title, .hljs-section, .hljs-doctag, .hljs-name, .hljs-strong {
+            color: #0033B3; /* Blue for keywords */
+            font-weight: normal;
+        }
+        
+        .hljs-string, .hljs-doctag {
+            color: #008000; /* Green for strings */
+        }
+        
+        .hljs-comment {
+            color: #808080; /* Gray for comments */
+            font-style: italic;
+        }
+        
+        .hljs-number, .hljs-literal {
+            color: #0000FF; /* Blue for numbers */
+        }
+        
+        .hljs-tag, .hljs-symbol, .hljs-bullet, .hljs-meta {
+            color: #9C27B0; /* Purple for tags */
+        }
+        
+        .hljs-attr {
+            color: #E65100; /* Orange for attributes */
+        }
+        
+        /* Dark mode support for highlighted code */
+        .dark-mode pre {
+            background-color: #2d2d2d;
+            border-color: #444;
+        }
+        
+        .dark-mode .hljs {
+            color: #f8f8f8;
+        }
+        
+        .dark-mode .hljs-keyword, .dark-mode .hljs-selector-tag, .dark-mode .hljs-title, 
+        .dark-mode .hljs-section, .dark-mode .hljs-doctag, .dark-mode .hljs-name, .dark-mode .hljs-strong {
+            color: #79B8FF; /* Light blue for dark mode */
+        }
+        
+        .dark-mode .hljs-string, .dark-mode .hljs-doctag {
+            color: #9AE6B4; /* Light green for dark mode */
+        }
+        
+        .dark-mode .hljs-comment {
+            color: #B0B0B0; /* Light gray for dark mode */
+        }
+        
+        .dark-mode .hljs-number, .dark-mode .hljs-literal {
+            color: #79B8FF; /* Light blue for dark mode */
+        }
+        
+        .dark-mode .hljs-tag, .dark-mode .hljs-symbol, .dark-mode .hljs-bullet, .dark-mode .hljs-meta {
+            color: #D8B0DF; /* Light purple for dark mode */
+        }
+        
+        .dark-mode .hljs-attr {
+            color: #FFAB70; /* Light orange for dark mode */
+        }
+
+        /* CSS cho nút ngữ cảnh dạng pill */
+        .aichat-context-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+            height: 36px;
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 18px;
+            color: #333;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin: 0 10px;
+            flex-grow: 1;
+            max-width: 200px;
+        }
+        
+        .aichat-context-pill:hover {
+            background-color: #e9e9e9;
+            border-color: #ccc;
+        }
+        
+        .aichat-context-pill i {
+            margin-right: 8px;
+            font-size: 0.9rem;
+        }
+        
+        /* CSS mới cho nút ngữ cảnh ngắn */
+        .aichat-context-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 12px;
+            height: 36px;
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 18px;
+            color: #333;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-right: 10px;
+            max-width: 100px;
+        }
+        
+        .aichat-context-btn:hover {
+            background-color: #e9e9e9;
+            border-color: #ccc;
+        }
+        
+        .aichat-context-btn i {
+            margin-right: 6px;
+            font-size: 0.9rem;
+        }
+        
+        /* CSS cho nút cộng với viền mỏng */
+        .add-file-btn {
+            border: 1px solid #e0e0e0;
+            margin-right: 8px;
+        }
+        
+        .dark-mode .add-file-btn {
+            border-color: #444;
+        }
+        
+        .add-file-btn:hover {
+            border-color: #ccc;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .dark-mode .add-file-btn:hover {
+            border-color: #555;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Điều chỉnh cho layout mới */
+        .aichat-input-actions {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            justify-content: space-between;
+        }
+        
+        /* Dark mode support */
+        .dark-mode .aichat-context-btn {
+            background-color: #333;
+            color: #f5f5f5;
+            border-color: #444;
+        }
+        
+        .dark-mode .aichat-context-btn:hover {
+            background-color: #444;
+            border-color: #555;
+        }
+        
+        /* Responsive */
+        @media (max-width: 576px) {
+            .aichat-context-btn span {
+                display: none;
+            }
+            
+            .aichat-context-btn {
+                padding: 0 8px;
+                width: auto;
+                max-width: none;
+            }
+            
+            .aichat-context-btn i {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body class="aichat-interface">
+
+    <div class="aichat-container">
+        <!-- Sidebar -->
+        <aside class="aichat-sidebar">
+            <div class="aichat-sidebar-header">
+                <button class="aichat-menu-button ripple" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="aichat-dropdown">
+                    <span>VYxAI</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="aichat-version">version 1.0.0</div>
+            </div>
+            
+            <div class="aichat-new-chat">
+                <button class="aichat-new-chat-btn ripple">
+                    <i class="fas fa-plus"></i>
+                    <span>Cuộc trò chuyện mới</span>
+                </button>
+            </div>
+            
+            <div class="aichat-sidebar-sections">
+                <div class="aichat-sidebar-section">
+                    <h3 class="aichat-section-title">Gần đây</h3>
+                    <ul class="aichat-conversation-list">
+                        <li class="aichat-conversation-item active">
+                            <div class="aichat-conversation-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <span>Hướng Dẫn Xây Dựng Chatbot</span>
+                        </li>
+                        <li class="aichat-conversation-item">
+                            <div class="aichat-conversation-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <span>Trợ lý ý tưởng</span>
+                        </li>
+                        <li class="aichat-conversation-item">
+                            <div class="aichat-conversation-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <span>Đối tác lập trình</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="aichat-sidebar-controls">
+                    <button class="aichat-control-item ripple">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Trợ giúp</span>
+                    </button>
+                    <button class="aichat-control-item ripple">
+                        <i class="fas fa-cog"></i>
+                        <span>Cài đặt</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main content -->
+        <main class="aichat-main">
+            <div class="aichat-header">
+                <div class="aichat-header-actions">
+                    <button class="aichat-action-button aichat-advanced-btn ripple">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home"></i>
+                            <span>Về trang chủ</span>
+                        </a>
+                    </button>
+                    <button class="aichat-action-button aichat-user-btn ripple">
+                        <div class="aichat-user-icon">V</div>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Chat Messages Area -->
+            <div id="chat-messages" class="chat-messages-container">
+                <!-- Welcome screen -->
+                <div class="welcome-screen">
+                    <div class="welcome-animation" id="particles-js"></div>
+                    <div class="welcome-header animate__animated animate__fadeIn">
+                        <h1>Chào mừng đến với VYxAI</h1>
+                        <div class="subtitle">Trợ lý AI thông minh của bạn, luôn sẵn sàng hỗ trợ</div>
+                        <p class="lead">Được phát triển với công nghệ xử lý ngôn ngữ tự nhiên tiên tiến, VYxAI sẽ giúp bạn giải quyết mọi vấn đề một cách nhanh chóng và chính xác.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Input area -->
+            <div class="aichat-input-container = mb-4">
+                <form id="chat-form" class="aichat-input-form">
+                    <div class="aichat-input-wrapper">
+                        <textarea id="user-input" class="aichat-input" placeholder="Hỏi tôi bất cứ điều gì..." rows="1"></textarea>
+                        <div class="aichat-input-actions">
+                            <div class="aichat-input-actions-left">
+                                <!-- Nút thêm file (+) ở bên trái -->
+                                <button type="button" class="aichat-action-btn add-file-btn ripple" title="Thêm file">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                
+                                <!-- Nút ngữ cảnh ngắn ở bên trái -->
+                                <button type="button" id="context-switcher-btn" class="aichat-context-btn ripple aichat-context-btn-short" title="Thay đổi ngữ cảnh của chatbot">
+                                    <i class="fas fa-sliders-h"></i>
+                                    <span>Suy luận</span>
+                                </button>
+                                
+                                <!-- Nút âm thanh ở bên phải -->
+                               
+                            </div>
+    
+                            <div class="aichat-input-actions-right">
+                                <button type="button" class="aichat-action-btn ripple" title="Ghi âm">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                                
+                                <!-- Nút gửi tin nhắn ở bên phải -->
+                                <button type="submit" class="aichat-send-btn ripple" id="send-button" title="Gửi tin nhắn">
+                                    <i class="fa-solid fa-location-arrow"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Menu dropdown ngữ cảnh (hiển thị khi bấm vào nút ngữ cảnh) -->
+                        <div id="context-dropdown-menu" class="context-dropdown-menu dropup">
+                            <!-- Dropdown items sẽ được thêm vào bằng JavaScript -->
+                            <div class="context-dropdown-loading">
+                                <i class="fas fa-spinner fa-spin"></i> Đang tải...
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle ripple" id="dark-mode-toggle" title="Chuyển đổi chế độ tối/sáng">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 JS (Needed for showToast and feedback) -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+    <!-- Animate on Scroll library -->
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <!-- Particles.js for background animation -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <!-- Markdown rendering with marked.js -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Syntax highlighting with highlight.js -->
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/styles/github.min.css">
+    <!-- Additional languages for highlight.js if needed -->
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/languages/python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/languages/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/languages/cpp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.7.0/build/languages/java.min.js"></script>
+
+    <!-- Load Custom Chatbot JS -->
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+    <!-- Or if not using Flask: -->
+    <!-- <script src="js/chatbot.js"></script> -->
+
+    <script>
+        // Xử lý nút thêm file khi trang đã tải
+        document.addEventListener('DOMContentLoaded', function() {
+            const addFileBtn = document.querySelector('.aichat-action-btn [class*="fa-plus"]').closest('button');
+            
+            if (addFileBtn) {
+                addFileBtn.addEventListener('click', function() {
+                    // Tạo input file ẩn
+                    const fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.accept = 'image/*,.pdf,.doc,.docx,.txt'; // Chấp nhận hình ảnh và một số định dạng file
+                    fileInput.style.display = 'none';
+                    
+                    // Thêm vào DOM và kích hoạt
+                    document.body.appendChild(fileInput);
+                    fileInput.click();
+                    
+                    // Xử lý khi người dùng chọn file
+                    fileInput.addEventListener('change', function() {
+                        if (fileInput.files.length > 0) {
+                            // Tạm thời hiển thị thông báo
+                            Swal.fire({
+                                toast: true,
+                                position: 'top',
+                                icon: 'info',
+                                title: 'Đã chọn file: ' + fileInput.files[0].name,
+                                text: 'Tính năng tải file sẽ được hỗ trợ trong bản cập nhật tới.',
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        }
+                        
+                        // Xóa input sau khi sử dụng
+                        document.body.removeChild(fileInput);
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

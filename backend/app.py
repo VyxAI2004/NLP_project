@@ -20,18 +20,21 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 import re
 import pandas as pd
 import numpy as np
+import uuid
 
 # Import các module đã viết
-from backend.crawler_synonyms import SynonymsCrawler
-from backend.data_augmentation import (
+from .crawler_synonyms import SynonymsCrawler
+from .data_augmentation import (
     replace_with_synonyms, load_synonyms_cache, save_synonyms_cache,
     add_random_words, swap_words, delete_words, create_augmented_samples
 )
-from backend.text_cleaning import clean_text, process_text_as_json, process_request, tokenize_sentences, tokenize_words, tag_parts_of_speech, parse_syntax
-from backend.text_vectorization import TextVectorizer, one_hot_encode, count_vectorize, tfidf_vectorize
-from backend.file_processor import FileProcessor
-from backend.text_classification import TextClassifier
-from backend.prediction_service import find_latest_model
+from .text_cleaning import clean_text, process_text_as_json, process_request, tokenize_sentences, tokenize_words, tag_parts_of_speech, parse_syntax
+from .text_vectorization import TextVectorizer, one_hot_encode, count_vectorize, tfidf_vectorize
+from .file_processor import FileProcessor
+from .text_classification import TextClassifier
+from .prediction_service import find_latest_model
+from .recommendation_system import get_recommendation_system
+from .chatbot import chatbot
 
 # Văn bản mẫu cho các danh mục
 SAMPLE_TEXTS = {
@@ -91,9 +94,14 @@ def index():
     return render_template('index.html')
 
 @app.route('/recommendation')
-def recommendation():
-    """Trang hệ thống đề xuất"""
+def recommendation_page():
+    """Trang hệ thống gợi ý thông minh"""
     return render_template('recommendation.html')
+
+@app.route('/chatbot')
+def chatbot_page():
+    """Trang chatbot AI"""
+    return render_template('chatbot.html')
 
 @app.route('/api/process_text', methods=['POST'])
 def process_text():
@@ -1172,10 +1180,6 @@ def train_model_page():
     """Trang đào tạo mô hình phân loại văn bản"""
     return render_template('train_model.html')
 
-@app.route('/recommendation')
-def recommendation_page():
-    """Trang hệ thống gợi ý thông minh"""
-    return render_template('recommendation.html')
 
 @app.route('/api/train_model', methods=['POST'])
 def api_train_model():
@@ -1399,6 +1403,337 @@ def api_model_categories():
         return jsonify({
             'status': 'error',
             'message': f'Lỗi khi lấy danh sách thể loại mô hình: {str(e)}'
+        }), 500
+    
+
+@app.route('/api/recommend', methods=['POST'])
+def recommend():
+    """
+    API chung để lấy đề xuất phim từ nhiều phương pháp
+    """
+    try:
+        data = request.get_json()
+        if not data or 'method' not in data:
+            return jsonify({
+                'status': 'error',
+                'message': 'Thiếu thông tin phương pháp đề xuất'
+            }), 400
+        
+        method = data['method']
+        recommendation_system = get_recommendation_system()
+        
+        if method == 'content-based':
+            if 'user_ratings' not in data:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Thiếu thông tin đánh giá từ người dùng'
+                }), 400
+            
+            # Thêm thông tin debug để hiểu user_ratings
+            logger.info(f"User ratings: {data['user_ratings']}")
+            recommendations = recommendation_system.content_based_recommend(data['user_ratings'])
+            
+            # Lấy số lượng đánh giá
+            num_ratings = len(data['user_ratings'])
+            
+            # Log thông tin chi tiết về đề xuất
+            logger.info(f"Generated {len(recommendations)} recommendations based on {num_ratings} ratings")
+            
+            # Thêm thông tin bổ sung để hiển thị cho người dùng
+            return jsonify({
+                'status': 'success',
+                'message': f'Đề xuất đã được tạo dựa trên {num_ratings} đánh giá phim của bạn',
+                'method': method,
+                'recommendations': recommendations,
+                'model_info': {
+                    'trained_on': num_ratings,
+                    'processing_time': "0.25" # Thêm để tương thích với giao diện hiện tại
+                }
+            })
+        elif method == 'collaborative':
+            if 'user_id' not in data:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Thiếu thông tin user_id'
+                }), 400
+            recommendations = recommendation_system.collaborative_recommend(data['user_id'])
+            
+            # Chuyển đổi định dạng để phù hợp với UI hiện tại
+            formatted_recommendations = []
+            for rec in recommendations:
+                formatted_recommendations.append({
+                    'id': rec['movie_id'],
+                    'title': rec['title'],
+                    'genres': rec['genres'],
+                    'predictedRating': rec['predicted_rating'],
+                    'score': rec['score']
+                })
+            
+            return jsonify({
+                'status': 'success',
+                'message': 'Đề xuất đã được tạo dựa trên người dùng tương tự',
+                'method': method,
+                'items': formatted_recommendations
+            })
+        elif method == 'context-aware':
+            if 'location' not in data:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Thiếu thông tin vị trí'
+                }), 400
+            recommendations = recommendation_system.context_aware_recommend(
+                data['location'], data.get('time'))
+            
+            # Chuyển đổi định dạng để phù hợp với UI hiện tại
+            formatted_recommendations = []
+            for rec in recommendations:
+                formatted_recommendations.append({
+                    'id': rec['movie_id'],
+                    'title': rec['title'],
+                    'genres': rec['genres'],
+                    'predictedRating': rec['predicted_rating'],
+                    'score': rec['score'],
+                    'location': rec['location'],
+                    'time': rec['time']
+                })
+            
+            return jsonify({
+                'status': 'success',
+                'message': f'Đề xuất phim gần {data["location"]} đã được tạo',
+                'method': method,
+                'items': formatted_recommendations
+            })
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': f'Phương pháp không hợp lệ: {method}'
+            }), 400
+        
+    except Exception as e:
+        logger.error(f"Lỗi khi đề xuất: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': f'Đã xảy ra lỗi: {str(e)}'
+        }), 500
+
+
+@app.route('/api/movies/list', methods=['GET'])
+def get_movies_list():
+    """
+    API để lấy danh sách tất cả các phim có sẵn để đánh giá
+    """
+    try:
+        recommendation_system = get_recommendation_system()
+        movies = recommendation_system.get_all_movies()
+        
+        return jsonify({
+            'status': 'success',
+            'movies': movies
+        })
+    except Exception as e:
+        logger.error(f"Lỗi khi lấy danh sách phim: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': f'Đã xảy ra lỗi: {str(e)}'
+        }), 500
+
+# API Endpoint cho Chatbot
+@app.route('/api/chat', methods=['POST'])
+def chat_api():
+    """API endpoint để tương tác với chatbot"""
+    try:
+        data = request.get_json()
+        
+        if not data or 'message' not in data:
+            return jsonify({'error': 'Không có tin nhắn được cung cấp'}), 400
+        
+        message = data['message']
+        conversation_id = data.get('conversation_id')
+        
+        # Tạo cuộc trò chuyện mới nếu không có conversation_id
+        if not conversation_id:
+            conversation_id = str(uuid.uuid4())
+        
+        # Lấy phản hồi từ chatbot
+        reply = chatbot.get_response(message, conversation_id)
+        
+        return jsonify({
+            'reply': reply,
+            'conversation_id': conversation_id
+        })
+    
+    except Exception as e:
+        app.logger.error(f"Chat API error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/chat/new', methods=['POST'])
+def new_conversation():
+    """API endpoint để tạo cuộc trò chuyện mới"""
+    try:
+        # Sử dụng phương thức create_conversation của chatbot để tạo ID mới
+        conversation_id = chatbot.create_conversation()
+        
+        # Trả về ID cuộc trò chuyện mới
+        return jsonify({
+            'conversation_id': conversation_id,
+            'status': 'success',
+            'message': 'Đã tạo cuộc trò chuyện mới'
+        })
+    
+    except Exception as e:
+        app.logger.error(f"New chat error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/chat/clear', methods=['POST'])
+def clear_chat_history():
+    """API endpoint để xóa lịch sử trò chuyện"""
+    try:
+        data = request.get_json()
+        conversation_id = data.get('conversation_id')
+        
+        chatbot.clear_history(conversation_id)
+        
+        return jsonify({
+            'status': 'success',
+            'message': 'Đã xóa lịch sử trò chuyện'
+        })
+    
+    except Exception as e:
+        app.logger.error(f"Clear chat error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/chatbot/health', methods=['GET'])
+def chatbot_health():
+    """API endpoint để kiểm tra trạng thái hoạt động của chatbot"""
+    try:
+        # Kiểm tra xem chatbot có khả dụng không
+        test_response = chatbot.get_response("Chào bạn", None)
+        
+        if test_response:
+            return jsonify({
+                'status': 'online',
+                'model_name': chatbot.model_name
+            })
+        else:
+            return jsonify({
+                'status': 'error', 
+                'message': 'Chatbot không phản hồi'
+            }), 500
+    
+    except Exception as e:
+        app.logger.error(f"Chatbot health check error: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': str(e)
+        }), 500
+
+# Thêm endpoint mới để thay đổi ngữ cảnh của chatbot
+@app.route('/api/chat/context', methods=['POST'])
+def change_chatbot_context():
+    """
+    API endpoint để thay đổi ngữ cảnh của chatbot.
+    
+    Yêu cầu POST có thể chứa:
+    - context_type: Loại ngữ cảnh có sẵn ('default', 'expert', 'creative', 'concise', 'technical', 'educational', 'conversational')
+    - custom_instruction: Hướng dẫn tùy chỉnh (ghi đè lên context_type nếu được cung cấp)
+    
+    Hoặc các thành phần để tạo ngữ cảnh tùy chỉnh:
+    - personality: Tính cách của chatbot
+    - expertise: Lĩnh vực chuyên môn
+    - response_style: Phong cách trả lời
+    - extra_instructions: Hướng dẫn bổ sung
+    
+    Trả về:
+    - Status: Trạng thái thành công/thất bại
+    - Message: Thông báo
+    - New context: Ngữ cảnh mới
+    """
+    try:
+        # Lấy dữ liệu từ request
+        data = request.get_json()
+        
+        # Kiểm tra loại thay đổi ngữ cảnh
+        if not data:
+            return jsonify({
+                'status': 'error',
+                'message': 'Không có dữ liệu trong request'
+            }), 400
+        
+        # Ghi log hành động thay đổi ngữ cảnh
+        logger.info(f"Thay đổi ngữ cảnh chatbot: {data}")
+        
+        # Trường hợp 1: Sử dụng context_type hoặc custom_instruction
+        if 'context_type' in data or 'custom_instruction' in data:
+            context_type = data.get('context_type')
+            custom_instruction = data.get('custom_instruction')
+            
+            # Thay đổi ngữ cảnh
+            result = chatbot.set_context(context_type=context_type, custom_instruction=custom_instruction)
+            
+            return jsonify({
+                'status': 'success',
+                'message': 'Đã thay đổi ngữ cảnh thành công',
+                'new_context': result
+            })
+        
+        # Trường hợp 2: Tạo ngữ cảnh tùy chỉnh từ các thành phần
+        elif any(key in data for key in ['personality', 'expertise', 'response_style', 'extra_instructions']):
+            personality = data.get('personality')
+            expertise = data.get('expertise')
+            response_style = data.get('response_style')
+            extra_instructions = data.get('extra_instructions')
+            
+            # Tạo ngữ cảnh tùy chỉnh
+            result = chatbot.create_custom_context(
+                personality=personality,
+                expertise=expertise,
+                response_style=response_style,
+                extra_instructions=extra_instructions
+            )
+            
+            return jsonify({
+                'status': 'success',
+                'message': 'Đã tạo và thiết lập ngữ cảnh tùy chỉnh thành công',
+                'new_context': result
+            })
+        
+        # Trường hợp không có dữ liệu hợp lệ
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': 'Không có thông tin ngữ cảnh hợp lệ'
+            }), 400
+    
+    except Exception as e:
+        logger.error(f"Lỗi khi thay đổi ngữ cảnh chatbot: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': f'Lỗi khi thay đổi ngữ cảnh: {str(e)}'
+        }), 500
+
+# Thêm endpoint để lấy danh sách ngữ cảnh có sẵn
+@app.route('/api/chat/available_contexts', methods=['GET'])
+def get_available_contexts():
+    """
+    API endpoint để lấy danh sách các ngữ cảnh có sẵn.
+    
+    Trả về:
+    - Status: Trạng thái thành công/thất bại
+    - Contexts: Dictionary chứa các loại ngữ cảnh và mô tả
+    """
+    try:
+        contexts = chatbot.get_available_contexts()
+        
+        return jsonify({
+            'status': 'success',
+            'contexts': contexts
+        })
+    
+    except Exception as e:
+        logger.error(f"Lỗi khi lấy danh sách ngữ cảnh: {str(e)}")
+        return jsonify({
+            'status': 'error',
+            'message': f'Lỗi khi lấy danh sách ngữ cảnh: {str(e)}'
         }), 500
 
 # Khởi động app

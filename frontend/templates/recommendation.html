@@ -28,6 +28,22 @@
             display: block;
         }
 
+        /* Theme transition optimization */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        /* Khi đang chuyển theme, tắt transition cho mọi phần tử để tăng hiệu suất */
+        body.theme-transitioning,
+        body.theme-transitioning * {
+            transition: none !important;
+        }
+        
+        /* Khi không trong trạng thái transitioning, thêm transition cho các phần tử chính */
+        .card, .method-selection-card, .movie-rating-card, .nav-tabs .nav-link {
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+        }
+
         /* Style for the recommendation method selection cards */
         .method-selection-card {
             padding: 1rem;
@@ -91,6 +107,51 @@
 
         /* Add other necessary styles from your 'style.css' if they are not global */
 
+        /* Star rating styles */
+        .star-rating {
+            display: inline-block;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .star-rating i {
+            color: #ccc;
+            font-size: 18px;
+            margin-right: 3px;
+            transition: color 0.2s;
+        }
+
+        .star-rating i.fas {
+            color: #FFC107;
+        }
+
+        .star-rating i:hover {
+            color: #FFC107;
+        }
+
+        .movie-rating-card {
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.125);
+        }
+
+        .movie-rating-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        body.dark-mode .movie-rating-card {
+            background-color: #2d2d2d;
+            border-color: #444;
+        }
+
+        body.dark-mode .star-rating i.fas {
+            color: #FFC107;
+        }
+
+        body.dark-mode .star-rating i {
+            color: #666;
+        }
+
     </style>
 </head>
 <body>
@@ -104,10 +165,10 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                 <ul class="navbar-nav ms-auto">
-                     <li class="nav-item">
-                        <a class="nav-link" href="/"> <!-- Link to homepage -->
-                            <i class="fas fa-home me-1"></i> Trang chủ 
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">
+                            <i class="fas fa-home me-1"></i> Trang chủ
                         </a>
                     </li>
                     <li class="nav-item">
@@ -200,9 +261,174 @@
                          <div id="input-container">
                              <!-- Input cho Content-Based -->
                              <div id="input-content-based" class="input-section active">
-                                 <label for="cb-movie-input" class="form-label">Nhập tên phim bạn thích hoặc mô tả thể loại:</label>
-                                <textarea id="cb-movie-input" class="form-control mb-3" rows="4" placeholder="Ví dụ: Phim hành động viễn tưởng giống Inception, phim hài lãng mạn Hàn Quốc..."></textarea>
-                                <button class="btn btn-sm btn-light clear-input-btn" data-target="#cb-movie-input"><i class="fas fa-eraser me-1"></i> Xóa</button>
+                                <div class="mt-4 mb-3">
+                                    <h6 class="mb-3">Đánh giá phim để cải thiện đề xuất:</h6>
+                                    <div class="movie-ratings">
+                                        <div class="row" id="movies-to-rate">
+                                            <!-- Movie cards will be inserted here dynamically -->
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">The Matrix</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Hành động, Viễn tưởng, Khoa học</p>
+                                                        <div class="star-rating" data-movie-id="1">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                           <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">Inception</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Hành động, Viễn tưởng, Ly kỳ</p>
+                                                        <div class="star-rating" data-movie-id="2">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                            <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">The Shawshank Redemption</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Chính kịch, Tội phạm</p>
+                                                        <div class="star-rating" data-movie-id="3">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                            <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">Pulp Fiction</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Tội phạm, Kịch tính, Hài đen</p>
+                                                        <div class="star-rating" data-movie-id="4">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                            <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">The Dark Knight</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Hành động, Tội phạm, Siêu anh hùng</p>
+                                                        <div class="star-rating" data-movie-id="5">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                            <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">Forrest Gump</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Chính kịch, Hài, Lãng mạn</p>
+                                                        <div class="star-rating" data-movie-id="6">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                            <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">Parasite</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Kinh dị, Chính kịch, Hài đen</p>
+                                                        <div class="star-rating" data-movie-id="7">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                            <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">Avatar</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Hành động, Phiêu lưu, Viễn tưởng</p>
+                                                        <div class="star-rating" data-movie-id="8">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                            <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">Titanic</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Chính kịch, Lãng mạn, Thảm họa</p>
+                                                        <div class="star-rating" data-movie-id="9">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                            <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <div class="card movie-rating-card">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">Spirited Away</h6>
+                                                        <p class="card-text small text-muted">Thể loại: Hoạt hình, Phiêu lưu, Giả tưởng</p>
+                                                        <div class="star-rating" data-movie-id="10">
+                                                            <i class="far fa-star" data-rating="1"></i>
+                                                            <i class="far fa-star" data-rating="2"></i>
+                                                            <i class="far fa-star" data-rating="3"></i>
+                                                            <i class="far fa-star" data-rating="4"></i>
+                                                            <i class="far fa-star" data-rating="5"></i>
+                                                            <span class="ms-2 rating-text">Chưa đánh giá</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                              <!-- Input cho Collaborative Filtering -->
@@ -319,5 +545,39 @@
 
     <script src="{{ url_for('static', filename='js/recommendation.js') }}"></script>
 
+    <script>
+    // Thêm xử lý Dark Mode
+    document.getElementById('dark-mode-toggle').addEventListener('click', function() {
+        // Thêm class transitioning để tối ưu hiệu suất
+        document.body.classList.add('theme-transitioning');
+        
+        // Sử dụng setTimeout để đảm bảo DOM có thời gian cập nhật trước khi thêm/xóa dark-mode
+        setTimeout(function() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.querySelector('#dark-mode-toggle i');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('darkMode', 'disabled');
+            }
+            
+            // Xóa class transitioning sau khi hoàn tất để trả lại animation cho các phần tử
+            setTimeout(function() {
+                document.body.classList.remove('theme-transitioning');
+            }, 50);
+        }, 10);
+    });
+
+    // Kiểm tra trạng thái Dark Mode khi tải trang
+    document.addEventListener('DOMContentLoaded', function() {
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('#dark-mode-toggle i').classList.replace('fa-moon', 'fa-sun');
+        }
+    });
+    </script>
 </body>
 </html>
