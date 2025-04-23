@@ -2838,7 +2838,7 @@ body.dark-mode .bot-message .message-content {
 
 /* Google VYxAI Interface Styles */
 .aichat-interface {
-    font-family: 'Google Sans', 'Roboto', sans-serif;
+    font-family: 'Be Vietnam Pro', 'Noto Sans', 'Roboto', sans-serif;
     background-color: #f8f9fa;
     color: #202124;
     height: 100vh;
@@ -2847,7 +2847,11 @@ body.dark-mode .bot-message .message-content {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    font-weight: 600; 
 }
+
+
+
 
 .aichat-container {
     display: flex;

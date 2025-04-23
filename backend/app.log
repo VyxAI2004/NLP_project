@@ -7633,3 +7633,928 @@
 2025-04-17 22:52:27,510 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 22:52:27] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
 2025-04-17 22:52:27,589 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 22:52:27] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
 2025-04-17 22:52:29,348 - werkzeug - INFO - 127.0.0.1 - - [17/Apr/2025 22:52:29] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-18 07:54:00,771 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 07:54:06,549 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 07:54:06,565 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.129.241.104:5000
+2025-04-18 07:54:06,565 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-18 07:54:06,581 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-18 07:54:08,146 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 07:54:11,759 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 07:54:11,783 - werkzeug - WARNING -  * Debugger is active!
+2025-04-18 07:54:11,791 - werkzeug - INFO -  * Debugger PIN: 869-788-550
+2025-04-18 07:54:15,866 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:15] "GET / HTTP/1.1" 200 -
+2025-04-18 07:54:15,957 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 07:54:15,964 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:15] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 07:54:16,184 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 07:54:16,185 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:16] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 07:54:16,751 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:16] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 07:54:16,770 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:16] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-18 07:54:16,821 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:16] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 07:54:19,473 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:19] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 07:54:19,501 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 07:54:19,509 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:19] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 07:54:19,690 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:19] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 07:54:19,787 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:19] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 07:54:26,077 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:26] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-18 07:54:50,880 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:50] "POST /api/chat HTTP/1.1" 200 -
+2025-04-18 07:54:56,691 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:54:56] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-18 07:55:02,502 - app - INFO - Thay đổi ngữ cảnh chatbot: {'context_type': 'educational'}
+2025-04-18 07:55:02,503 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:02] "POST /api/chat/context HTTP/1.1" 200 -
+2025-04-18 07:55:13,658 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:13] "POST /api/chat HTTP/1.1" 200 -
+2025-04-18 07:55:18,399 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:18] "POST /api/chat HTTP/1.1" 200 -
+2025-04-18 07:55:23,391 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:23] "POST /api/chat HTTP/1.1" 200 -
+2025-04-18 07:55:27,154 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:27] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 07:55:27,173 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 07:55:27,186 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:27] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 07:55:27,546 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:27] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 07:55:27,729 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:27] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 07:55:35,282 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:35] "POST /api/chat HTTP/1.1" 200 -
+2025-04-18 07:55:47,319 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 07:55:47,321 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:55:47] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 07:58:22,425 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:58:22] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 07:58:22,460 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:58:22] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 07:58:22,464 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:58:22] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 07:58:23,177 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:58:23] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 07:58:23,757 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 07:58:23] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:00:16,932 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:16] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:00:16,950 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:16] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 08:00:16,965 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:16] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:00:17,745 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:17] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:00:17,824 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:17] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:00:30,189 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:30] "POST /api/chat/new HTTP/1.1" 200 -
+2025-04-18 08:00:38,046 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:38] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:00:38,062 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:00:38,068 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:38] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:00:38,186 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:38] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:00:38,264 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:00:38] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:01:13,980 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:01:13] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:01:13,998 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:01:13] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 08:01:14,001 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:01:14] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:01:14,156 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:01:14] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:01:14,256 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:01:14] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:02:06,406 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:06] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:02:06,430 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:06] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 08:02:06,431 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:06] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:02:06,595 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:06] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:02:06,691 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:06] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:02:17,528 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:17] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:02:17,544 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:17] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 08:02:17,544 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:17] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:02:17,679 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:17] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:02:17,750 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:17] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:02:56,190 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:56] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:02:56,191 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:02:56] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:03:22,914 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:22] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:03:22,937 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:22] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 08:03:22,944 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:22] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:03:23,850 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:23] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:03:24,344 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:24] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:03:42,466 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:42] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:03:42,483 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:42] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 08:03:42,495 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:42] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:03:43,184 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:43] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:03:43,259 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:03:43] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:04:04,494 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:04] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:04:04,515 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:04:04,518 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:04] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:04:04,650 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:04] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:04:04,726 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:04] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:04:33,230 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:33] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:04:33,251 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:33] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 08:04:33,261 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:33] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:04:33,406 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:33] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:04:33,489 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:33] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:04:42,676 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:42] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:04:42,693 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:04:42,707 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:42] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:04:42,847 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:42] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:04:42,911 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:04:42] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:07:29,496 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:29] "POST /api/chat/new HTTP/1.1" 200 -
+2025-04-18 08:07:44,214 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:44] "GET / HTTP/1.1" 200 -
+2025-04-18 08:07:44,249 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:44] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 08:07:44,260 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:44] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 08:07:44,455 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 08:07:44,456 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:44] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 08:07:44,577 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:44] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:07:44,756 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:44] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:07:51,066 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:51] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 08:07:51,097 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:51] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:07:51,097 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:51] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 08:07:52,557 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:52] "GET / HTTP/1.1" 200 -
+2025-04-18 08:07:52,576 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:52] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:07:52,584 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:52] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 08:07:52,617 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 08:07:52,618 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:52] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 08:07:52,685 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:52] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:07:52,752 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:52] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:07:53,731 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:53] "GET /recommendation HTTP/1.1" 200 -
+2025-04-18 08:07:53,754 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:53] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:07:53,760 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:53] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-18 08:07:53,893 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:53] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:07:53,898 - recommendation_system - INFO - Đã tải 2193 phim từ backend/data/dataset\Movies.csv
+2025-04-18 08:07:53,988 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:53] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:07:54,204 - recommendation_system - INFO - Đã tạo ma trận đặc trưng với 22 thể loại và áp dụng TF-IDF
+2025-04-18 08:07:54,204 - recommendation_system - INFO - Hệ thống đề xuất đã được khởi tạo thành công
+2025-04-18 08:07:54,301 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:54] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-18 08:07:54,967 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:54] "GET / HTTP/1.1" 200 -
+2025-04-18 08:07:54,998 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:54] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:07:55,007 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:55] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 08:07:55,049 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 08:07:55,049 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:55] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 08:07:55,145 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:55] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:07:55,219 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:55] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:07:56,755 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:56] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:07:56,786 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:56] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:07:56,793 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:56] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:07:56,957 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:56] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:07:57,061 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:07:57] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:12:11,105 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\app.py', reloading
+2025-04-18 08:12:11,105 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\chatbot.py', reloading
+2025-04-18 08:12:11,105 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\crawler_synonyms.py', reloading
+2025-04-18 08:12:11,136 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\data_augmentation.py', reloading
+2025-04-18 08:12:11,136 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\file_processor.py', reloading
+2025-04-18 08:12:11,136 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\prediction_service.py', reloading
+2025-04-18 08:12:11,136 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\recommendation_system.py', reloading
+2025-04-18 08:12:11,136 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\text_classification.py', reloading
+2025-04-18 08:12:11,136 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\text_cleaning.py', reloading
+2025-04-18 08:12:11,136 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\text_vectorization.py', reloading
+2025-04-18 08:12:11,136 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\__init__.py', reloading
+2025-04-18 08:12:11,152 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\run.py', reloading
+2025-04-18 08:12:14,526 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-18 08:12:17,529 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 08:12:22,482 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 08:12:22,497 - werkzeug - WARNING -  * Debugger is active!
+2025-04-18 08:12:22,500 - werkzeug - INFO -  * Debugger PIN: 869-788-550
+2025-04-18 08:43:11,245 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:11] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 08:43:11,488 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:11] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 08:43:11,491 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:11] "GET /static/js/train_model.js HTTP/1.1" 200 -
+2025-04-18 08:43:12,368 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:12] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-18 08:43:14,797 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:14] "GET / HTTP/1.1" 200 -
+2025-04-18 08:43:14,835 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:14] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:43:14,842 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:14] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 08:43:14,880 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 08:43:14,886 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:14] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 08:43:14,971 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:14] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:43:15,011 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:15] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 08:43:16,845 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:16] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 08:43:16,889 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:16] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 08:43:16,894 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:16] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 08:43:17,061 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:17] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 08:43:17,095 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 08:43:17] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 09:12:11,295 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\app.py', reloading
+2025-04-18 09:12:11,348 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\chatbot.py', reloading
+2025-04-18 09:12:11,349 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\crawler_synonyms.py', reloading
+2025-04-18 09:12:11,364 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\data_augmentation.py', reloading
+2025-04-18 09:12:11,367 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\file_processor.py', reloading
+2025-04-18 09:12:11,368 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\prediction_service.py', reloading
+2025-04-18 09:12:11,369 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\recommendation_system.py', reloading
+2025-04-18 09:12:11,371 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\text_classification.py', reloading
+2025-04-18 09:12:11,373 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\text_cleaning.py', reloading
+2025-04-18 09:12:11,373 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\text_vectorization.py', reloading
+2025-04-18 09:12:11,374 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\__init__.py', reloading
+2025-04-18 09:12:11,383 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\run.py', reloading
+2025-04-18 09:12:16,155 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-18 09:12:25,665 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 09:12:35,549 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 09:12:35,564 - werkzeug - WARNING -  * Debugger is active!
+2025-04-18 09:12:35,576 - werkzeug - INFO -  * Debugger PIN: 869-788-550
+2025-04-18 17:06:54,744 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 17:07:02,876 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 17:07:02,908 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.20.10.9:5000
+2025-04-18 17:07:02,908 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-18 17:07:02,924 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-18 17:07:04,508 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 17:07:08,892 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 17:07:08,916 - werkzeug - WARNING -  * Debugger is active!
+2025-04-18 17:07:08,923 - werkzeug - INFO -  * Debugger PIN: 873-402-916
+2025-04-18 17:07:09,025 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:09] "GET / HTTP/1.1" 200 -
+2025-04-18 17:07:09,135 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:07:09,142 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:09] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 17:07:09,343 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 17:07:09,344 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:09] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 17:07:10,061 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:10] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-18 17:07:10,080 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:10] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:07:10,125 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:10] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:07:19,209 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:19] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 17:07:19,255 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:07:19,292 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:19] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 17:07:22,036 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:22] "GET / HTTP/1.1" 200 -
+2025-04-18 17:07:22,078 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:07:22,082 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:22] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 17:07:22,117 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 17:07:22,118 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:22] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 17:07:22,203 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:22] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:07:22,243 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:22] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:07:23,548 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:23] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 17:07:23,576 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:23] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:07:26,225 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:26] "GET / HTTP/1.1" 200 -
+2025-04-18 17:07:26,272 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:26] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:07:26,275 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:26] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 17:07:26,318 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 17:07:26,319 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:26] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 17:07:26,404 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:26] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:07:26,443 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:26] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:07:27,290 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:27] "GET /recommendation HTTP/1.1" 200 -
+2025-04-18 17:07:27,316 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:07:27,351 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:27] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-18 17:07:27,518 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:27] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:07:27,520 - recommendation_system - INFO - Đã tải 2193 phim từ backend/data/dataset\Movies.csv
+2025-04-18 17:07:27,628 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:27] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:07:27,846 - recommendation_system - INFO - Đã tạo ma trận đặc trưng với 22 thể loại và áp dụng TF-IDF
+2025-04-18 17:07:27,846 - recommendation_system - INFO - Hệ thống đề xuất đã được khởi tạo thành công
+2025-04-18 17:07:27,943 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:27] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-18 17:07:31,593 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:31] "GET / HTTP/1.1" 200 -
+2025-04-18 17:07:31,639 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:31] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 17:07:31,639 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:31] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:07:31,680 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 17:07:31,683 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:31] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 17:07:31,768 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:31] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:07:31,803 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:31] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:07:32,712 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:32] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 17:07:32,757 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:32] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:07:32,807 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:32] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 17:07:33,020 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:33] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:07:33,058 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:07:33] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:08:06,745 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:06] "GET / HTTP/1.1" 200 -
+2025-04-18 17:08:06,776 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:06] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:08:06,795 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:06] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 17:08:07,043 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 17:08:07,045 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:07] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 17:08:07,191 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:07] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:08:07,236 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:07] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:08:08,321 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:08] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 17:08:08,359 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:08] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:08:08,362 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:08] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 17:08:09,337 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:09] "GET / HTTP/1.1" 200 -
+2025-04-18 17:08:09,382 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:08:09,382 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:09] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 17:08:09,409 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 17:08:09,412 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:09] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 17:08:09,502 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:09] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:08:09,541 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:09] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:08:09,834 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:09] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 17:08:09,879 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:08:10,446 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:10] "GET / HTTP/1.1" 200 -
+2025-04-18 17:08:10,463 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:10] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:08:10,482 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:10] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 17:08:10,519 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 17:08:10,519 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:10] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 17:08:10,630 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:10] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:08:10,671 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:10] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:08:11,375 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:11] "GET /recommendation HTTP/1.1" 200 -
+2025-04-18 17:08:11,408 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:08:11,419 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:11] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-18 17:08:11,584 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:11] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-18 17:08:11,591 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:11] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:08:12,406 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:12] "GET / HTTP/1.1" 200 -
+2025-04-18 17:08:12,465 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:12] "GET / HTTP/1.1" 200 -
+2025-04-18 17:08:12,511 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:08:12,511 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:12] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 17:08:12,548 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 17:08:12,548 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:12] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 17:08:12,566 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:12] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:08:12,680 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:12] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:08:13,064 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:13] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 17:08:13,098 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:08:13,099 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:13] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 17:08:13,263 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:13] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:08:13,302 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:13] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 17:08:45,327 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:45] "POST /api/chat HTTP/1.1" 200 -
+2025-04-18 17:08:56,963 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:08:56] "POST /api/chat HTTP/1.1" 200 -
+2025-04-18 17:09:12,439 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:09:12] "GET / HTTP/1.1" 200 -
+2025-04-18 17:09:12,489 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:09:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 17:09:12,490 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:09:12] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 17:09:12,822 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 17:09:12,822 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:09:12] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 17:09:12,961 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:09:12] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-18 17:09:12,999 - werkzeug - INFO - 127.0.0.1 - - [18/Apr/2025 17:09:12] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-18 21:44:53,094 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 21:44:59,806 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 21:44:59,834 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.123.17:5000
+2025-04-18 21:44:59,834 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-18 21:44:59,855 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-18 21:45:01,760 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 21:45:06,646 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-18 21:45:06,662 - werkzeug - WARNING -  * Debugger is active!
+2025-04-18 21:45:06,668 - werkzeug - INFO -  * Debugger PIN: 873-402-916
+2025-04-18 21:45:06,719 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:06] "GET / HTTP/1.1" 200 -
+2025-04-18 21:45:06,893 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:06] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-18 21:45:06,894 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:06] "GET /static/js/script.js HTTP/1.1" 200 -
+2025-04-18 21:45:07,347 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:45:07,348 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:07] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:45:08,005 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:08] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-18 21:45:11,990 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:45:11,992 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:11] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:45:15,485 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:15] "POST /api/vectorize HTTP/1.1" 200 -
+2025-04-18 21:45:19,228 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:19] "POST /api/vectorize HTTP/1.1" 200 -
+2025-04-18 21:45:21,628 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:21] "POST /api/vectorize HTTP/1.1" 200 -
+2025-04-18 21:45:23,450 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:23] "POST /api/vectorize HTTP/1.1" 200 -
+2025-04-18 21:45:49,183 - prediction_service - INFO - Tìm kiếm mô hình trong thư mục thể loại: backend\data\models\sentiment_analysis
+2025-04-18 21:45:49,186 - prediction_service - INFO - Tìm thấy model mới nhất: backend\data\models\sentiment_analysis\Cảm Xúc_model
+2025-04-18 21:45:49,186 - prediction_service - INFO - Vectorizer tương ứng: backend\data\models\sentiment_analysis\Cảm Xúc_vectorizer
+2025-04-18 21:45:49,186 - prediction_service - INFO - Loại model: Cảm Xúc
+2025-04-18 21:45:49,187 - prediction_service - INFO - Thể loại model: sentiment_analysis
+2025-04-18 21:45:49,187 - prediction_service - INFO - Đang tải model: backend\data\models\sentiment_analysis\Cảm Xúc_model
+2025-04-18 21:45:49,207 - prediction_service - INFO - Đang tải vectorizer: backend\data\models\sentiment_analysis\Cảm Xúc_vectorizer
+2025-04-18 21:45:49,264 - prediction_service - INFO - Đã làm sạch văn bản trước khi dự đoán
+2025-04-18 21:45:49,269 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:45:49] "POST /api/predict HTTP/1.1" 200 -
+2025-04-18 21:46:38,923 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:46:38] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:46:38,975 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:46:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:46:39,097 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:46:39] "GET /static/js/train_model.js HTTP/1.1" 200 -
+2025-04-18 21:47:08,364 - app - INFO - Đào tạo mô hình logistic_regression với vectorization tfidf cho thể loại sentiment_analysis
+2025-04-18 21:47:08,365 - app - INFO - Dataset: data.csv, text_column: content, label_column: label
+2025-04-18 21:47:08,576 - app - WARNING - Dataset có 24 giá trị NaN trong cột content và 0 giá trị NaN trong cột label
+2025-04-18 21:47:08,667 - text_classification - INFO - Chuẩn bị dữ liệu từ backend\temp\data.csv...
+2025-04-18 21:47:08,690 - text_classification - WARNING - Đã lọc bỏ 24 dòng có giá trị NaN hoặc không hợp lệ
+2025-04-18 21:47:08,704 - text_classification - INFO - Vector hóa văn bản với phương pháp tfidf...
+2025-04-18 21:47:08,994 - text_classification - INFO - Huấn luyện mô hình logistic_regression...
+2025-04-18 21:47:09,545 - text_classification - INFO - Đã lưu mô hình: backend\data\models\sentiment_analysis\logistic_regression_2025-04-18T14-46-58_model
+2025-04-18 21:47:09,547 - text_classification - INFO - Đã lưu vector hóa: backend\data\models\sentiment_analysis\logistic_regression_2025-04-18T14-46-58_vectorizer
+2025-04-18 21:47:09,552 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:47:09] "POST /api/train_model HTTP/1.1" 200 -
+2025-04-18 21:48:22,175 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:48:22] "GET / HTTP/1.1" 200 -
+2025-04-18 21:48:22,225 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:48:22] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:48:22,226 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:48:22] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:48:22,534 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:48:22,535 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:48:22] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:48:24,525 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:48:24] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:48:24,567 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:48:24] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:48:30,089 - app - INFO - API: Tìm từ đồng nghĩa cho: Tốt
+2025-04-18 21:48:30,090 - data_augmentation - INFO - Đã tải 98 từ từ cache
+2025-04-18 21:48:30,091 - app - INFO - Đã tìm thấy từ 'Tốt' trong cache
+2025-04-18 21:48:30,092 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:48:30] "POST /api/find_synonyms HTTP/1.1" 200 -
+2025-04-18 21:48:36,646 - app - INFO - API: Tìm từ đồng nghĩa cho: Hay
+2025-04-18 21:48:36,648 - data_augmentation - INFO - Đã tải 98 từ từ cache
+2025-04-18 21:48:36,650 - app - INFO - Đã tìm thấy từ 'Hay' trong cache
+2025-04-18 21:48:36,651 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:48:36] "POST /api/find_synonyms HTTP/1.1" 200 -
+2025-04-18 21:48:40,113 - app - INFO - API: Tìm từ đồng nghĩa cho: Nước
+2025-04-18 21:48:40,113 - data_augmentation - INFO - Đã tải 98 từ từ cache
+2025-04-18 21:48:40,114 - app - INFO - Đã tìm thấy từ 'Nước' trong cache
+2025-04-18 21:48:40,114 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:48:40] "POST /api/find_synonyms HTTP/1.1" 200 -
+2025-04-18 21:49:25,690 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:49:25] "GET / HTTP/1.1" 200 -
+2025-04-18 21:49:25,763 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:49:25] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:49:25,763 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:49:25] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:49:25,818 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:49:25,820 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:49:25] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:49:28,143 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:49:28] "GET /recommendation HTTP/1.1" 200 -
+2025-04-18 21:49:28,184 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:49:28] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:49:28,244 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:49:28] "GET /static/js/recommendation.js HTTP/1.1" 200 -
+2025-04-18 21:49:28,424 - recommendation_system - INFO - Đã tải 2193 phim từ backend/data/dataset\Movies.csv
+2025-04-18 21:49:28,843 - recommendation_system - INFO - Đã tạo ma trận đặc trưng với 22 thể loại và áp dụng TF-IDF
+2025-04-18 21:49:28,844 - recommendation_system - INFO - Hệ thống đề xuất đã được khởi tạo thành công
+2025-04-18 21:49:28,945 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:49:28] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-18 21:50:29,239 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:50:29] "GET / HTTP/1.1" 200 -
+2025-04-18 21:50:29,302 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:50:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:50:29,302 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:50:29] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:50:29,412 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:50:29,413 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:50:29] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:50:30,422 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:50:30] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 21:50:30,472 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:50:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:50:30,521 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:50:30] "GET /static/js/chatbot.js HTTP/1.1" 200 -
+2025-04-18 21:50:34,192 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:50:34] "POST /api/chat/new HTTP/1.1" 200 -
+2025-04-18 21:50:38,648 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:50:38] "POST /api/chat HTTP/1.1" 200 -
+2025-04-18 21:51:08,044 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:08] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-18 21:51:23,753 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:23] "GET / HTTP/1.1" 200 -
+2025-04-18 21:51:23,818 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:23] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:23,829 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:23] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:51:24,207 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:51:24,210 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:24] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:51:36,218 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:36] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:51:36,298 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:36,302 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:36] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:51:37,080 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:37] "GET / HTTP/1.1" 200 -
+2025-04-18 21:51:37,127 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:37] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:37,130 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:37] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:51:37,212 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:51:37,214 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:37] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:51:37,760 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:37] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:51:37,800 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:37] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:38,587 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:38] "GET / HTTP/1.1" 200 -
+2025-04-18 21:51:38,627 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:38,640 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:38] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:51:38,709 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:51:38,711 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:38] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:51:43,028 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:43] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:51:43,070 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:43] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:43,077 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:43] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:51:43,908 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:43] "GET / HTTP/1.1" 200 -
+2025-04-18 21:51:43,935 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:43] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:43,949 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:43] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:51:43,985 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:51:43,986 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:43] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:51:44,592 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:44] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:51:44,630 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:45,251 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:45] "GET / HTTP/1.1" 200 -
+2025-04-18 21:51:45,292 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:45] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:45,303 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:45] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:51:45,334 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:51:45,335 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:45] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:51:45,794 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:45] "GET /recommendation HTTP/1.1" 200 -
+2025-04-18 21:51:45,837 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:45] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:45,845 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:45] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-18 21:51:46,115 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:46] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-18 21:51:46,769 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:46] "GET / HTTP/1.1" 200 -
+2025-04-18 21:51:46,834 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:46] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:51:46,834 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:46] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:46,895 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:51:46,895 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:46] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:51:57,073 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:57] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 21:51:57,135 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:51:57,144 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:51:57] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:00,959 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:00] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:01,034 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:01] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:01,052 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:01] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:01,139 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:01,140 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:01] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:11,032 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:11] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:52:11,097 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:11,107 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:11] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:13,958 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:13] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:14,004 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:14] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:14,013 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:14] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:14,040 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:14,041 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:14] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:18,004 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:18] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:52:18,057 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:18,065 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:18] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:18,895 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:18] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:18,937 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:18,937 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:18] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:18,973 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:18,975 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:18] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:19,604 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:19] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:52:19,640 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:20,203 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:20] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:20,235 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:20] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:20,244 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:20] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:20,271 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:20,272 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:20] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:20,621 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:20] "GET /recommendation HTTP/1.1" 200 -
+2025-04-18 21:52:20,664 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:20] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:20,664 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:20] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:20,926 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:20] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-18 21:52:21,589 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:21] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:21,667 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:21] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:21,669 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:21] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:21,760 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:21,762 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:21] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:34,653 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:34] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 21:52:34,708 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:34] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:34,715 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:34] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:37,587 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:37] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:37,654 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:37] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:37,677 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:37] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:37,733 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:37,734 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:37] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:38,778 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:38] "GET /recommendation HTTP/1.1" 200 -
+2025-04-18 21:52:38,819 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:38] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:38,829 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:38] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:39,032 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:39] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-18 21:52:40,109 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:40] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:40,160 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:40] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:40,160 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:40] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:40,213 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:40,215 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:40] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:41,319 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:41] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:52:41,353 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:41] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:41,948 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:41] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:41,973 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:41] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:41,985 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:41] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:42,048 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:42,051 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:42] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:42,605 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:42] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:52:42,634 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:42,650 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:42] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:43,477 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:43] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:43,534 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:43] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:43,536 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:43] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:43,568 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:43,569 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:43] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:44,257 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:44] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:44,295 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:44,305 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:44] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:44,399 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:44,400 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:44] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:44,940 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:44] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 21:52:44,981 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:44,990 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:44] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:48,782 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:48] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:48,839 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:48] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:48,844 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:48] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:48,866 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:48,866 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:48] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:57,615 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:57] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:52:57,665 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:57] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:57,675 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:57] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:58,530 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:58] "GET / HTTP/1.1" 200 -
+2025-04-18 21:52:58,559 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:58] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:58,575 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:58] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:52:58,609 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:52:58,611 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:58] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:52:59,168 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:59] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:52:59,208 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:59] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:52:59,734 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:59] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:52:59,770 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:52:59] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:00,328 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:00] "GET / HTTP/1.1" 200 -
+2025-04-18 21:53:00,362 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:00] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:00,372 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:00] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:53:00,400 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:53:00,400 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:00] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:53:04,370 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:04] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:53:04,413 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:04] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:16,289 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:16] "GET / HTTP/1.1" 200 -
+2025-04-18 21:53:16,337 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:16] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:16,337 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:16] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:53:16,435 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:53:16,439 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:16] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:53:17,568 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:17] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:53:17,606 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:17] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:17,609 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:17] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:53:27,679 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:27] "GET / HTTP/1.1" 200 -
+2025-04-18 21:53:27,724 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:27,724 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:27] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:53:27,841 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:53:27,842 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:27] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:53:29,481 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:29] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:53:29,522 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:29,530 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:29] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:53:30,920 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:30] "GET / HTTP/1.1" 200 -
+2025-04-18 21:53:30,963 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:30,964 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:30] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:53:31,008 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:53:31,010 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:31] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:53:32,328 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:32] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:53:32,369 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:32] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:42,355 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:42] "GET / HTTP/1.1" 200 -
+2025-04-18 21:53:42,388 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:42] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:42,392 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:42] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:53:42,425 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:53:42,427 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:42] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:53:43,242 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:43] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:53:43,289 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:43] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:53:43,299 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:53:43] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:54:18,562 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:54:18] "GET / HTTP/1.1" 200 -
+2025-04-18 21:54:18,613 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:54:18] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:54:18,613 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:54:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:54:19,021 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:54:19,021 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:54:19] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:54:33,479 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:54:33] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:54:33,519 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:54:33] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:54:33,520 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:54:33] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:56:41,540 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:41] "GET / HTTP/1.1" 200 -
+2025-04-18 21:56:41,583 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:41] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:56:41,586 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:41] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:56:41,659 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:56:41,660 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:41] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:56:45,066 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:45] "GET /train_model HTTP/1.1" 200 -
+2025-04-18 21:56:45,115 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:45] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-18 21:56:45,116 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:45] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:56:54,662 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:54] "GET / HTTP/1.1" 200 -
+2025-04-18 21:56:54,694 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:54] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:56:54,698 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:54] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:56:54,731 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:56:54,732 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:54] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:56:55,616 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:55] "GET /synonyms HTTP/1.1" 200 -
+2025-04-18 21:56:55,652 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:56:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:57:12,083 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:12] "GET / HTTP/1.1" 200 -
+2025-04-18 21:57:12,119 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:12] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:57:12,119 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:12] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:57:12,158 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:57:12,159 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:12] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:57:13,038 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:13] "GET /recommendation HTTP/1.1" 200 -
+2025-04-18 21:57:13,070 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:57:13,082 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:13] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-18 21:57:13,296 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:13] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-18 21:57:16,761 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:16] "GET / HTTP/1.1" 200 -
+2025-04-18 21:57:16,802 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:16] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:57:16,805 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:16] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-18 21:57:16,850 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-18 21:57:16,851 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:16] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-18 21:57:17,870 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:17] "GET /chatbot HTTP/1.1" 200 -
+2025-04-18 21:57:17,925 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:17] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-18 21:57:17,928 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:17] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-18 21:57:39,534 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:39] "POST /api/chat HTTP/1.1" 200 -
+2025-04-18 21:57:45,618 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:45] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-18 21:57:47,002 - app - INFO - Thay đổi ngữ cảnh chatbot: {'context_type': 'technical'}
+2025-04-18 21:57:47,004 - werkzeug - INFO - 192.168.123.17 - - [18/Apr/2025 21:57:47] "POST /api/chat/context HTTP/1.1" 200 -
+2025-04-20 21:28:24,106 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-20 21:28:41,926 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-20 21:29:19,922 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-20 21:30:01,061 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-20 21:31:13,431 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-20 21:38:06,237 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-21 23:06:26,995 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-21 23:13:25,223 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-21 23:26:58,168 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-21 23:27:03,966 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-21 23:27:03,999 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.123.17:5000
+2025-04-21 23:27:03,999 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-21 23:27:04,014 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-21 23:27:05,578 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-21 23:27:09,495 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-21 23:27:09,511 - werkzeug - WARNING -  * Debugger is active!
+2025-04-21 23:27:09,513 - werkzeug - INFO -  * Debugger PIN: 536-532-331
+2025-04-21 23:27:09,594 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:09] "GET / HTTP/1.1" 200 -
+2025-04-21 23:27:09,997 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:09] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-21 23:27:10,018 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:10] "GET /static/js/script.js HTTP/1.1" 200 -
+2025-04-21 23:27:10,215 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-21 23:27:10,216 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:10] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-21 23:27:10,820 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:10] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-21 23:27:10,838 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:10] "GET /static/manifest.json HTTP/1.1" 200 -
+2025-04-21 23:27:10,875 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:10] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:27:13,066 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:13] "GET /train_model HTTP/1.1" 200 -
+2025-04-21 23:27:13,105 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:27:13,133 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:13] "GET /static/js/train_model.js HTTP/1.1" 200 -
+2025-04-21 23:27:14,427 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:14] "GET / HTTP/1.1" 200 -
+2025-04-21 23:27:14,467 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:14] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:27:14,468 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:14] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-21 23:27:14,502 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-21 23:27:14,502 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:14] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-21 23:27:14,586 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:14] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:27:14,625 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:14] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:27:15,112 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:15] "GET /synonyms HTTP/1.1" 200 -
+2025-04-21 23:27:15,151 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:27:18,134 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:18] "GET / HTTP/1.1" 200 -
+2025-04-21 23:27:18,171 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:18] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:27:18,171 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:18] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-21 23:27:18,298 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-21 23:27:18,298 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:18] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-21 23:27:18,422 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:18] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:27:18,472 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:18] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:27:19,363 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:19] "GET /recommendation HTTP/1.1" 200 -
+2025-04-21 23:27:19,402 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:19] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:27:19,431 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:19] "GET /static/js/recommendation.js HTTP/1.1" 200 -
+2025-04-21 23:27:19,671 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:19] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:27:19,678 - recommendation_system - INFO - Đã tải 2193 phim từ backend/data/dataset\Movies.csv
+2025-04-21 23:27:19,828 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:19] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:27:19,995 - recommendation_system - INFO - Đã tạo ma trận đặc trưng với 22 thể loại và áp dụng TF-IDF
+2025-04-21 23:27:19,995 - recommendation_system - INFO - Hệ thống đề xuất đã được khởi tạo thành công
+2025-04-21 23:27:20,092 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:20] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-21 23:27:23,178 - app - INFO - User ratings: {'939347': 5}
+2025-04-21 23:27:23,265 - recommendation_system - INFO - Trọng số đặc trưng: [('Action', 0.0), ('Adventure', 0.0), ('Animation', 0.0), ('Biography', 0.0), ('Comedy', 0.0), ('Crime', 0.0), ('Documentary', 0.0), ('Drama', 0.0), ('Family', 0.0), ('Fantasy', 0.0), ('History', 0.0), ('Horror', 0.0), ('Music', 0.0), ('Mystery', 0.0), ('Romance', 0.0), ('Sci-Fi', 0.0), ('Science Fiction', 0.0), ('Sport', 0.0), ('TV Movie', 0.0), ('Thriller', 0.0), ('War', 0.0), ('Western', 0.0)]
+2025-04-21 23:27:23,265 - recommendation_system - INFO - Bias của người dùng: 5.0
+2025-04-21 23:27:23,328 - recommendation_system - INFO - RMSE cho các đánh giá đã biết: 0.0
+2025-04-21 23:27:23,329 - recommendation_system - INFO - Đã đề xuất 5 phim dựa trên 1 đánh giá
+2025-04-21 23:27:23,329 - app - INFO - Generated 5 recommendations based on 1 ratings
+2025-04-21 23:27:23,330 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:23] "POST /api/recommend HTTP/1.1" 200 -
+2025-04-21 23:27:25,986 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:25] "GET / HTTP/1.1" 200 -
+2025-04-21 23:27:26,025 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:26] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:27:26,028 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:26] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-21 23:27:26,065 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-21 23:27:26,065 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:26] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-21 23:27:26,157 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:26] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:27:26,201 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:26] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:27:26,768 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:26] "GET /chatbot HTTP/1.1" 200 -
+2025-04-21 23:27:26,815 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:26] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:27:26,847 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:26] "GET /static/js/chatbot.js HTTP/1.1" 200 -
+2025-04-21 23:27:27,107 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:27] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:27:27,143 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:27] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:27:35,530 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:35] "POST /api/chat HTTP/1.1" 200 -
+2025-04-21 23:27:36,671 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:36] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-21 23:27:39,827 - app - INFO - Thay đổi ngữ cảnh chatbot: {'context_type': 'conversational'}
+2025-04-21 23:27:39,827 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:39] "POST /api/chat/context HTTP/1.1" 200 -
+2025-04-21 23:27:47,180 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:27:47] "POST /api/chat HTTP/1.1" 200 -
+2025-04-21 23:28:09,605 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:28:09] "POST /api/chat HTTP/1.1" 200 -
+2025-04-21 23:28:26,438 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:28:26] "POST /api/chat HTTP/1.1" 200 -
+2025-04-21 23:28:40,433 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:28:40] "POST /api/chat HTTP/1.1" 200 -
+2025-04-21 23:29:09,626 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:29:09] "POST /api/chat HTTP/1.1" 200 -
+2025-04-21 23:29:34,732 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:29:34] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-21 23:32:44,725 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:44] "GET / HTTP/1.1" 200 -
+2025-04-21 23:32:44,774 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:44] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:32:44,782 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:44] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-21 23:32:45,103 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-21 23:32:45,104 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:45] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-21 23:32:45,223 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:45] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:32:45,275 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:45] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:32:47,837 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:47] "GET /train_model HTTP/1.1" 200 -
+2025-04-21 23:32:47,879 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:32:47,880 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:47] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-21 23:32:48,753 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:48] "GET / HTTP/1.1" 200 -
+2025-04-21 23:32:48,789 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:48] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:32:48,792 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:48] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-21 23:32:48,835 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-21 23:32:48,835 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:48] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-21 23:32:48,929 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:48] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:32:48,965 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:48] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:32:49,326 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:49] "GET /recommendation HTTP/1.1" 200 -
+2025-04-21 23:32:49,360 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:32:49,371 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:49] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-21 23:32:49,521 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:49] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-21 23:32:49,523 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:49] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:32:50,206 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:50] "GET /recommendation HTTP/1.1" 200 -
+2025-04-21 23:32:50,276 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:50] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:32:50,278 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:50] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-21 23:32:50,280 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:50] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:32:50,455 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:50] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-21 23:32:50,457 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:50] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:32:51,038 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:51] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:32:51,210 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:51] "GET / HTTP/1.1" 200 -
+2025-04-21 23:32:51,302 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:51] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:32:51,315 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:51] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-21 23:32:51,378 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-21 23:32:51,379 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:51] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-21 23:32:51,499 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:51] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:32:51,545 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:51] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:32:52,678 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:52] "GET /chatbot HTTP/1.1" 200 -
+2025-04-21 23:32:52,724 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:52] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:32:52,726 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:52] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-21 23:32:52,989 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:52] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:32:53,030 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:53] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:32:54,988 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:54] "GET / HTTP/1.1" 200 -
+2025-04-21 23:32:55,033 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:55] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-21 23:32:55,039 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:55] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-21 23:32:55,081 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-21 23:32:55,082 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:55] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-21 23:32:55,186 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:55] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-21 23:32:55,219 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2025 23:32:55] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-21 23:33:30,060 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\chatbot.py', reloading
+2025-04-21 23:33:30,091 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\crawler_synonyms.py', reloading
+2025-04-21 23:33:30,533 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\data_augmentation.py', reloading
+2025-04-21 23:33:30,573 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\file_processor.py', reloading
+2025-04-21 23:33:30,612 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\prediction_service.py', reloading
+2025-04-21 23:33:30,671 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\recommendation_system.py', reloading
+2025-04-21 23:33:30,694 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\text_classification.py', reloading
+2025-04-21 23:33:30,718 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\text_vectorization.py', reloading
+2025-04-21 23:33:30,735 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\__init__.py', reloading
+2025-04-21 23:33:35,097 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-21 23:33:37,967 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-21 23:33:44,006 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-21 23:33:44,022 - werkzeug - WARNING -  * Debugger is active!
+2025-04-21 23:33:44,027 - werkzeug - INFO -  * Debugger PIN: 536-532-331
+2025-04-23 07:25:56,800 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 07:26:04,762 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 07:26:04,792 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.172.2.19:5000
+2025-04-23 07:26:04,792 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 07:26:04,808 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-23 07:26:06,365 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 07:26:10,383 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 07:26:10,395 - werkzeug - WARNING -  * Debugger is active!
+2025-04-23 07:26:10,399 - werkzeug - INFO -  * Debugger PIN: 536-532-331
+2025-04-23 07:26:10,464 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:26:10] "GET / HTTP/1.1" 200 -
+2025-04-23 07:26:10,566 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:26:10] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-23 07:26:10,583 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:26:10] "GET /static/js/script.js HTTP/1.1" 200 -
+2025-04-23 07:26:10,825 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-23 07:26:10,827 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:26:10] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-23 07:26:11,652 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:26:11] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-23 07:26:17,455 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:26:17] "GET /chatbot HTTP/1.1" 200 -
+2025-04-23 07:26:17,503 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:26:17] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 07:26:17,532 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:26:17] "GET /static/js/chatbot.js HTTP/1.1" 200 -
+2025-04-23 07:27:01,441 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:27:01] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-23 07:27:02,595 - app - INFO - Thay đổi ngữ cảnh chatbot: {'context_type': 'educational'}
+2025-04-23 07:27:02,596 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:27:02] "POST /api/chat/context HTTP/1.1" 200 -
+2025-04-23 07:27:03,968 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:27:03] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-23 07:27:05,078 - app - INFO - Thay đổi ngữ cảnh chatbot: {'context_type': 'conversational'}
+2025-04-23 07:27:05,080 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:27:05] "POST /api/chat/context HTTP/1.1" 200 -
+2025-04-23 07:27:06,740 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:27:06] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-23 07:27:08,239 - app - INFO - Thay đổi ngữ cảnh chatbot: {'context_type': 'concise'}
+2025-04-23 07:27:08,239 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:27:08] "POST /api/chat/context HTTP/1.1" 200 -
+2025-04-23 07:27:17,581 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:27:17] "POST /api/chat/new HTTP/1.1" 200 -
+2025-04-23 07:27:25,501 - werkzeug - INFO - 172.172.2.19 - - [23/Apr/2025 07:27:25] "POST /api/chat HTTP/1.1" 200 -
+2025-04-23 10:30:53,613 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 10:31:01,340 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 10:31:01,372 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.20.10.9:5000
+2025-04-23 10:31:01,372 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-04-23 10:31:01,388 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-23 10:31:02,975 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 10:31:07,412 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 10:31:07,418 - werkzeug - WARNING -  * Debugger is active!
+2025-04-23 10:31:07,418 - werkzeug - INFO -  * Debugger PIN: 536-532-331
+2025-04-23 10:31:07,488 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:07] "GET / HTTP/1.1" 200 -
+2025-04-23 10:31:07,605 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:07] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-04-23 10:31:07,606 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:07] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-23 10:31:07,815 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-23 10:31:07,815 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:07] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-23 10:31:08,546 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:08] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-23 10:31:08,564 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:08] "GET /static/manifest.json HTTP/1.1" 200 -
+2025-04-23 10:31:08,599 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:08] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:31:09,533 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:09] "GET /recommendation HTTP/1.1" 200 -
+2025-04-23 10:31:09,585 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:31:09,606 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:09] "GET /static/js/recommendation.js HTTP/1.1" 200 -
+2025-04-23 10:31:11,763 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:11] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:31:11,776 - recommendation_system - INFO - Đã tải 2193 phim từ backend/data/dataset\Movies.csv
+2025-04-23 10:31:11,943 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:11] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:31:12,110 - recommendation_system - INFO - Đã tạo ma trận đặc trưng với 22 thể loại và áp dụng TF-IDF
+2025-04-23 10:31:12,112 - recommendation_system - INFO - Hệ thống đề xuất đã được khởi tạo thành công
+2025-04-23 10:31:12,204 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:12] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-23 10:31:32,453 - app - INFO - User ratings: {'787459': 5, '939347': 3, '1072077': 3, '1255517': 3, '31174028': 5}
+2025-04-23 10:31:32,696 - recommendation_system - INFO - Trọng số đặc trưng: [('Action', -0.5822977373941457), ('Adventure', -0.3658055589049022), ('Animation', 0.0), ('Biography', 0.0), ('Comedy', -0.4851320181116968), ('Crime', 0.0), ('Documentary', 0.0), ('Drama', -0.7232911382973568), ('Family', 2.421541398512303), ('Fantasy', -0.43305380852088754), ('History', 0.0), ('Horror', 0.0), ('Music', 0.0), ('Mystery', 0.0), ('Romance', 2.440365820768856), ('Sci-Fi', 0.0), ('Science Fiction', -0.4578328719885683), ('Sport', 0.0), ('TV Movie', 0.0), ('Thriller', -0.2940460651902391), ('War', 0.0), ('Western', 0.0)]
+2025-04-23 10:31:32,696 - recommendation_system - INFO - Bias của người dùng: 3.9088403777196086
+2025-04-23 10:31:32,703 - recommendation_system - INFO - RMSE cho các đánh giá đã biết: 0.0344723242332095
+2025-04-23 10:31:32,704 - recommendation_system - INFO - Đã đề xuất 5 phim dựa trên 5 đánh giá
+2025-04-23 10:31:32,705 - app - INFO - Generated 5 recommendations based on 5 ratings
+2025-04-23 10:31:32,706 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:32] "POST /api/recommend HTTP/1.1" 200 -
+2025-04-23 10:31:40,923 - app - INFO - User ratings: {'787459': 5, '31174028': 5}
+2025-04-23 10:31:40,925 - recommendation_system - INFO - Trọng số đặc trưng: [('Action', 0.0), ('Adventure', 0.0), ('Animation', 0.0), ('Biography', 0.0), ('Comedy', 0.0), ('Crime', 0.0), ('Documentary', 0.0), ('Drama', 0.0), ('Family', 0.0), ('Fantasy', 0.0), ('History', 0.0), ('Horror', 0.0), ('Music', 0.0), ('Mystery', 0.0), ('Romance', 0.0), ('Sci-Fi', 0.0), ('Science Fiction', 0.0), ('Sport', 0.0), ('TV Movie', 0.0), ('Thriller', 0.0), ('War', 0.0), ('Western', 0.0)]
+2025-04-23 10:31:40,925 - recommendation_system - INFO - Bias của người dùng: 5.0
+2025-04-23 10:31:40,927 - recommendation_system - INFO - RMSE cho các đánh giá đã biết: 0.0
+2025-04-23 10:31:40,928 - recommendation_system - INFO - Đã đề xuất 5 phim dựa trên 2 đánh giá
+2025-04-23 10:31:40,928 - app - INFO - Generated 5 recommendations based on 2 ratings
+2025-04-23 10:31:40,929 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:31:40] "POST /api/recommend HTTP/1.1" 200 -
+2025-04-23 10:32:27,684 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:27] "GET / HTTP/1.1" 200 -
+2025-04-23 10:32:27,729 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:27] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:32:27,732 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:27] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-23 10:32:28,125 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-23 10:32:28,126 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:28] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-23 10:32:28,260 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:28] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:32:28,303 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:28] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:32:29,172 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:29] "GET /chatbot HTTP/1.1" 200 -
+2025-04-23 10:32:29,222 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:29] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:32:29,262 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:29] "GET /static/js/chatbot.js HTTP/1.1" 200 -
+2025-04-23 10:32:29,756 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:29] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:32:29,793 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:29] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:32:36,081 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:36] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-23 10:32:44,478 - app - INFO - Thay đổi ngữ cảnh chatbot: {'context_type': 'concise'}
+2025-04-23 10:32:44,479 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:44] "POST /api/chat/context HTTP/1.1" 200 -
+2025-04-23 10:32:47,820 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:47] "GET / HTTP/1.1" 200 -
+2025-04-23 10:32:47,869 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:47] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:32:47,872 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:47] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-23 10:32:47,903 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-23 10:32:47,905 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:47] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-23 10:32:47,986 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:47] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:32:48,022 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:48] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:32:49,438 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:49] "GET /chatbot HTTP/1.1" 200 -
+2025-04-23 10:32:49,487 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:49] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:32:49,490 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:49] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-23 10:32:49,620 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:49] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:32:49,655 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:49] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:32:50,513 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:50] "GET / HTTP/1.1" 200 -
+2025-04-23 10:32:50,560 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:50] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:32:50,571 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:50] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-23 10:32:50,598 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-23 10:32:50,599 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:50] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-23 10:32:50,700 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:50] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:32:50,734 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:32:50] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:33:07,781 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:07] "GET /train_model HTTP/1.1" 200 -
+2025-04-23 10:33:07,824 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:07] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:33:07,855 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:07] "[36mGET /static/js/train_model.js HTTP/1.1[0m" 304 -
+2025-04-23 10:33:08,963 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:08] "GET / HTTP/1.1" 200 -
+2025-04-23 10:33:09,002 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:33:09,011 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:09] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-23 10:33:09,108 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-23 10:33:09,109 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:09] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-23 10:33:09,234 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:09] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:33:09,280 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:09] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:33:10,121 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:10] "GET /synonyms HTTP/1.1" 200 -
+2025-04-23 10:33:10,154 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:10] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:33:11,892 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:11] "GET / HTTP/1.1" 200 -
+2025-04-23 10:33:11,925 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:33:11,937 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:11] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-23 10:33:11,973 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-23 10:33:11,974 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:11] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-23 10:33:12,063 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:12] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:33:12,116 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:12] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:33:13,695 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:13] "GET /recommendation HTTP/1.1" 200 -
+2025-04-23 10:33:13,737 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:13] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:33:13,747 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:13] "[36mGET /static/js/recommendation.js HTTP/1.1[0m" 304 -
+2025-04-23 10:33:13,881 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:13] "GET /api/movies/list HTTP/1.1" 200 -
+2025-04-23 10:33:13,886 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:13] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:33:14,587 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:14] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:33:14,982 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:14] "GET / HTTP/1.1" 200 -
+2025-04-23 10:33:15,020 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:15] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:33:15,037 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:15] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-23 10:33:15,064 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-23 10:33:15,065 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:15] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-23 10:33:15,142 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:15] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:33:15,185 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:15] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:33:17,402 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:17] "GET /chatbot HTTP/1.1" 200 -
+2025-04-23 10:33:17,441 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:17] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:33:17,452 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:17] "[36mGET /static/js/chatbot.js HTTP/1.1[0m" 304 -
+2025-04-23 10:33:17,584 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:17] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:33:17,622 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:17] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:33:47,975 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:47] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-23 10:33:54,182 - app - INFO - Thay đổi ngữ cảnh chatbot: {'context_type': 'default'}
+2025-04-23 10:33:54,183 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:33:54] "POST /api/chat/context HTTP/1.1" 200 -
+2025-04-23 10:34:02,785 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:34:02] "GET /api/chat/available_contexts HTTP/1.1" 200 -
+2025-04-23 10:34:04,360 - app - INFO - Thay đổi ngữ cảnh chatbot: {'context_type': 'conversational'}
+2025-04-23 10:34:04,362 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:34:04] "POST /api/chat/context HTTP/1.1" 200 -
+2025-04-23 10:34:12,619 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:34:12] "POST /api/chat HTTP/1.1" 200 -
+2025-04-23 10:34:30,475 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:34:30] "GET / HTTP/1.1" 200 -
+2025-04-23 10:34:30,527 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:34:30] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-04-23 10:34:30,527 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:34:30] "[36mGET /static/js/script.js HTTP/1.1[0m" 304 -
+2025-04-23 10:34:31,002 - app - INFO - Đã cung cấp văn bản mẫu cho danh mục: tích_cực
+2025-04-23 10:34:31,002 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:34:31] "GET /api/sample_text?category=tích_cực HTTP/1.1" 200 -
+2025-04-23 10:34:31,125 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:34:31] "[36mGET /static/manifest.json HTTP/1.1[0m" 304 -
+2025-04-23 10:34:31,162 - werkzeug - INFO - 127.0.0.1 - - [23/Apr/2025 10:34:31] "[33mGET /static/img/icon-192.png HTTP/1.1[0m" 404 -
+2025-04-23 10:35:13,543 - werkzeug - INFO -  * Detected change in 'C:\\Users\\vyx13\\Desktop\\NLP\\app1\\backend\\chatbot.py', reloading
+2025-04-23 10:35:22,607 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-04-23 10:35:28,519 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 10:35:35,977 - crawler_synonyms - INFO - Đã tải 98 từ từ cache
+2025-04-23 10:35:35,993 - werkzeug - WARNING -  * Debugger is active!
+2025-04-23 10:35:35,998 - werkzeug - INFO -  * Debugger PIN: 536-532-331
