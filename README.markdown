@@ -136,3 +136,6 @@ nlp-tool/
 - **Email**: <vyxv113@gmail.com>
 - **Trường**: Đại học Sư Phạm Kỹ Thuật TP.HCM
 - **Khoa**: Công nghệ thông tin - Trí tuệ nhân tạo
+
+
+**Link youtube** : https://youtu.be/CzF7h2BqmCQ
