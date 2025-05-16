@@ -1,4 +1,4 @@
-# NLP Tool - Công cụ Xử lý Ngôn ngữ Tự nhiên Tiên tiến
+# NLP Tool - Công cụ Xử lý Ngôn ngữ Tự nhiên 
 
 **NLP Tool** là một hệ thống xử lý ngôn ngữ tự nhiên (NLP) toàn diện, được thiết kế để phân tích, xử lý và khai thác dữ liệu văn bản tiếng Việt. Dự án này là bài tập cá nhân cho môn học Xử lý Ngôn ngữ Tự nhiên tại **Trường Đại học Sư Phạm Kỹ Thuật Thành Phố Hồ Chí Minh**.
 
