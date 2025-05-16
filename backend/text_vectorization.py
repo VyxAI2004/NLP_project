@@ -1,11 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-Module chuyên dụng cho việc vector hóa văn bản tiếng Việt.
-Bao gồm các phương pháp biến đổi văn bản sang dạng số, như One-Hot Encoding, TF-IDF, Word2Vec, v.v.
-"""
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -35,14 +27,6 @@ logger = logging.getLogger('text_vectorization')
 
 # Thêm class TextVectorizer để giữ tương thích với app.py
 class TextVectorizer:
-    """
-    Lớp xử lý vector hóa văn bản tiếng Việt.
-    Hỗ trợ các phương pháp vector hóa:
-    - One-hot encoding
-    - Bag of Words (BoW)
-    - TF-IDF
-    - Binary Bag of Words
-    """
     
     def __init__(self):
         """Khởi tạo vectorizer"""
@@ -55,13 +39,7 @@ class TextVectorizer:
         self._tfidf_vectorizer = None
     
     def fit(self, texts: List[str], min_word_count: int = 1):
-        """
-        Xây dựng từ điển từ tập văn bản.
-        
-        Args:
-            texts: Danh sách các văn bản để xây dựng từ điển
-            min_word_count: Số lần xuất hiện tối thiểu của một từ để đưa vào từ điển
-        """
+
         self.vocab = {}
         self.index_to_word = {}
         
@@ -89,12 +67,7 @@ class TextVectorizer:
         self._initialize_vectorizers(texts)
     
     def _initialize_vectorizers(self, texts: List[str]):
-        """
-        Khởi tạo các vectorizer từ scikit-learn
-        
-        Args:
-            texts: Danh sách các văn bản để khởi tạo vectorizer
-        """
+
         # Chuẩn bị dữ liệu
         clean_texts = [clean_text(text, remove_special_chars=True, lowercase=True) for text in texts]
         
@@ -107,15 +80,7 @@ class TextVectorizer:
         self._tfidf_vectorizer.fit(clean_texts)
     
     def _tokenize(self, text: str) -> List[str]:
-        """
-        Tách văn bản thành các từ đơn.
-        
-        Args:
-            text: Văn bản cần tách từ
-            
-        Returns:
-            Danh sách các từ đã tách
-        """
+
         if not text:
             return []
         
@@ -127,69 +92,31 @@ class TextVectorizer:
         return [token for token in tokens if token.strip()]
     
     def get_onehot_vector(self, text: str) -> List[List[int]]:
-        """
-        Chuyển đổi văn bản thành vector one-hot.
-        
-        Args:
-            text: Văn bản cần chuyển đổi
-            
-        Returns:
-            Danh sách các vector one-hot (một vector cho mỗi từ)
-        """
+
         # Sử dụng hàm one_hot_encode bên ngoài
         result = one_hot_encode(text, display_table=False)
         return result["one_hot_matrix"].tolist()
     
     def get_bow_vector(self, text: str) -> List[int]:
-        """
-        Chuyển đổi văn bản thành vector Bag of Words.
-        
-        Args:
-            text: Văn bản cần chuyển đổi
-            
-        Returns:
-            Vector Bag of Words
-        """
+
         # Sử dụng hàm count_vectorize bên ngoài
         result = count_vectorize(text, display_table=False)
         return result["count_matrix"].tolist()[0]
     
     def get_binary_bow_vector(self, text: str) -> List[int]:
-        """
-        Chuyển đổi văn bản thành vector Binary Bag of Words.
-        
-        Args:
-            text: Văn bản cần chuyển đổi
-            
-        Returns:
-            Vector Binary Bag of Words
-        """
+
         # Lấy vector BoW và chuyển thành dạng binary (0 hoặc 1)
         bow_vector = self.get_bow_vector(text)
         return [1 if count > 0 else 0 for count in bow_vector]
     
     def get_tfidf_vector(self, text: str) -> List[float]:
-        """
-        Chuyển đổi văn bản thành vector TF-IDF.
-        
-        Args:
-            text: Văn bản cần chuyển đổi
-            
-        Returns:
-            Vector TF-IDF
-        """
+
         # Sử dụng hàm tfidf_vectorize bên ngoài
         result = tfidf_vectorize(text, display_table=False)
         return result["tfidf_matrix"].tolist()[0]
     
     def visualize_vectors(self, text: str, vector_type: str = "onehot"):
-        """
-        Hiển thị trực quan vector hóa của văn bản.
-        
-        Args:
-            text: Văn bản cần hiển thị vector
-            vector_type: Loại vector ("onehot", "bow", "binary_bow", "tfidf")
-        """
+
         if vector_type == "onehot":
             visualize_one_hot_encoding(text, custom_sentence=True)
         elif vector_type == "bow":
@@ -205,16 +132,6 @@ class TextVectorizer:
             logger.warning(f"Không hỗ trợ loại vector: {vector_type}")
 
 def one_hot_encode(text: str, display_table: bool = True) -> Dict[str, Any]:
-    """
-    Chuyển đổi văn bản thành biểu diễn one-hot encoding sử dụng sklearn.
-    
-    Args:
-        text: Văn bản cần mã hóa one-hot
-        display_table: Hiển thị bảng kết quả one-hot encoding
-        
-    Returns:
-        Dict chứa thông tin về kết quả mã hóa one-hot
-    """
     try:
         # Làm sạch văn bản và tách từ
         cleaned_text = clean_text(text, remove_special_chars=True, lowercase=True)
@@ -271,13 +188,6 @@ def one_hot_encode(text: str, display_table: bool = True) -> Dict[str, Any]:
         }
 
 def visualize_one_hot_encoding(text: str, custom_sentence: bool = False) -> None:
-    """
-    Hiển thị trực quan kết quả one-hot encoding của một câu.
-    
-    Args:
-        text: Văn bản cần mã hóa one-hot và hiển thị
-        custom_sentence: Nếu True, sử dụng văn bản như đã nhập, nếu False, tạo bảng có tên cột đơn giản
-    """
     try:
         if custom_sentence:
             # Sử dụng văn bản người dùng nhập vào
@@ -357,16 +267,7 @@ def visualize_one_hot_encoding(text: str, custom_sentence: bool = False) -> None
         print(f"Lỗi: {str(e)}")
 
 def count_vectorize(text: str, display_table: bool = True) -> Dict[str, Any]:
-    """
-    Biến đổi văn bản thành vector đếm từ (Bag of Words) sử dụng CountVectorizer.
-    
-    Args:
-        text: Văn bản cần biến đổi
-        display_table: Hiển thị bảng kết quả vector đếm
-        
-    Returns:
-        Dict chứa thông tin về kết quả vector đếm
-    """
+
     try:
         # Làm sạch văn bản
         cleaned_text = clean_text(text, remove_special_chars=True, lowercase=True)
@@ -423,16 +324,7 @@ def count_vectorize(text: str, display_table: bool = True) -> Dict[str, Any]:
         }
 
 def tfidf_vectorize(text: str, display_table: bool = True) -> Dict[str, Any]:
-    """
-    Biến đổi văn bản thành vector TF-IDF sử dụng TfidfVectorizer.
-    
-    Args:
-        text: Văn bản cần biến đổi
-        display_table: Hiển thị bảng kết quả TF-IDF
-        
-    Returns:
-        Dict chứa thông tin về kết quả vector TF-IDF
-    """
+
     try:
         # Làm sạch văn bản
         cleaned_text = clean_text(text, remove_special_chars=True, lowercase=True)

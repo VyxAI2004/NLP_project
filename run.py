@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
-"""
-Ứng dụng chatbot sử dụng Gemini 1.5 Pro
-"""
 
 import os
 import sys

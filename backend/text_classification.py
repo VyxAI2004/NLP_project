@@ -15,6 +15,8 @@ from sklearn.svm import SVC
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 from backend.text_cleaning import clean_text
 
@@ -34,7 +36,10 @@ class TextClassifier:
     Lớp xử lý phân loại văn bản sử dụng các thuật toán khác nhau
     """
     
-    def __init__(self, model_type='naive_bayes', max_features=5000, n_neighbors=5):
+    def __init__(self, model_type='naive_bayes', max_features=5000, n_neighbors=5, 
+                 nn_hidden_layers=1, nn_neurons_per_layer=32,
+                 gb_n_estimators=100, gb_learning_rate=0.1,
+                 svm_kernel='linear', svm_c=1.0):
         """
         Khởi tạo bộ phân loại văn bản
         
@@ -46,6 +51,18 @@ class TextClassifier:
             Số lượng đặc trưng tối đa khi vector hóa văn bản
         n_neighbors : int
             Số lượng láng giềng gần nhất cho KNeighborsClassifier
+        nn_hidden_layers : int
+            Số lớp ẩn cho Neural Network
+        nn_neurons_per_layer : int
+            Số nơ-ron trên mỗi lớp ẩn của Neural Network
+        gb_n_estimators : int
+            Số ước lượng cho Gradient Boosting
+        gb_learning_rate : float
+            Tốc độ học cho Gradient Boosting
+        svm_kernel : str
+            Loại kernel cho SVM ('linear', 'rbf', 'poly')
+        svm_c : float
+            Hệ số C cho SVM (điều chỉnh mức độ phạt lỗi)
         """
         self.model_type = model_type
         self.max_features = max_features
@@ -58,11 +75,21 @@ class TextClassifier:
         elif model_type == 'logistic_regression':
             self.model = LogisticRegression(max_iter=1000, solver='liblinear')
         elif model_type == 'svm':
-            self.model = SVC(kernel='linear', probability=True)
+            self.model = SVC(kernel=svm_kernel, C=svm_c, probability=True)
         elif model_type == 'knn':
             self.model = KNeighborsClassifier(n_neighbors=n_neighbors)
         elif model_type == 'decision_tree':
             self.model = DecisionTreeClassifier()
+        elif model_type == 'neural_network':
+            # Tạo cấu trúc lớp ẩn dựa trên tham số đầu vào
+            hidden_layer_sizes = tuple([nn_neurons_per_layer] * nn_hidden_layers)
+            self.model = MLPClassifier(hidden_layer_sizes=hidden_layer_sizes, max_iter=1000, random_state=42)
+        elif model_type == 'gradient_boosting':
+            self.model = GradientBoostingClassifier(
+                n_estimators=gb_n_estimators, 
+                learning_rate=gb_learning_rate, 
+                random_state=42
+            )
         else:
             # Mặc định là Naive Bayes nếu loại không hợp lệ
             logger.warning(f"Loại mô hình {model_type} không được hỗ trợ. Sử dụng Naive Bayes.")
@@ -96,7 +123,7 @@ class TextClassifier:
         else:  # mặc định là 'bow'
             return CountVectorizer(max_features=self.max_features)
     
-    def train_from_file(self, file_path, text_column='review', label_column='sentiment', test_size=0.2, random_state=42, vectorization_method='bow', ngram_range=None):
+    def train_from_file(self, file_path, text_column='review', label_column='sentiment', test_size=0.2, random_state=42, vectorization_method='bow', ngram_range=None, progress_callback=None):
         """
         Huấn luyện mô hình từ file
         
@@ -116,6 +143,8 @@ class TextClassifier:
             Phương pháp vector hóa ('bow', 'tfidf', 'ngrams')
         ngram_range : tuple
             Phạm vi n-gram, ví dụ (1, 3) cho unigram đến trigram
+        progress_callback : function
+            Callback để cập nhật tiến trình, nhận 3 tham số: status, message, progress_pct (0-100)
             
         Returns:
         --------
@@ -125,6 +154,10 @@ class TextClassifier:
         try:
             # Đọc dữ liệu
             start_time = datetime.now()
+            
+            if progress_callback:
+                progress_callback("processing", "Đang đọc dữ liệu từ file...", 0)
+            
             df = pd.read_csv(file_path)
             
             if text_column not in df.columns:
@@ -135,6 +168,9 @@ class TextClassifier:
             
             # Chuẩn bị dữ liệu
             logger.info(f"Chuẩn bị dữ liệu từ {file_path}...")
+            if progress_callback:
+                progress_callback("processing", "Đang chuẩn bị dữ liệu...", 20)
+                
             X = df[text_column].values
             y = df[label_column].values
             
@@ -148,11 +184,17 @@ class TextClassifier:
                 logger.warning(f"Đã lọc bỏ {len(X) - len(valid_indices)} dòng có giá trị NaN hoặc không hợp lệ")
                 X = X[valid_indices]
                 y = y[valid_indices]
+                
+                if progress_callback:
+                    progress_callback("processing", f"Đã lọc bỏ {len(X) - len(valid_indices)} dòng có giá trị NaN hoặc không hợp lệ", 30)
             
             if len(X) == 0:
                 raise ValueError("Không có dữ liệu hợp lệ sau khi lọc các giá trị NaN")
             
             # Chia dữ liệu thành tập huấn luyện và kiểm thử
+            if progress_callback:
+                progress_callback("processing", "Đang chia dữ liệu thành tập huấn luyện và kiểm thử...", 40)
+                
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state)
             
             # Tạo bộ vector hóa
@@ -160,14 +202,23 @@ class TextClassifier:
             
             # Chuyển đổi văn bản thành vectơ đặc trưng
             logger.info(f"Vector hóa văn bản với phương pháp {vectorization_method}...")
+            if progress_callback:
+                progress_callback("processing", f"Đang vector hóa văn bản với phương pháp {vectorization_method}...", 50)
+                
             X_train_vec = self.vectorizer.fit_transform(X_train)
             X_test_vec = self.vectorizer.transform(X_test)
             
             # Huấn luyện mô hình
             logger.info(f"Huấn luyện mô hình {self.model_type}...")
+            if progress_callback:
+                progress_callback("processing", f"Đang huấn luyện mô hình {self.model_type}...", 70)
+                
             self.model.fit(X_train_vec, y_train)
             
             # Dự đoán trên tập kiểm thử
+            if progress_callback:
+                progress_callback("processing", "Đang đánh giá mô hình trên tập kiểm thử...", 80)
+                
             y_pred = self.model.predict(X_test_vec)
             
             # Tính xác suất dự đoán nếu mô hình hỗ trợ
@@ -179,6 +230,9 @@ class TextClassifier:
                 logger.warning(f"Mô hình {self.model_type} không hỗ trợ predict_proba")
             
             # Đánh giá mô hình
+            if progress_callback:
+                progress_callback("processing", "Đang tính toán các chỉ số đánh giá...", 90)
+                
             accuracy = metrics.accuracy_score(y_test, y_pred)
             precision = metrics.precision_score(y_test, y_pred, average='weighted', zero_division=0)
             recall = metrics.recall_score(y_test, y_pred, average='weighted', zero_division=0)
@@ -193,6 +247,9 @@ class TextClassifier:
             # Tổng thời gian huấn luyện
             training_time = (datetime.now() - start_time).total_seconds()
             
+            if progress_callback:
+                progress_callback("completed", "Huấn luyện mô hình hoàn tất!", 100)
+                
             # Trả về kết quả
             return {
                 'accuracy': accuracy,
@@ -209,6 +266,8 @@ class TextClassifier:
             
         except Exception as e:
             logger.error(f"Lỗi khi huấn luyện mô hình từ file: {str(e)}")
+            if progress_callback:
+                progress_callback("error", f"Lỗi: {str(e)}", 0)
             raise
     
     def predict(self, text):

@@ -14,7 +14,8 @@ unicodedata2==14.0.0
 lxml==4.8.0
 spacy==3.8.0
 joblib==1.1.0
-
+# Mô hình tiếng Việt cho spaCy 3.8.x
+https://github.com/trungtv/vi_spacy/raw/master/packages/vi_core_news_lg-3.8.0/dist/vi_core_news_lg-3.8.0-py3-none-any.whl 
 # Thêm thư viện cho chatbot AI
 transformers==4.9.2
 torch==1.9.0

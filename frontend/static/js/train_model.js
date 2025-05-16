@@ -6,6 +6,9 @@
 let modelResults = []; // Mảng lưu trữ kết quả của các mô hình đã huấn luyện
 let currentModelIndex = -1; // Chỉ số của mô hình hiện tại đang hiển thị
 
+// Biến lưu trữ thông tin mô hình hiện tại
+let currentModelInfo = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     // Khởi tạo các thành phần UI
     initUIComponents();
@@ -44,6 +47,25 @@ function setupEventListeners() {
     document.querySelectorAll('.classification-option').forEach(function(radio) {
         radio.addEventListener('change', function() {
             generateDefaultModelName();
+            // Ẩn tất cả các tùy chọn tham số trước
+            document.querySelectorAll('.knn-params, .neural-network-params, .gradient-boosting-params, .svm-params').forEach(elem => {
+                if (elem) elem.style.display = 'none';
+            });
+            
+            // Hiển thị tùy chọn tương ứng với phương pháp đã chọn
+            if (this.id === 'knn') {
+                const knnParams = document.querySelector('.knn-params');
+                if (knnParams) knnParams.style.display = 'block';
+            } else if (this.id === 'neural_network') {
+                const nnParams = document.querySelector('.neural-network-params');
+                if (nnParams) nnParams.style.display = 'block';
+            } else if (this.id === 'gradient_boosting') {
+                const gbParams = document.querySelector('.gradient-boosting-params');
+                if (gbParams) gbParams.style.display = 'block';
+            } else if (this.id === 'svm') {
+                const svmParams = document.querySelector('.svm-params');
+                if (svmParams) svmParams.style.display = 'block';
+            }
         });
     });
     
@@ -81,18 +103,31 @@ function setupEventListeners() {
         trainModel();
     });
     
-    // Xử lý hiển thị/ẩn tùy chọn N-grams khi chọn phương pháp vector hóa
-    const vectorizationOptions = document.querySelectorAll('.vectorization-option');
-    vectorizationOptions.forEach(option => {
-        option.addEventListener('change', function() {
-            const ngramsOptions = document.getElementById('ngrams-options');
-            if (this.value === 'ngrams') {
-                ngramsOptions.style.display = 'block';
-            } else {
-                ngramsOptions.style.display = 'none';
-            }
-        });
-    });
+    // Kiểm tra trạng thái ban đầu của các phương pháp phân loại
+    // và hiển thị tùy chọn tham số tương ứng
+    const knn = document.getElementById('knn');
+    if (knn && knn.checked) {
+        const knnParams = document.querySelector('.knn-params');
+        if (knnParams) knnParams.style.display = 'block';
+    }
+    
+    const nn = document.getElementById('neural_network');
+    if (nn && nn.checked) {
+        const nnParams = document.querySelector('.neural-network-params');
+        if (nnParams) nnParams.style.display = 'block';
+    }
+    
+    const gb = document.getElementById('gradient_boosting');
+    if (gb && gb.checked) {
+        const gbParams = document.querySelector('.gradient-boosting-params');
+        if (gbParams) gbParams.style.display = 'block';
+    }
+    
+    const svm = document.getElementById('svm');
+    if (svm && svm.checked) {
+        const svmParams = document.querySelector('.svm-params');
+        if (svmParams) svmParams.style.display = 'block';
+    }
     
     // Xử lý thanh trượt max-features
     const maxFeaturesRange = document.getElementById('max-features-range');
@@ -103,54 +138,6 @@ function setupEventListeners() {
         maxFeaturesRange.addEventListener('input', function() {
             maxFeaturesValue.textContent = this.value;
             maxFeaturesInput.value = this.value;
-        });
-    }
-    
-    // Thêm animation khi hover vào card
-    const cards = document.querySelectorAll('.card');
-    cards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.classList.add('shadow');
-        });
-        card.addEventListener('mouseleave', function() {
-            this.classList.remove('shadow');
-        });
-    });
-    
-    // Hiệu ứng cho các nút
-    const buttons = document.querySelectorAll('.btn');
-    buttons.forEach(button => {
-        button.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-1px)';
-        });
-        button.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
-    });
-    
-    // Xử lý khi nhập thông tin mô hình
-    const modelNameInput = document.getElementById('model-name');
-    const randomStateInput = document.getElementById('random-state');
-    
-    if (modelNameInput) {
-        modelNameInput.addEventListener('input', function() {
-            // Cập nhật tên mô hình khi người dùng nhập
-        });
-    }
-    
-    if (randomStateInput) {
-        randomStateInput.addEventListener('input', function() {
-            // Xử lý khi thay đổi random state
-        });
-    }
-    
-    // Xử lý khi tải file dataset lên
-    const datasetFileInput = document.getElementById('dataset-file');
-    if (datasetFileInput) {
-        datasetFileInput.addEventListener('change', function() {
-            if (this.files && this.files.length > 0) {
-                // File đã được chọn
-            }
         });
     }
     
@@ -178,6 +165,10 @@ function setupEventListeners() {
         document.querySelectorAll('.classification-option').forEach(checkbox => {
             checkbox.checked = true;
         });
+        toggleKNNParams();
+        toggleNeuralNetworkParams();
+        toggleGradientBoostingParams();
+        toggleSVMParams();
     });
     
     document.getElementById('deselect-all-classifications')?.addEventListener('click', function() {
@@ -189,13 +180,30 @@ function setupEventListeners() {
         if (document.querySelectorAll('.classification-option:checked').length === 0) {
             document.getElementById('naive_bayes').checked = true;
         }
+        toggleKNNParams();
+        toggleNeuralNetworkParams();
+        toggleGradientBoostingParams();
+        toggleSVMParams();
     });
 
     // Xử lý hiển thị/ẩn tham số khi chọn/bỏ chọn KNN
     document.getElementById('knn').addEventListener('change', toggleKNNParams);
     
-    // Kiểm tra trạng thái ban đầu của KNN
+    // Xử lý hiển thị/ẩn tham số khi chọn/bỏ chọn Neural Network
+    document.getElementById('neural_network').addEventListener('change', toggleNeuralNetworkParams);
+    
+    // Xử lý hiển thị/ẩn tham số khi chọn/bỏ chọn Gradient Boosting
+    document.getElementById('gradient_boosting').addEventListener('change', toggleGradientBoostingParams);
+    
+    // Xử lý hiển thị/ẩn tham số khi chọn/bỏ chọn SVM
+    document.getElementById('svm').addEventListener('change', toggleSVMParams);
+    
+    // Kiểm tra trạng thái ban đầu của các phương pháp phân loại
+    // và hiển thị tùy chọn tham số tương ứng
     toggleKNNParams();
+    toggleNeuralNetworkParams();
+    toggleGradientBoostingParams();
+    toggleSVMParams();
 }
 
 /**
@@ -226,14 +234,6 @@ async function previewDataset() {
         return;
     }
     
-    const textColumn = document.getElementById('text-column').value;
-    const labelColumn = document.getElementById('label-column').value;
-    
-    if (!textColumn || !labelColumn) {
-        showToast('Vui lòng nhập tên cột văn bản và cột nhãn', 'warning');
-        return;
-    }
-    
     try {
         // Hiển thị loading
         showLoading('Đang đọc dataset...');
@@ -249,14 +249,13 @@ async function previewDataset() {
             currentPage: 0,
             pageSize: 20,
             totalSamples: 0,
-            isLoading: false // Thêm flag để theo dõi trạng thái đang tải
+            isLoading: false
         };
         
         // Đọc file CSV
         const text = await datasetFile.text();
         let rows = text.split('\n');
         
-        // Xử lý trường hợp file có ký tự BOM hoặc các ký tự đặc biệt khác
         if (rows[0].charCodeAt(0) === 0xFEFF) {
             rows[0] = rows[0].substring(1); // Loại bỏ BOM nếu có
         }
@@ -265,11 +264,8 @@ async function previewDataset() {
             throw new Error('Dataset không hợp lệ hoặc không có dữ liệu');
         }
         
-        // Lấy header và xử lý
         try {
-            // Thử phân tích header như CSV chuẩn
             const headerLine = rows[0].trim();
-            // Xử lý ngắt dòng đặc biệt của Windows
             if (headerLine.includes('\r')) {
                 window.datasetData.header = headerLine.split('\r')[0].split(',');
             } else {
@@ -280,37 +276,89 @@ async function previewDataset() {
             throw new Error('Không thể phân tích header của file CSV. Vui lòng kiểm tra định dạng file.');
         }
         
-        // Tìm vị trí của cột văn bản và cột nhãn
-        window.datasetData.textColIndex = window.datasetData.header.findIndex(col => col.toLowerCase() === textColumn.toLowerCase());
-        window.datasetData.labelColIndex = window.datasetData.header.findIndex(col => col.toLowerCase() === labelColumn.toLowerCase());
+        // Tự động đề xuất cột văn bản và cột nhãn
+        const textColumn = document.getElementById('text-column').value;
+        const labelColumn = document.getElementById('label-column').value;
         
+        // Nếu đã có giá trị nhập vào, tìm theo giá trị đó
+        if (textColumn) {
+            window.datasetData.textColIndex = window.datasetData.header.findIndex(col => col.toLowerCase() === textColumn.toLowerCase());
+        }
+        
+        if (labelColumn) {
+            window.datasetData.labelColIndex = window.datasetData.header.findIndex(col => col.toLowerCase() === labelColumn.toLowerCase());
+        }
+        
+        // Nếu chưa tìm thấy, gợi ý cột văn bản và cột nhãn dựa trên tên cột phổ biến
         if (window.datasetData.textColIndex === -1) {
-            throw new Error(`Không tìm thấy cột văn bản "${textColumn}" trong dataset`);
+            // Các tên cột văn bản phổ biến
+            const commonTextColumns = ['text', 'content', 'document', 'message', 'description', 'review', 'nội dung', 'văn bản'];
+            for (const col of commonTextColumns) {
+                const index = window.datasetData.header.findIndex(header => header.toLowerCase().includes(col));
+                if (index !== -1) {
+                    window.datasetData.textColIndex = index;
+                    // Cập nhật giá trị vào trường nhập liệu
+                    document.getElementById('text-column').value = window.datasetData.header[index];
+                    break;
+                }
+            }
+            // Nếu vẫn không tìm thấy, lấy cột đầu tiên làm cột văn bản
+            if (window.datasetData.textColIndex === -1 && window.datasetData.header.length > 0) {
+                window.datasetData.textColIndex = 0;
+                document.getElementById('text-column').value = window.datasetData.header[0];
+            }
         }
         
         if (window.datasetData.labelColIndex === -1) {
-            throw new Error(`Không tìm thấy cột nhãn "${labelColumn}" trong dataset`);
+            // Các tên cột nhãn phổ biến
+            const commonLabelColumns = ['label', 'class', 'category', 'target', 'type', 'sentiment', 'nhãn', 'phân loại', 'thể loại'];
+            for (const col of commonLabelColumns) {
+                const index = window.datasetData.header.findIndex(header => header.toLowerCase().includes(col));
+                if (index !== -1 && index !== window.datasetData.textColIndex) {
+                    window.datasetData.labelColIndex = index;
+                    // Cập nhật giá trị vào trường nhập liệu
+                    document.getElementById('label-column').value = window.datasetData.header[index];
+                    break;
+                }
+            }
+            // Nếu vẫn không tìm thấy, lấy cột cuối cùng làm cột nhãn (miễn là khác cột văn bản)
+            if (window.datasetData.labelColIndex === -1 && window.datasetData.header.length > 1) {
+                const lastColIndex = window.datasetData.header.length - 1;
+                if (lastColIndex !== window.datasetData.textColIndex) {
+                    window.datasetData.labelColIndex = lastColIndex;
+                } else {
+                    // Nếu cột cuối trùng với cột văn bản, lấy cột kế cuối
+                    window.datasetData.labelColIndex = lastColIndex - 1;
+                }
+                if (window.datasetData.labelColIndex >= 0) {
+                    document.getElementById('label-column').value = window.datasetData.header[window.datasetData.labelColIndex];
+                }
+            }
         }
         
-        // Lưu toàn bộ dữ liệu vào bộ nhớ (trừ header)
         window.datasetData.data = rows.slice(1).filter(row => row.trim());
         window.datasetData.totalSamples = window.datasetData.data.length;
         window.datasetData.parsed = true;
         
-        // Cập nhật UI với số lượng mẫu
         document.getElementById('dataset-total-samples').textContent = window.datasetData.totalSamples.toLocaleString();
         document.getElementById('total-samples-count').textContent = window.datasetData.totalSamples.toLocaleString();
         
-        // Phân tích tối đa 1000 mẫu đầu tiên để hiển thị phân phối nhãn
-        await parseDatasetLabels(Math.min(1000, window.datasetData.totalSamples));
+        // Cập nhật cấu trúc bảng preview để hiển thị tất cả các cột
+        updatePreviewTableHeader(window.datasetData.header);
         
-        // Tải trang đầu tiên của dữ liệu
+        // Phân tích và hiển thị thông tin về nhãn nếu đã tìm thấy cột nhãn
+        if (window.datasetData.labelColIndex !== -1) {
+            await parseDatasetLabels(Math.min(1000, window.datasetData.totalSamples));
+        } else {
+            // Nếu không tìm thấy cột nhãn, hiển thị thông báo
+            document.getElementById('dataset-labels-distribution').innerHTML = 
+                '<div class="alert alert-info mb-0">Chưa xác định được cột nhãn. Vui lòng nhập tên cột nhãn.</div>';
+        }
+        
         await loadDatasetPage(0);
         
-        // Ẩn loading và hiển thị modal
         hideLoading();
         
-        // Xóa mọi overlay loading có thể còn tồn tại
         const allOverlays = document.querySelectorAll('[id^="loading-overlay"]');
         allOverlays.forEach(overlay => {
             if (overlay && overlay.parentNode) {
@@ -318,22 +366,17 @@ async function previewDataset() {
             }
         });
         
-        // Đảm bảo body không còn class modal-open
         document.body.classList.remove('modal-open');
         document.body.style.overflow = '';
         document.body.style.paddingRight = '';
         
-        // Hiển thị modal với timeout nhỏ để đảm bảo DOM đã được cập nhật
         setTimeout(() => {
             const previewModal = new bootstrap.Modal(document.getElementById('preview-dataset-modal'));
             previewModal.show();
             
-            // Thêm event listener để theo dõi cuộn
             const tableContainer = document.querySelector('.table-responsive');
             if (tableContainer) {
-                // Xóa event listener cũ nếu có
                 tableContainer.removeEventListener('scroll', handleTableScroll);
-                // Thêm event listener mới
                 tableContainer.addEventListener('scroll', handleTableScroll);
             }
         }, 100);
@@ -343,6 +386,38 @@ async function previewDataset() {
         hideLoading();
         showToast('Lỗi khi đọc file dataset: ' + error.message, 'danger');
     }
+}
+
+/**
+ * Cập nhật cấu trúc bảng preview để hiển thị tất cả các cột
+ */
+function updatePreviewTableHeader(headers) {
+    const tableHead = document.querySelector('#dataset-preview-table thead tr');
+    if (!tableHead) return;
+    
+    // Xóa các cột hiện tại
+    tableHead.innerHTML = '';
+    
+    // Thêm cột STT
+    const indexHeader = document.createElement('th');
+    indexHeader.style.width = '50px';
+    indexHeader.textContent = '#';
+    tableHead.appendChild(indexHeader);
+    
+    // Thêm mỗi cột từ header
+    headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        // Đánh dấu cột văn bản và cột nhãn
+        if (window.datasetData.textColIndex !== -1 && header === headers[window.datasetData.textColIndex]) {
+            th.className = 'text-primary';
+            th.innerHTML = `${header} <i class="fas fa-font ms-1" title="Cột văn bản"></i>`;
+        } else if (window.datasetData.labelColIndex !== -1 && header === headers[window.datasetData.labelColIndex]) {
+            th.className = 'text-primary';
+            th.innerHTML = `${header} <i class="fas fa-tag ms-1" title="Cột nhãn"></i>`;
+        }
+        tableHead.appendChild(th);
+    });
 }
 
 /**
@@ -357,27 +432,23 @@ function handleTableScroll(event) {
     const scrollPosition = tableContainer.scrollTop + tableContainer.clientHeight;
     const totalHeight = tableContainer.scrollHeight;
     
-    // Nếu đã cuộn đến vị trí gần cuối (còn 100px)
     if (scrollPosition >= totalHeight - 100) {
-        // Tải trang tiếp theo nếu chưa tải hết dữ liệu
         const nextPage = window.datasetData.currentPage + 1;
         const startIndex = nextPage * window.datasetData.pageSize;
         
         if (startIndex < window.datasetData.data.length) {
             window.datasetData.isLoading = true;
             
-            // Tăng pageSize sau mỗi 5 lần cuộn để hiệu suất tốt hơn
             if (nextPage % 5 === 0 && window.datasetData.pageSize < 100) {
                 window.datasetData.pageSize = Math.min(100, window.datasetData.pageSize * 1.5);
             }
             
-            // Thêm trạng thái loading ở cuối bảng
             const tableBody = document.querySelector('#dataset-preview-table tbody');
             const loadingRow = document.createElement('tr');
             loadingRow.className = 'loading-row';
             loadingRow.id = 'infinite-scroll-loader';
             loadingRow.innerHTML = `
-                <td colspan="3" class="text-center">
+                <td colspan="${window.datasetData.header.length + 1}" class="text-center">
                     <div class="spinner-border spinner-border-sm text-primary me-2" role="status">
                         <span class="visually-hidden">Đang tải...</span>
                     </div>
@@ -386,11 +457,8 @@ function handleTableScroll(event) {
             `;
             tableBody.appendChild(loadingRow);
             
-            // Tải trang tiếp theo
             loadDatasetPage(nextPage).then(() => {
                 window.datasetData.isLoading = false;
-                
-                // Xóa hàng loading
                 const loader = document.getElementById('infinite-scroll-loader');
                 if (loader) {
                     loader.remove();
@@ -404,23 +472,21 @@ function handleTableScroll(event) {
  * Phân tích và hiển thị phân phối nhãn từ dataset
  */
 async function parseDatasetLabels(maxSamples) {
-    if (!window.datasetData || !window.datasetData.parsed) return;
+    if (!window.datasetData || !window.datasetData.parsed || window.datasetData.labelColIndex === -1) return;
     
     window.datasetData.labels = {};
     
-    // Sử dụng số mẫu nhỏ hơn để tính toán phân phối nhanh
     const sampleSize = Math.min(maxSamples, window.datasetData.data.length);
     
     for (let i = 0; i < sampleSize; i++) {
         try {
             const rowData = parseCSVRow(window.datasetData.data[i]);
-            if (rowData.length <= Math.max(window.datasetData.textColIndex, window.datasetData.labelColIndex)) {
-                continue; // Bỏ qua hàng không đủ cột
+            if (rowData.length <= window.datasetData.labelColIndex) {
+                continue;
             }
             
             const label = rowData[window.datasetData.labelColIndex].replace(/^"|"$/g, '');
             
-            // Đếm phân phối nhãn
             if (window.datasetData.labels[label]) {
                 window.datasetData.labels[label]++;
             } else {
@@ -430,46 +496,42 @@ async function parseDatasetLabels(maxSamples) {
             console.error("Lỗi khi phân tích hàng", i, e);
         }
     }
-        
-        // Hiển thị phân phối nhãn bằng biểu đồ màu
-        const labelsContainer = document.getElementById('dataset-labels-distribution');
-        labelsContainer.innerHTML = '';
-        
-        // Các màu nền đẹp cho các nhãn
-        const backgroundColors = [
-            'rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 
-            'rgba(75, 192, 192, 0.2)', 'rgba(255, 206, 86, 0.2)',
-            'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)',
-            'rgba(199, 199, 199, 0.2)', 'rgba(83, 102, 255, 0.2)',
-            'rgba(255, 99, 255, 0.2)', 'rgba(0, 212, 255, 0.2)'
-        ];
-        
-        // Các màu viền đẹp cho các nhãn
-        const borderColors = [
-            'rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 
-            'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)',
-            'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
-            'rgba(199, 199, 199, 1)', 'rgba(83, 102, 255, 1)',
-            'rgba(255, 99, 255, 1)', 'rgba(0, 212, 255, 1)'
-        ];
-        
-        // Hiển thị nhãn dưới dạng badge
+    
+    const labelsContainer = document.getElementById('dataset-labels-distribution');
+    labelsContainer.innerHTML = '';
+    
+    const backgroundColors = [
+        'rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 
+        'rgba(75, 192, 192, 0.2)', 'rgba(255, 206, 86, 0.2)',
+        'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)',
+        'rgba(199, 199, 199, 0.2)', 'rgba(83, 102, 255, 0.2)',
+        'rgba(255, 99, 255, 0.2)', 'rgba(0, 212, 255, 0.2)'
+    ];
+    
+    const borderColors = [
+        'rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 
+        'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)',
+        'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
+        'rgba(199, 199, 199, 1)', 'rgba(83, 102, 255, 1)',
+        'rgba(255, 99, 255, 1)', 'rgba(0, 212, 255, 1)'
+    ];
+    
     Object.keys(window.datasetData.labels).forEach((label, index) => {
         const count = window.datasetData.labels[label];
-            const bgColor = backgroundColors[index % backgroundColors.length];
-            const borderColor = borderColors[index % borderColors.length];
-            
-            const badge = document.createElement('span');
-            badge.className = 'badge rounded-pill me-2 mb-2';
-            badge.style.backgroundColor = bgColor;
-            badge.style.color = borderColor;
-            badge.style.borderColor = borderColor;
-            badge.style.borderWidth = '1px';
-            badge.style.borderStyle = 'solid';
-            badge.textContent = `${label}: ${count}`;
-            
-            labelsContainer.appendChild(badge);
-        });
+        const bgColor = backgroundColors[index % backgroundColors.length];
+        const borderColor = borderColors[index % borderColors.length];
+        
+        const badge = document.createElement('span');
+        badge.className = 'badge rounded-pill me-2 mb-2';
+        badge.style.backgroundColor = bgColor;
+        badge.style.color = borderColor;
+        badge.style.borderColor = borderColor;
+        badge.style.borderWidth = '1px';
+        badge.style.borderStyle = 'solid';
+        badge.textContent = `${label}: ${count}`;
+        
+        labelsContainer.appendChild(badge);
+    });
 }
 
 /**
@@ -482,120 +544,113 @@ async function loadDatasetPage(pageNumber) {
     const startIndex = pageNumber * pageSize;
     const endIndex = Math.min(startIndex + pageSize, window.datasetData.data.length);
     
-    // Nếu đã tải hết dữ liệu
     if (startIndex >= window.datasetData.data.length) {
-        // Ẩn nút tải thêm và cập nhật trạng thái
         const loadMoreBtn = document.getElementById('load-more-samples');
         if (loadMoreBtn) {
             loadMoreBtn.style.display = 'none';
         }
         
-        // Cập nhật thông tin hiển thị
         document.getElementById('dataset-preview-info').innerHTML = `<i class="fas fa-check-circle text-success me-1"></i> Đã tải tất cả ${window.datasetData.totalSamples.toLocaleString()} mẫu`;
         return;
     }
     
-        const tableBody = document.querySelector('#dataset-preview-table tbody');
+    const tableBody = document.querySelector('#dataset-preview-table tbody');
     
-    // Nếu là trang đầu tiên, xóa sạch tbody
     if (pageNumber === 0) {
         tableBody.innerHTML = '';
         
-        // Thêm hàng loading
         for (let i = 0; i < 3; i++) {
             const loadingRow = document.createElement('tr');
             loadingRow.className = 'loading-row';
-            loadingRow.innerHTML = `
-                <td></td>
-                <td></td>
-                <td></td>
-            `;
+            loadingRow.innerHTML = '<td colspan="' + (window.datasetData.header.length + 1) + '"></td>';
             tableBody.appendChild(loadingRow);
         }
     }
     
-    // Sử dụng setTimeout để cho phép UI cập nhật loading state
     return new Promise(resolve => {
         setTimeout(async () => {
-            // Xóa các hàng loading
             const loadingRows = tableBody.querySelectorAll('.loading-row:not(#infinite-scroll-loader)');
             loadingRows.forEach(row => row.remove());
             
-            // Tải và hiển thị dữ liệu
             for (let i = startIndex; i < endIndex; i++) {
                 try {
-            const row = document.createElement('tr');
+                    const row = document.createElement('tr');
                     const rowData = parseCSVRow(window.datasetData.data[i]);
                     
-                    if (rowData.length <= Math.max(window.datasetData.textColIndex, window.datasetData.labelColIndex)) {
-                        continue; // Bỏ qua hàng không đủ cột
-                    }
-            
-            const indexCell = document.createElement('td');
-            indexCell.textContent = i + 1;
-            row.appendChild(indexCell);
-            
-            const textCell = document.createElement('td');
-                    const textPreview = rowData[window.datasetData.textColIndex];
-                    const textTrimmed = textPreview.length > 150 ? textPreview.substring(0, 150) + '...' : textPreview;
-                    textCell.textContent = textTrimmed;
-                    textCell.title = textPreview; // Hiển thị đầy đủ khi hover
-            row.appendChild(textCell);
-            
-            const labelCell = document.createElement('td');
-                    const label = rowData[window.datasetData.labelColIndex];
+                    // Thêm cột STT
+                    const indexCell = document.createElement('td');
+                    indexCell.textContent = i + 1;
+                    row.appendChild(indexCell);
                     
-            // Sử dụng badge có màu tương ứng với nhãn
-                    const labelIndex = Object.keys(window.datasetData.labels).indexOf(label);
-                    const backgroundColors = [
-                        'rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 
-                        'rgba(75, 192, 192, 0.2)', 'rgba(255, 206, 86, 0.2)',
-                        'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'
-                    ];
-                    const borderColors = [
-                        'rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 
-                        'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)',
-                        'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'
-                    ];
-                    
-                    const bgColor = labelIndex >= 0 
-                        ? backgroundColors[labelIndex % backgroundColors.length] 
-                        : 'rgba(200, 200, 200, 0.2)';
+                    // Thêm dữ liệu cho mỗi cột
+                    for (let j = 0; j < window.datasetData.header.length; j++) {
+                        const cell = document.createElement('td');
                         
-                    const borderColor = labelIndex >= 0 
-                        ? borderColors[labelIndex % borderColors.length] 
-                        : 'rgba(200, 200, 200, 1)';
-            
-            const labelBadge = document.createElement('span');
-            labelBadge.className = 'badge rounded-pill';
-            labelBadge.style.backgroundColor = bgColor;
-            labelBadge.style.color = borderColor;
-            labelBadge.style.borderColor = borderColor;
-            labelBadge.style.borderWidth = '1px';
-            labelBadge.style.borderStyle = 'solid';
-                    labelBadge.textContent = label;
-            
-            labelCell.appendChild(labelBadge);
-            row.appendChild(labelCell);
-            
-            tableBody.appendChild(row);
+                        if (j < rowData.length) {
+                            const cellValue = rowData[j];
+                            const textTrimmed = cellValue.length > 150 ? cellValue.substring(0, 150) + '...' : cellValue;
+                            cell.textContent = textTrimmed;
+                            cell.title = cellValue;
+                            
+                            // Nếu là cột nhãn và đã xác định cột nhãn
+                            if (j === window.datasetData.labelColIndex && window.datasetData.labelColIndex !== -1) {
+                                // Tạo badge cho nhãn
+                                cell.textContent = '';
+                                const label = cellValue;
+                                
+                                const labelIndex = Object.keys(window.datasetData.labels).indexOf(label);
+                                const backgroundColors = [
+                                    'rgba(54, 162, 235, 0.2)', 'rgba(255, 99, 132, 0.2)', 
+                                    'rgba(75, 192, 192, 0.2)', 'rgba(255, 206, 86, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)', 'rgba(255, 159, 64, 0.2)'
+                                ];
+                                const borderColors = [
+                                    'rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)', 
+                                    'rgba(75, 192, 192, 1)', 'rgba(255, 206, 86, 1)',
+                                    'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)'
+                                ];
+                                
+                                const bgColor = labelIndex >= 0 
+                                    ? backgroundColors[labelIndex % backgroundColors.length] 
+                                    : 'rgba(200, 200, 200, 0.2)';
+                                    
+                                const borderColor = labelIndex >= 0 
+                                    ? borderColors[labelIndex % borderColors.length] 
+                                    : 'rgba(200, 200, 200, 1)';
+                        
+                                const labelBadge = document.createElement('span');
+                                labelBadge.className = 'badge rounded-pill';
+                                labelBadge.style.backgroundColor = bgColor;
+                                labelBadge.style.color = borderColor;
+                                labelBadge.style.borderColor = borderColor;
+                                labelBadge.style.borderWidth = '1px';
+                                labelBadge.style.borderStyle = 'solid';
+                                labelBadge.textContent = label;
+                        
+                                cell.appendChild(labelBadge);
+                            }
+                        } else {
+                            cell.textContent = '';
+                        }
+                        
+                        row.appendChild(cell);
+                    }
+                    
+                    tableBody.appendChild(row);
                 } catch (e) {
                     console.error("Lỗi khi hiển thị hàng", i, e);
                 }
             }
             
-            // Cập nhật trạng thái
             window.datasetData.currentPage = pageNumber;
             const samplesLoaded = Math.min((pageNumber + 1) * pageSize, window.datasetData.totalSamples);
             document.getElementById('samples-loaded').textContent = samplesLoaded.toLocaleString();
             
-            // Ẩn nút tải thêm nếu không cần thiết
             const loadMoreBtn = document.getElementById('load-more-samples');
             if (loadMoreBtn) {
                 loadMoreBtn.style.display = 'none';
             }
             
-            // Hiển thị thông báo nếu đã tải hết dữ liệu
             if (endIndex >= window.datasetData.data.length) {
                 document.getElementById('dataset-preview-info').innerHTML = `<i class="fas fa-check-circle text-success me-1"></i> Đã tải tất cả ${window.datasetData.totalSamples.toLocaleString()} mẫu`;
             }
@@ -611,7 +666,6 @@ async function loadDatasetPage(pageNumber) {
 function parseCSVRow(rowStr) {
     if (!rowStr) return [];
     
-    // Xử lý break line của Windows
     if (rowStr.includes('\r')) {
         rowStr = rowStr.split('\r')[0];
     }
@@ -641,502 +695,147 @@ function parseCSVRow(rowStr) {
         values.push(currentValue.trim());
     }
     
-    // Xóa dấu ngoặc kép ở đầu và cuối nếu có
     return values.map(v => v.replace(/^"|"$/g, ''));
 }
 
 /**
- * Đào tạo mô hình
+ * Hiển thị loading indicator với thanh tiến trình
  */
-async function trainModel() {
-    const datasetFile = document.getElementById('dataset-file').files[0];
+function showLoading(message = 'Đang xử lý...', showProgress = false) {
+    // Xóa overlay cũ nếu có
+    hideLoading();
     
-    if (!datasetFile) {
-        showToast('Vui lòng chọn file dataset', 'warning');
-        return;
-    }
+    // Tạo unique ID bằng timestamp
+    const timestamp = new Date().getTime();
+    const overlayId = 'loading-overlay-' + timestamp;
+    const progressBarId = 'progress-bar-' + timestamp;
+    const statusMessageId = 'status-message-' + timestamp;
     
-    const textColumn = document.getElementById('text-column').value;
-    const labelColumn = document.getElementById('label-column').value;
+    // Tạo overlay
+    const overlay = document.createElement('div');
+    overlay.id = overlayId;
+    overlay.className = 'position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center';
+    overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    overlay.style.zIndex = '9999';
     
-    if (!textColumn || !labelColumn) {
-        showToast('Vui lòng nhập tên cột văn bản và cột nhãn', 'warning');
-        return;
-    }
+    // Tạo content
+    const content = document.createElement('div');
+    content.className = 'bg-white p-4 rounded shadow text-center';
+    content.style.width = '400px';
+    content.style.maxWidth = '90%';
     
-    // Kiểm tra phương pháp vector hóa
-    let vectorizationMethod = '';
-    document.querySelectorAll('.vectorization-option').forEach(option => {
-        if (option.checked) {
-            vectorizationMethod = option.value;
-        }
-    });
-    
-    if (!vectorizationMethod) {
-        showToast('Vui lòng chọn phương pháp vector hóa', 'warning');
-        return;
-    }
-    
-    // Kiểm tra phương pháp phân loại
-    let classificationMethods = [];
-    document.querySelectorAll('.classification-option').forEach(option => {
-        if (option.checked) {
-            classificationMethods.push(option.value);
-        }
-    });
-    
-    if (classificationMethods.length === 0) {
-        showToast('Vui lòng chọn ít nhất một phương pháp phân loại', 'warning');
-        return;
-    }
-    
-    // Lấy thể loại mô hình
-    let modelCategory = '';
-    document.querySelectorAll('.model-category-option').forEach(option => {
-        if (option.checked) {
-            modelCategory = option.value;
-        }
-    });
-    
-    // Nếu là thể loại tùy chỉnh, lấy giá trị từ ô nhập
-    if (modelCategory === 'custom') {
-        const customCategory = document.getElementById('custom-category-input').value.trim();
-        if (!customCategory) {
-            showToast('Vui lòng nhập tên thể loại tùy chỉnh', 'warning');
-            return;
-        }
-        modelCategory = customCategory;
-    }
-    
-    // Tạo form data
-    const formData = new FormData();
-    formData.append('dataset', datasetFile);
-    formData.append('text_column', textColumn);
-    formData.append('label_column', labelColumn);
-    formData.append('vectorization_method', vectorizationMethod);
-    formData.append('classification_method', classificationMethods[0]);
-    formData.append('max_features', document.getElementById('max-features').value);
-    formData.append('train_test_split', document.getElementById('train-test-split').value / 100);
-    formData.append('random_state', document.getElementById('random-state').value);
-    formData.append('model_category', modelCategory);
-    
-    // Tên mô hình (nếu có)
-    const modelName = document.getElementById('model-name').value;
-    if (modelName) {
-        formData.append('model_name', modelName);
-    }
-    
-    // Thêm tham số k cho KNN nếu KNN được chọn
-    const knnOption = document.getElementById('knn');
-    if (knnOption && knnOption.checked) {
-        const knnNeighbors = document.getElementById('knn-neighbors').value;
-        formData.append('knn_neighbors', knnNeighbors);
-    }
-    
-    // Thêm tham số ngram range nếu phương pháp là ngrams
-    if (vectorizationMethod === 'ngrams') {
-        const ngramMin = document.getElementById('ngram-min').value;
-        const ngramMax = document.getElementById('ngram-max').value;
-        
-        if (parseInt(ngramMin) > parseInt(ngramMax)) {
-            showToast('Giá trị Min không thể lớn hơn Max trong N-grams', 'warning');
-            return;
-        }
-        
-        formData.append('ngram_min', ngramMin);
-        formData.append('ngram_max', ngramMax);
-    }
-    
-    try {
-        // Hiển thị loading
-        showLoading('Đang đào tạo mô hình...');
-        
-        // Gửi request đào tạo mô hình
-        const response = await fetch('/api/train_model', {
-            method: 'POST',
-            body: formData
-        });
-        
-        const result = await response.json();
-        
-        // Đảm bảo ẩn loading trong mọi trường hợp
-        hideLoading();
-        
-        // Xóa mọi overlay loading có thể còn tồn tại
-        const allOverlays = document.querySelectorAll('[id^="loading-overlay"]');
-        allOverlays.forEach(overlay => {
-            if (overlay && overlay.parentNode) {
-                overlay.parentNode.removeChild(overlay);
-            }
-        });
-        
-        // Đảm bảo body không còn class modal-open
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-        
-        if (result.status === 'error') {
-            showToast(result.message || 'Lỗi khi đào tạo mô hình', 'danger');
-            return;
-        }
-        
-        // Hiển thị kết quả đào tạo với timeout nhỏ
-        setTimeout(() => {
-            // Ẩn trạng thái trống
-            const emptyStateCard = document.getElementById('empty-state-card');
-            if (emptyStateCard) {
-                emptyStateCard.style.display = 'none';
-            }
-            
-            // Hiển thị kết quả đào tạo
-            const trainingResults = document.getElementById('training-results');
-            if (trainingResults) {
-                trainingResults.style.display = 'block';
-            }
-            
-            // Lưu kết quả vào mảng để so sánh
-            modelResults.push({
-                ...result,
-                timestamp: new Date().toLocaleString(),
-                model_number: modelResults.length + 1
-            });
-            
-            // Cập nhật chỉ số của mô hình hiện tại
-            currentModelIndex = modelResults.length - 1;
-            
-            // Cập nhật nội dung kết quả
-            updateResultsDisplay();
-            
-            // Cuộn đến phần kết quả
-            document.getElementById('results-wrapper').scrollIntoView({ behavior: 'smooth' });
-            
-            // Hiển thị thông báo thành công
-            showToast('Đã đào tạo mô hình thành công!', 'success');
-        }, 100);
-        
-    } catch (error) {
-        console.error('Lỗi khi đào tạo mô hình:', error);
-        // Đảm bảo ẩn loading khi có lỗi
-        hideLoading();
-        showToast('Lỗi khi gửi yêu cầu đào tạo mô hình', 'danger');
-    }
-}
-
-/**
- * Tạo HTML cho kết quả đào tạo
- */
-function createTrainingResultHTML(result) {
-    const training = result.training_result;
-    const modelInfo = result.model_info;
-    
-    // Tính thời gian huấn luyện
-    const processingTime = result.processing_time ? 
-        `<div class="badge bg-primary bg-opacity-75 p-2 mb-3">⏱️ Thời gian xử lý: ${result.processing_time} giây</div>` : '';
-    
-    // Tạo HTML cho thông tin mô hình - thiết kế đơn giản hơn
-    const modelInfoHTML = `
-        <div class="card model-info-card mb-4">
-            <div class="card-header bg-primary bg-opacity-75 text-white">
-                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i> Thông tin mô hình</h5>
-            </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-center mb-4">
-                    ${processingTime}
-                </div>
-                
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">Tên mô hình:</span>
-                        <span class="text-secondary">${modelInfo.model_name}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">Phương pháp phân loại:</span>
-                        <span class="text-secondary">${modelInfo.classification_method}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">Phương pháp vector hóa:</span>
-                        <span class="text-secondary">${modelInfo.vectorization_method}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">Số lớp:</span>
-                        <span class="text-secondary">${training.labels.length}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">Số đặc trưng:</span>
-                        <span class="text-secondary">${formatNumber(training.feature_count)}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">Mẫu huấn luyện:</span>
-                        <span class="text-secondary">${formatNumber(training.train_samples)}</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span class="fw-bold">Mẫu kiểm thử:</span>
-                        <span class="text-secondary">${formatNumber(training.test_samples)}</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    `;
-    
-    // Tạo HTML card cho các chỉ số đánh giá - thiết kế trực quan hơn
-    const metricsHTML = `
-        <div class="card model-info-card mb-4">
-            <div class="card-header bg-primary bg-opacity-75 text-white">
-                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i> Chỉ số đánh giá</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3 mb-3">
-                    <div class="col-md-3 col-6">
-                        <div class="metric-card text-center p-3 border-0 rounded shadow-sm" style="background-color: rgba(13, 110, 253, 0.1);">
-                            <div class="display-4 fw-bold" style="color: #0d6efd;">${(training.accuracy * 100).toFixed(1)}%</div>
-                            <p class="fs-5 mb-0">Accuracy</p>
-                            <div class="small text-muted">Dự đoán đúng</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="metric-card text-center p-3 border-0 rounded shadow-sm" style="background-color: rgba(32, 136, 203, 0.1);">
-                            <div class="display-4 fw-bold" style="color: #2088cb;">${(training.precision * 100).toFixed(1)}%</div>
-                            <p class="fs-5 mb-0">Precision</p>
-                            <div class="small text-muted">Độ chính xác</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="metric-card text-center p-3 border-0 rounded shadow-sm" style="background-color: rgba(86, 155, 215, 0.1);">
-                            <div class="display-4 fw-bold" style="color: #569bd7;">${(training.recall * 100).toFixed(1)}%</div>
-                            <p class="fs-5 mb-0">Recall</p>
-                            <div class="small text-muted">Độ nhạy</div>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-6">
-                        <div class="metric-card text-center p-3 border-0 rounded shadow-sm" style="background-color: rgba(108, 175, 233, 0.1);">
-                            <div class="display-4 fw-bold" style="color: #6cafe9;">${(training.f1 * 100).toFixed(1)}%</div>
-                            <p class="fs-5 mb-0">F1 Score</p>
-                            <div class="small text-muted">Điểm cân bằng</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row g-3 mt-3">
-                    <div class="col-md-8">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-header bg-light">
-                                <h6 class="mb-0"><i class="fas fa-table me-2"></i> Ma trận nhầm lẫn</h6>
-                            </div>
-                            <div class="card-body p-2">
-                                <div class="confusion-matrix-container">
-                                    ${createConfusionMatrixHTML(training.confusion_matrix, training.labels)}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-light">
-                                <h6 class="mb-0"><i class="fas fa-chart-pie me-2"></i> Phân phối nhãn</h6>
-                            </div>
-                            <div class="card-body p-2">
-                                <div class="chart-container" style="position: relative; height: 180px;">
-                                    <canvas id="labels-distribution-chart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Kết hợp tất cả các phần
-    const html = modelInfoHTML + metricsHTML;
-    
-    // Vẽ biểu đồ phân phối nhãn sau khi HTML được thêm vào DOM
-    setTimeout(() => {
-        const labelCounts = {};
-        training.labels.forEach(label => {
-            labelCounts[label] = 0;
-        });
-        
-        // Tính tổng số mẫu mỗi nhãn từ ma trận nhầm lẫn
-        for (let i = 0; i < training.confusion_matrix.length; i++) {
-            for (let j = 0; j < training.confusion_matrix[i].length; j++) {
-                if (i === j) {
-                    labelCounts[training.labels[i]] += training.confusion_matrix[i][j];
-                }
-            }
-        }
-        
-        const ctx = document.getElementById('labels-distribution-chart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: Object.keys(labelCounts),
-                datasets: [{
-                    data: Object.values(labelCounts),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(153, 102, 255, 0.7)',
-                        'rgba(255, 159, 64, 0.7)',
-                        'rgba(199, 199, 199, 0.7)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                size: 12
-                            }
-                        }
-                    }
-                },
-                cutout: '60%'
-            }
-        });
-    }, 100);
-    
-    return html;
-}
-
-/**
- * Tạo HTML cho ma trận nhầm lẫn
- */
-function createConfusionMatrixHTML(confusionMatrix, labels) {
-    if (!confusionMatrix || confusionMatrix.length === 0 || !labels || labels.length === 0) {
-        return '<div class="alert alert-warning">Không có dữ liệu ma trận nhầm lẫn</div>';
-    }
-    
-    // Rút gọn nhãn nếu quá dài
-    const shortenedLabels = labels.map(label => formatDisplayValue(label, 8));
-    
-    let html = '<div class="table-responsive"><table class="table table-sm table-bordered confusion-matrix m-0">';
-    
-    // Tạo header với styling mới
-    html += '<thead class="table-light"><tr><th style="background-color: #f8f9fa;"></th>';
-    for (let i = 0; i < labels.length; i++) {
-        html += `<th class="text-center" title="${labels[i]}">${shortenedLabels[i]}</th>`;
-    }
-    html += '</tr></thead>';
-    
-    // Tạo body với styling mới
-    html += '<tbody>';
-    for (let i = 0; i < confusionMatrix.length; i++) {
-        html += `<tr><td class="fw-bold bg-light" title="${labels[i]}">${shortenedLabels[i]}</td>`;
-        for (let j = 0; j < confusionMatrix[i].length; j++) {
-            const value = confusionMatrix[i][j];
-            let cellClass = 'text-center';
-            let textClass = '';
-            let bgColor = '#ffffff'; // Màu nền mặc định là trắng
-            
-            if (i === j && value > 0) {
-                // Diagonal cells (correct predictions) - Màu xanh lam nhạt
-                textClass = 'fw-bold';
-                const intensity = Math.min(Math.max(value / 10, 0.1), 0.6);
-                bgColor = `rgba(13, 110, 253, ${intensity})`; // Màu xanh lam với độ trong suốt
-            } else if (value > 0) {
-                // Incorrect predictions - Màu đỏ nhạt
-                textClass = '';
-                const intensity = Math.min(Math.max(value / 10, 0.1), 0.6);
-                bgColor = `rgba(220, 53, 69, ${intensity})`; // Màu đỏ với độ trong suốt
-            } else {
-                // Khi giá trị bằng 0
-                bgColor = '#f8f9fa'; // Màu xám rất nhạt
-            }
-            
-            html += `<td class="${cellClass}" style="background-color: ${bgColor}"><span class="${textClass}">${value}</span></td>`;
-        }
-        html += '</tr>';
-    }
-    html += '</tbody></table></div>';
-    
-    return html;
-}
-
-/**
- * Hiển thị loading indicator
- */
-function showLoading(message = 'Đang xử lý...') {
-    try {
-        // Đầu tiên, xóa tất cả overlay hiện có để tránh chồng chéo
-        hideLoading();
-        
-        // Tạo overlay mới với ID duy nhất để tránh xung đột
-        const overlayId = 'loading-overlay-' + Date.now();
-        let loadingOverlay = document.createElement('div');
-        loadingOverlay.id = overlayId;
-        loadingOverlay.className = 'position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center';
-        loadingOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        loadingOverlay.style.zIndex = '9999';
-        
-        const loadingContent = document.createElement('div');
-        loadingContent.className = 'bg-white p-4 rounded shadow text-center';
-        
+    if (!showProgress) {
+        // Chỉ hiển thị spinner
         const spinner = document.createElement('div');
         spinner.className = 'spinner-border text-primary mb-3';
         spinner.setAttribute('role', 'status');
+        content.appendChild(spinner);
+    } else {
+        // Hiển thị thanh tiến trình
+        const progressContainer = document.createElement('div');
+        progressContainer.className = 'mb-3';
         
-        const loadingMessage = document.createElement('div');
-        loadingMessage.id = 'loading-message-' + Date.now();
-        loadingMessage.className = 'text-center';
-        loadingMessage.textContent = message;
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress';
+        progressBar.style.height = '20px';
         
-        loadingContent.appendChild(spinner);
-        loadingContent.appendChild(loadingMessage);
-        loadingOverlay.appendChild(loadingContent);
-        document.body.appendChild(loadingOverlay);
+        const progressBarInner = document.createElement('div');
+        progressBarInner.id = progressBarId;
+        progressBarInner.className = 'progress-bar progress-bar-striped progress-bar-animated';
+        progressBarInner.style.width = '0%';
+        progressBarInner.setAttribute('role', 'progressbar');
+        progressBarInner.setAttribute('aria-valuenow', '0');
+        progressBarInner.setAttribute('aria-valuemin', '0');
+        progressBarInner.setAttribute('aria-valuemax', '100');
         
-        // Đặt timeout tự động ẩn loading sau 30 giây để tránh bị treo
-        setTimeout(() => {
-            if (document.getElementById(overlayId)) {
-                console.log('Tự động ẩn loading overlay sau 30 giây');
-                hideLoading();
-            }
-        }, 30000);
+        progressBar.appendChild(progressBarInner);
+        progressContainer.appendChild(progressBar);
         
-        console.log('Đã hiển thị loading overlay với ID:', overlayId);
-    } catch (e) {
-        console.error('Lỗi khi hiển thị loading:', e);
+        // Thêm thông tin trạng thái
+        const statusContainer = document.createElement('div');
+        statusContainer.className = 'mt-2 mb-3';
+        
+        const statusMessage = document.createElement('div');
+        statusMessage.id = statusMessageId;
+        statusMessage.className = 'small text-muted';
+        statusMessage.textContent = "Đang chuẩn bị...";
+        
+        statusContainer.appendChild(statusMessage);
+        progressContainer.appendChild(statusContainer);
+        
+        content.appendChild(progressContainer);
+        
+        // Thêm nút hủy
+        const btnContainer = document.createElement('div');
+        btnContainer.className = 'mt-3';
+        
+        const cancelBtn = document.createElement('button');
+        cancelBtn.className = 'btn btn-sm btn-outline-secondary';
+        cancelBtn.textContent = 'Hủy';
+        cancelBtn.onclick = function() {
+            hideLoading();
+        };
+        
+        btnContainer.appendChild(cancelBtn);
+        content.appendChild(btnContainer);
     }
+    
+    // Thêm thông báo
+    const messageElem = document.createElement('div');
+    messageElem.className = 'text-center';
+    messageElem.textContent = message;
+    content.appendChild(messageElem);
+    
+    // Thêm vào overlay và body
+    overlay.appendChild(content);
+    document.body.appendChild(overlay);
+    
+    // Thiết lập timeout tự động ẩn
+    setTimeout(function() {
+        if (document.getElementById(overlayId)) {
+            hideLoading();
+        }
+    }, 60000);
+    
+    return {
+        overlayId: overlayId,
+        progressBarId: progressBarId,
+        statusMessageId: statusMessageId
+    };
 }
 
 /**
  * Ẩn loading indicator
  */
 function hideLoading() {
-    try {
-        // Xóa tất cả các overlay loading
-        const overlays = document.querySelectorAll('[id^="loading-overlay"]');
-        overlays.forEach(overlay => {
-            // Xóa overlay khỏi DOM hoàn toàn
-            if (overlay.parentNode) {
-                overlay.parentNode.removeChild(overlay);
+    // Xóa tất cả các overlay loading
+    const elements = document.querySelectorAll('[id^="loading-overlay"]');
+    for (let i = 0; i < elements.length; i++) {
+        if (elements[i] && elements[i].parentNode) {
+            elements[i].parentNode.removeChild(elements[i]);
+        }
+    }
+    
+    // Xóa backdrop nếu không có modal đang hiển thị
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    const activeModals = document.querySelectorAll('.modal.show');
+    if (activeModals.length === 0) {
+        for (let i = 0; i < backdrops.length; i++) {
+            if (backdrops[i] && backdrops[i].parentNode) {
+                backdrops[i].parentNode.removeChild(backdrops[i]);
             }
-        });
-        
-        // Xóa tất cả modal-backdrop không cần thiết
-        const backdrops = document.querySelectorAll('.modal-backdrop:not(.show)');
-        backdrops.forEach(backdrop => {
-            if (backdrop.parentNode) {
-                backdrop.parentNode.removeChild(backdrop);
-            }
-        });
-        
-        // Phục hồi trạng thái body
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-        
-        // Ghi log để debug
-        console.log('Đã xóa tất cả loading overlay và khôi phục trạng thái body');
-    } catch (e) {
-        console.error('Lỗi khi ẩn loading:', e);
+        }
+    }
+    
+    // Khôi phục trạng thái body
+    document.body.classList.remove('modal-open');
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    
+    // Dừng polling nếu đang chạy
+    if (currentPollingInterval) {
+        clearInterval(currentPollingInterval);
+        currentPollingInterval = null;
     }
 }
 
@@ -1144,7 +843,6 @@ function hideLoading() {
  * Hiển thị thông báo toast
  */
 function showToast(message, type = 'info') {
-    // Tạo container toast nếu chưa tồn tại
     let toastContainer = document.querySelector('.toast-container');
     if (!toastContainer) {
         toastContainer = document.createElement('div');
@@ -1152,7 +850,6 @@ function showToast(message, type = 'info') {
         document.body.appendChild(toastContainer);
     }
     
-    // Xác định màu sắc dựa trên loại toast
     let bgColor = 'bg-info';
     switch (type) {
         case 'success':
@@ -1166,7 +863,6 @@ function showToast(message, type = 'info') {
             break;
     }
     
-    // Tạo toast mới
     const toastId = 'toast-' + Date.now();
     const toastHTML = `
         <div id="${toastId}" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -1180,10 +876,8 @@ function showToast(message, type = 'info') {
         </div>
     `;
     
-    // Thêm toast vào container
     toastContainer.innerHTML += toastHTML;
     
-    // Hiển thị toast
     const toastElement = document.getElementById(toastId);
     const toast = new bootstrap.Toast(toastElement, { 
         autohide: true,
@@ -1191,7 +885,6 @@ function showToast(message, type = 'info') {
     });
     toast.show();
     
-    // Xóa toast sau khi ẩn
     toastElement.addEventListener('hidden.bs.toast', function() {
         toastElement.remove();
     });
@@ -1208,20 +901,23 @@ async function testModel() {
         return;
     }
     
-    // Đảm bảo có mô hình đã được huấn luyện
     if (modelResults.length === 0 || currentModelIndex < 0) {
         showToast('Chưa có mô hình nào được huấn luyện', 'warning');
         return;
     }
     
     try {
-        // Lấy thông tin mô hình hiện tại
         const currentModel = modelResults[currentModelIndex];
         
-        // Hiển thị loading
-        showLoading('Đang phân loại văn bản...');
+        // Hiển thị loading với thanh tiến trình
+        const loadingIds = showLoading('Đang phân loại văn bản...', true);
+        currentProgressBarId = loadingIds.progressBarId;
+        currentStatusMessageId = loadingIds.statusMessageId;
+        currentOverlayId = loadingIds.overlayId;
         
-        // Gửi request phân loại
+        // Bắt đầu polling để cập nhật tiến trình
+        startProgressPolling();
+        
         const response = await fetch('/api/test_model', {
             method: 'POST',
             headers: {
@@ -1229,13 +925,12 @@ async function testModel() {
             },
             body: JSON.stringify({
                 text: input,
-                model_id: currentModel.model_info.model_id  // Sử dụng ID của mô hình hiện tại
+                model_id: currentModel.model_info.model_id
             })
         });
         
         const result = await response.json();
         
-        // Ẩn loading
         hideLoading();
         
         if (result.status === 'error') {
@@ -1243,7 +938,6 @@ async function testModel() {
             return;
         }
         
-        // Hiển thị kết quả
         const testResult = document.getElementById('test-result');
         if (testResult) {
             testResult.style.display = 'block';
@@ -1318,24 +1012,21 @@ async function testModel() {
 function getBgColorForLabel(label) {
     if (!label) return 'bg-secondary';
     
-    // Chuyển đổi nhãn thành mã hash
     let hash = 0;
     for (let i = 0; i < label.length; i++) {
         hash = ((hash << 5) - hash) + label.charCodeAt(i);
-        hash = hash & hash; // Convert to 32bit integer
+        hash = hash & hash;
     }
     
-    // Danh sách các màu bootstrap mới mô phỏng bảng xanh lam
     const colors = [
-        'primary',          // Xanh lam
-        'primary-subtle',   // Xanh lam nhạt
-        'primary-emphasis', // Xanh lam đậm
-        'info',             // Xanh dương
-        'info-subtle',      // Xanh dương nhạt
-        'info-emphasis'     // Xanh dương đậm
+        'primary',
+        'primary-subtle',
+        'primary-emphasis',
+        'info',
+        'info-subtle',
+        'info-emphasis'
     ];
     
-    // Lấy màu dựa vào hash
     const colorIndex = Math.abs(hash) % colors.length;
     return `bg-${colors[colorIndex]}`;
 }
@@ -1373,10 +1064,8 @@ function updateResultsDisplay() {
         return;
     }
     
-    // Lấy kết quả của mô hình hiện tại
     const currentResult = modelResults[currentModelIndex];
     
-    // Tạo HTML cho giao diện lựa chọn mô hình
     let modelSelectorHTML = '';
     if (modelResults.length > 1) {
         modelSelectorHTML = `
@@ -1435,13 +1124,10 @@ function updateResultsDisplay() {
         `;
     }
     
-    // Tạo HTML cho kết quả mô hình
     const resultHTML = createTrainingResultHTML(currentResult);
     
-    // Kết hợp tất cả - Đổi thứ tự để thông tin mô hình hiển thị trước, card so sánh ở dưới
     resultsContainer.innerHTML = resultHTML + modelSelectorHTML;
     
-    // Cập nhật biểu đồ so sánh nếu có nhiều mô hình
     setTimeout(() => {
         if (modelResults.length > 1) {
             updateComparisonCharts();
@@ -1469,7 +1155,6 @@ function compareModels() {
         return;
     }
     
-    // Tạo dữ liệu cho bảng so sánh
     const comparisonData = modelResults.map(result => {
         const training = result.training_result;
         const modelInfo = result.model_info;
@@ -1489,7 +1174,6 @@ function compareModels() {
         };
     });
     
-    // Tạo HTML cho bảng so sánh
     let comparisonHTML = `
         <div class="table-responsive">
             <table class="table table-striped table-hover">
@@ -1529,7 +1213,6 @@ function compareModels() {
         </div>
     `;
     
-    // Hiển thị modal với bảng so sánh
     const modalHTML = `
         <div class="modal fade" id="compare-models-modal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-xl">
@@ -1553,16 +1236,13 @@ function compareModels() {
         </div>
     `;
     
-    // Thêm modal vào DOM
     const modalContainer = document.createElement('div');
     modalContainer.innerHTML = modalHTML;
     document.body.appendChild(modalContainer);
     
-    // Hiển thị modal
     const modal = new bootstrap.Modal(document.getElementById('compare-models-modal'));
     modal.show();
     
-    // Xóa modal khỏi DOM khi đóng
     document.getElementById('compare-models-modal').addEventListener('hidden.bs.modal', function () {
         document.body.removeChild(modalContainer);
     });
@@ -1579,7 +1259,6 @@ function updateComparisonCharts() {
     
     document.getElementById('metrics-comparison-container').style.display = 'block';
     
-    // Chuẩn bị dữ liệu cho biểu đồ
     const labels = modelResults.map(result => {
         const modelInfo = result.model_info;
         return `Mô hình #${result.model_number} (${modelInfo.classification_method})`;
@@ -1590,7 +1269,6 @@ function updateComparisonCharts() {
     const recallData = modelResults.map(result => (result.training_result.recall * 100).toFixed(1));
     const f1Data = modelResults.map(result => (result.training_result.f1 * 100).toFixed(1));
     
-    // Vẽ biểu đồ Accuracy và Precision
     const accuracyPrecisionCtx = document.getElementById('accuracy-precision-chart').getContext('2d');
     if (window.accuracyPrecisionChart) {
         window.accuracyPrecisionChart.destroy();
@@ -1655,7 +1333,6 @@ function updateComparisonCharts() {
         }
     });
     
-    // Vẽ biểu đồ Recall và F1
     const recallF1Ctx = document.getElementById('recall-f1-chart').getContext('2d');
     if (window.recallF1Chart) {
         window.recallF1Chart.destroy();
@@ -1721,7 +1398,9 @@ function updateComparisonCharts() {
     });
 }
 
-// Thêm hàm mới để xử lý việc hiển thị/ẩn tham số KNN
+/**
+ * Hiển thị/ẩn tham số cho KNN
+ */
 function toggleKNNParams() {
     const knnOption = document.getElementById('knn');
     const knnParams = document.querySelector('.knn-params');
@@ -1729,4 +1408,683 @@ function toggleKNNParams() {
     if (knnParams) {
         knnParams.style.display = knnOption.checked ? 'block' : 'none';
     }
-} 
+}
+
+/**
+ * Hiển thị/ẩn tham số cho Neural Network
+ */
+function toggleNeuralNetworkParams() {
+    const nnOption = document.getElementById('neural_network');
+    const nnParams = document.querySelector('.neural-network-params');
+    
+    if (nnParams) {
+        nnParams.style.display = nnOption.checked ? 'block' : 'none';
+    }
+}
+
+/**
+ * Hiển thị/ẩn tham số cho Gradient Boosting
+ */
+function toggleGradientBoostingParams() {
+    const gbOption = document.getElementById('gradient_boosting');
+    const gbParams = document.querySelector('.gradient-boosting-params');
+    
+    if (gbParams) {
+        gbParams.style.display = gbOption.checked ? 'block' : 'none';
+    }
+}
+
+/**
+ * Hiển thị/ẩn tham số cho SVM
+ */
+function toggleSVMParams() {
+    const svmOption = document.getElementById('svm');
+    const svmParams = document.querySelector('.svm-params');
+    
+    if (svmParams) {
+        svmParams.style.display = svmOption.checked ? 'block' : 'none';
+    }
+}
+
+/**
+ * Cập nhật thanh tiến trình và thông báo trạng thái
+ * @param {string} progressBarId - ID của thanh tiến trình
+ * @param {string} statusMessageId - ID của thông báo trạng thái
+ * @param {number} progress - Giá trị tiến trình (0-100)
+ * @param {string} message - Thông báo trạng thái
+ */
+function updateProgress(progressBarId, statusMessageId, progress, message) {
+    try {
+        // Giới hạn tiến trình trong khoảng 0-100
+        progress = Math.max(0, Math.min(100, progress));
+        
+        // Cập nhật thanh tiến trình
+        const progressBar = document.getElementById(progressBarId);
+        if (progressBar) {
+            progressBar.style.width = progress + '%';
+            progressBar.setAttribute('aria-valuenow', progress);
+        }
+        
+        // Cập nhật thông báo trạng thái
+        const statusMessage = document.getElementById(statusMessageId);
+        if (statusMessage) {
+            statusMessage.textContent = message || 'Đang xử lý...';
+        }
+        
+        // Hiển thị nút tải xuống khi hoàn thành
+        if (progress >= 100) {
+            // Tạo thẻ container cho nút tải xuống nếu chưa tồn tại
+            let downloadButtonContainer = document.getElementById('download-model-container');
+            if (!downloadButtonContainer) {
+                downloadButtonContainer = document.createElement('div');
+                downloadButtonContainer.id = 'download-model-container';
+                downloadButtonContainer.className = 'text-center mt-3';
+                
+                // Tìm loading overlay hiện tại để thêm nút vào
+                const currentOverlay = document.getElementById(currentOverlayId);
+                if (currentOverlay) {
+                    currentOverlay.appendChild(downloadButtonContainer);
+                }
+            } else {
+                // Xóa nội dung cũ nếu đã tồn tại
+                downloadButtonContainer.innerHTML = '';
+            }
+            
+            // Tạo nút tải xuống mô hình
+            const downloadButton = document.createElement('button');
+            downloadButton.className = 'btn btn-success';
+            downloadButton.innerHTML = '<i class="fas fa-download"></i> Tải xuống mô hình đã huấn luyện';
+            downloadButton.onclick = function() {
+                downloadTrainedModel();
+            };
+            
+            // Thêm nút vào container
+            downloadButtonContainer.appendChild(downloadButton);
+        }
+    } catch (error) {
+        console.error('Lỗi khi cập nhật tiến trình:', error);
+    }
+}
+
+// Hàm tải mô hình đã đào tạo
+function downloadTrainedModel() {
+    // Kiểm tra xem có thông tin model không
+    if (!currentModelInfo || !currentModelInfo.model_id) {
+        showToast('Không có thông tin mô hình để tải xuống', 'danger');
+        return;
+    }
+    
+    const modelId = currentModelInfo.model_id;
+    const downloadUrl = `/api/download_model?model_id=${encodeURIComponent(modelId)}`;
+    
+    // Hiển thị thông báo đang tải
+    showToast('Đang chuẩn bị tải xuống mô hình...', 'info');
+    
+    // Tạo phần tử a để tải xuống
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = downloadUrl;
+    a.download = `${currentModelInfo.model_name || 'trained_model'}.zip`;
+    
+    // Thêm phần tử vào trang và kích hoạt sự kiện click
+    document.body.appendChild(a);
+    a.click();
+    
+    // Dọn dẹp
+    setTimeout(() => {
+        document.body.removeChild(a);
+    }, 100);
+    
+    showToast('Đang tải mô hình xuống...', 'success');
+}
+
+// Biến lưu trữ ID cho tiến trình hiện tại 
+let currentProgressBarId = null;
+let currentStatusMessageId = null;
+let currentOverlayId = null;
+let currentPollingInterval = null;
+
+/**
+ * Bắt đầu polling để cập nhật tiến trình
+ */
+function startProgressPolling() {
+    // Dọn dẹp interval cũ nếu có
+    if (currentPollingInterval) {
+        clearInterval(currentPollingInterval);
+        currentPollingInterval = null;
+    }
+    
+    // Biến đếm số lần lỗi liên tiếp
+    let errorCount = 0;
+    
+    // Thời gian bắt đầu polling
+    const startTime = Date.now();
+    
+    // Thời gian tối đa cho phép polling (10 phút)
+    const maxPollingTime = 10 * 60 * 1000;
+    
+    currentPollingInterval = setInterval(function() {
+        // Kiểm tra thời gian chạy
+        if (Date.now() - startTime > maxPollingTime) {
+            clearInterval(currentPollingInterval);
+            currentPollingInterval = null;
+            hideLoading();
+            showToast('Quá trình xử lý kéo dài quá lâu, đã ngắt kết nối giám sát tiến trình', 'warning');
+            return;
+        }
+        
+        // Gọi API lấy trạng thái
+        fetch('/api/progress_status')
+            .then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(function(data) {
+                // Reset đếm lỗi
+                errorCount = 0;
+                
+                // Cập nhật tiến trình
+                updateProgress(
+                    currentProgressBarId, 
+                    currentStatusMessageId, 
+                    data.progress, 
+                    data.message
+                );
+                
+                // Nếu hoàn thành
+                if (data.status === 'completed' && data.progress >= 100) {
+                    setTimeout(function() {
+                        clearInterval(currentPollingInterval);
+                        currentPollingInterval = null;
+                        hideLoading();
+                    }, 2000);
+                }
+                
+                // Nếu có lỗi
+                if (data.status === 'error') {
+                    showToast(data.message, 'danger');
+                    clearInterval(currentPollingInterval);
+                    currentPollingInterval = null;
+                    hideLoading();
+                }
+            })
+            .catch(function(error) {
+                errorCount++;
+                console.error('Lỗi khi gọi API tiến trình:', error);
+                
+                // Nếu lỗi 5 lần liên tiếp, dừng polling
+                if (errorCount >= 5) {
+                    clearInterval(currentPollingInterval);
+                    currentPollingInterval = null;
+                    hideLoading();
+                    showToast('Không thể kết nối với máy chủ', 'danger');
+                }
+            });
+    }, 1000);
+    
+    return currentPollingInterval;
+}
+
+/**
+ * Huấn luyện mô hình
+ */
+async function trainModel() {
+    const datasetFile = document.getElementById('dataset-file').files[0];
+    
+    if (!datasetFile) {
+        showToast('Vui lòng chọn file dataset', 'warning');
+        return;
+    }
+    
+    const textColumn = document.getElementById('text-column').value;
+    const labelColumn = document.getElementById('label-column').value;
+    
+    if (!textColumn || !labelColumn) {
+        showToast('Vui lòng nhập tên cột văn bản và cột nhãn', 'warning');
+        return;
+    }
+    
+    // Lấy phương pháp vector hóa đã chọn
+    let vectorizationMethod = '';
+    document.querySelectorAll('.vectorization-option').forEach(option => {
+        if (option.checked) {
+            vectorizationMethod = option.value;
+        }
+    });
+    
+    if (!vectorizationMethod) {
+        showToast('Vui lòng chọn phương pháp vector hóa', 'warning');
+        return;
+    }
+    
+    // Lấy phương pháp phân loại đã chọn
+    let classificationMethod = '';
+    document.querySelectorAll('.classification-option').forEach(option => {
+        if (option.checked) {
+            classificationMethod = option.value;
+        }
+    });
+    
+    if (!classificationMethod) {
+        showToast('Vui lòng chọn phương pháp phân loại', 'warning');
+        return;
+    }
+    
+    let modelCategory = '';
+    document.querySelectorAll('.model-category-option').forEach(option => {
+        if (option.checked) {
+            modelCategory = option.value;
+        }
+    });
+    
+    if (modelCategory === 'custom') {
+        const customCategory = document.getElementById('custom-category-input').value.trim();
+        if (!customCategory) {
+            showToast('Vui lòng nhập tên thể loại tùy chỉnh', 'warning');
+            return;
+        }
+        modelCategory = customCategory;
+    }
+    
+    const formData = new FormData();
+    formData.append('dataset', datasetFile);
+    formData.append('text_column', textColumn);
+    formData.append('label_column', labelColumn);
+    formData.append('vectorization_method', vectorizationMethod);
+    formData.append('classification_method', classificationMethod);
+    formData.append('max_features', document.getElementById('max-features').value);
+    formData.append('train_test_split', (100 - document.getElementById('train-test-split').value) / 100);
+    formData.append('random_state', document.getElementById('random-state').value);
+    formData.append('model_category', modelCategory);
+    
+    const modelName = document.getElementById('model-name').value;
+    if (modelName) {
+        formData.append('model_name', modelName);
+    }
+    
+    // Thêm các tham số tùy chỉnh cho từng loại mô hình phân loại
+    if (classificationMethod === 'knn') {
+        const knnNeighbors = document.getElementById('knn-neighbors').value;
+        formData.append('knn_neighbors', knnNeighbors);
+    }
+    
+    if (classificationMethod === 'neural_network') {
+        const hiddenLayers = document.getElementById('nn-hidden-layers').value;
+        const neuronsPerLayer = document.getElementById('nn-neurons-per-layer').value;
+        formData.append('nn_hidden_layers', hiddenLayers);
+        formData.append('nn_neurons_per_layer', neuronsPerLayer);
+    }
+    
+    if (classificationMethod === 'gradient_boosting') {
+        const nEstimators = document.getElementById('gb-n-estimators').value;
+        const learningRate = document.getElementById('gb-learning-rate').value;
+        formData.append('gb_n_estimators', nEstimators);
+        formData.append('gb_learning_rate', learningRate);
+    }
+    
+    if (classificationMethod === 'svm') {
+        const svmKernel = document.getElementById('svm-kernel').value;
+        const svmC = document.getElementById('svm-c').value;
+        formData.append('svm_kernel', svmKernel);
+        formData.append('svm_c', svmC);
+    }
+    
+    if (vectorizationMethod === 'ngrams') {
+        const ngramMin = document.getElementById('ngram-min').value;
+        const ngramMax = document.getElementById('ngram-max').value;
+        
+        if (parseInt(ngramMin) > parseInt(ngramMax)) {
+            showToast('Giá trị Min không thể lớn hơn Max trong N-grams', 'warning');
+            return;
+        }
+        
+        formData.append('ngram_min', ngramMin);
+        formData.append('ngram_max', ngramMax);
+    }
+    
+    try {
+        // Hiển thị loading với thanh tiến trình
+        const loadingIds = showLoading('Đang huấn luyện mô hình...', true);
+        currentProgressBarId = loadingIds.progressBarId;
+        currentStatusMessageId = loadingIds.statusMessageId;
+        currentOverlayId = loadingIds.overlayId;
+        
+        // Bắt đầu polling để cập nhật tiến trình
+        startProgressPolling();
+        
+        console.log('Đang gửi yêu cầu huấn luyện mô hình đến server...');
+        const response = await fetch('/api/train_model', {
+            method: 'POST',
+            body: formData
+        });
+        
+        // Kiểm tra nếu response không OK (HTTP error)
+        if (!response.ok) {
+            console.error('Lỗi từ server:', response.status, response.statusText);
+            // Hiển thị thông báo lỗi 
+            showToast(`Lỗi từ server: ${response.status} ${response.statusText}`, 'danger');
+            hideLoading();
+            return;
+        }
+        
+        const result = await response.json();
+        
+        // Xóa các overlay cũ
+        const allOverlays = document.querySelectorAll('[id^="loading-overlay"]');
+        allOverlays.forEach(overlay => {
+            if (overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        });
+        
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+        
+        if (result.status === 'error') {
+            console.error('Lỗi huấn luyện mô hình:', result.message);
+            showToast(result.message || 'Lỗi khi đào tạo mô hình', 'danger');
+            return;
+        }
+        
+        setTimeout(() => {
+            const emptyStateCard = document.getElementById('empty-state-card');
+            if (emptyStateCard) {
+                emptyStateCard.style.display = 'none';
+            }
+            
+            const trainingResults = document.getElementById('training-results');
+            if (trainingResults) {
+                trainingResults.style.display = 'block';
+            }
+            
+            modelResults.push({
+                ...result,
+                timestamp: new Date().toLocaleString(),
+                model_number: modelResults.length + 1
+            });
+            
+            currentModelIndex = modelResults.length - 1;
+            updateResultsDisplay();
+            
+            // Hiển thị phần testing
+            const modelTesting = document.getElementById('model-testing');
+            if (modelTesting) {
+                modelTesting.style.display = 'block';
+            }
+            
+            document.getElementById('results-wrapper').scrollIntoView({ behavior: 'smooth' });
+            showToast('Đã đào tạo mô hình thành công!', 'success');
+        }, 100);
+        
+    } catch (error) {
+        console.error('Lỗi khi đào tạo mô hình:', error);
+        hideLoading();
+        showToast('Lỗi khi gửi yêu cầu đào tạo mô hình', 'danger');
+    }
+}
+
+/**
+ * Tạo HTML cho kết quả đào tạo
+ */
+function createTrainingResultHTML(result) {
+    const training = result.training_result;
+    const modelInfo = result.model_info;
+    
+    const processingTime = result.processing_time ? 
+        `<div class="badge bg-primary bg-opacity-75 p-2 mb-3">⏱️ Thời gian xử lý: ${result.processing_time} giây</div>` : '';
+    
+    const modelInfoHTML = `
+        <div class="card model-info-card mb-4">
+            <div class="card-header bg-primary bg-opacity-75 text-white">
+                <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i> Thông tin mô hình</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-center mb-4">
+                    ${processingTime}
+                </div>
+                
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Tên mô hình:</span>
+                        <span class="text-secondary">${modelInfo.model_name}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Phương pháp phân loại:</span>
+                        <span class="text-secondary">${modelInfo.classification_method}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Phương pháp vector hóa:</span>
+                        <span class="text-secondary">${modelInfo.vectorization_method}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Số lớp:</span>
+                        <span class="text-secondary">${training.labels.length}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Số đặc trưng:</span>
+                        <span class="text-secondary">${formatNumber(training.feature_count)}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Mẫu huấn luyện:</span>
+                        <span class="text-secondary">${formatNumber(training.train_samples)}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Mẫu kiểm thử:</span>
+                        <span class="text-secondary">${formatNumber(training.test_samples)}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    `;
+    
+    const metricsHTML = `
+        <div class="card model-info-card mb-4">
+            <div class="card-header bg-primary bg-opacity-75 text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i> Chỉ số đánh giá</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-3 col-6">
+                        <div class="metric-card text-center p-3 border-0 rounded shadow-sm" style="background-color: rgba(13, 110, 253, 0.1);">
+                            <div class="display-4 fw-bold" style="color: #0d6efd;">${(training.accuracy * 100).toFixed(1)}%</div>
+                            <p class="fs-5 mb-0">Accuracy</p>
+                            <div class="small text-muted">Dự đoán đúng</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="metric-card text-center p-3 border-0 rounded shadow-sm" style="background-color: rgba(32, 136, 203, 0.1);">
+                            <div class="display-4 fw-bold" style="color: #2088cb;">${(training.precision * 100).toFixed(1)}%</div>
+                            <p class="fs-5 mb-0">Precision</p>
+                            <div class="small text-muted">Độ chính xác</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="metric-card text-center p-3 border-0 rounded shadow-sm" style="background-color: rgba(86, 155, 215, 0.1);">
+                            <div class="display-4 fw-bold" style="color: #569bd7;">${(training.recall * 100).toFixed(1)}%</div>
+                            <p class="fs-5 mb-0">Recall</p>
+                            <div class="small text-muted">Độ nhạy</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="metric-card text-center p-3 border-0 rounded shadow-sm" style="background-color: rgba(108, 175, 233, 0.1);">
+                            <div class="display-4 fw-bold" style="color: #6cafe9;">${(training.f1 * 100).toFixed(1)}%</div>
+                            <p class="fs-5 mb-0">F1 Score</p>
+                            <div class="small text-muted">Điểm cân bằng</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row g-3 mt-3">
+                    <div class="col-md-8">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-table me-2"></i> Ma trận nhầm lẫn</h6>
+                            </div>
+                            <div class="card-body p-2">
+                                <div class="confusion-matrix-container">
+                                    ${createConfusionMatrixHTML(training.confusion_matrix, training.labels)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0"><i class="fas fa-chart-pie me-2"></i> Phân phối nhãn</h6>
+                            </div>
+                            <div class="card-body p-2">
+                                <div class="chart-container" style="position: relative; height: 180px;">
+                                    <canvas id="labels-distribution-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    const html = modelInfoHTML + metricsHTML;
+    
+    setTimeout(() => {
+        const labelCounts = {};
+        training.labels.forEach(label => {
+            labelCounts[label] = 0;
+        });
+        
+        for (let i = 0; i < training.confusion_matrix.length; i++) {
+            for (let j = 0; j < training.confusion_matrix[i].length; j++) {
+                if (i === j) {
+                    labelCounts[training.labels[i]] += training.confusion_matrix[i][j];
+                }
+            }
+        }
+        
+        const ctx = document.getElementById('labels-distribution-chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(labelCounts),
+                datasets: [{
+                    data: Object.values(labelCounts),
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(199, 199, 199, 0.7)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            }
+        });
+    }, 100);
+    
+    return html;
+}
+
+/**
+ * Tạo HTML cho ma trận nhầm lẫn
+ */
+function createConfusionMatrixHTML(confusionMatrix, labels) {
+    if (!confusionMatrix || confusionMatrix.length === 0 || !labels || labels.length === 0) {
+        return '<div class="alert alert-warning">Không có dữ liệu ma trận nhầm lẫn</div>';
+    }
+    
+    const shortenedLabels = labels.map(label => formatDisplayValue(label, 8));
+    
+    let html = '<div class="table-responsive"><table class="table table-sm table-bordered confusion-matrix m-0">';
+    
+    html += '<thead class="table-light"><tr><th style="background-color: #f8f9fa;"></th>';
+    for (let i = 0; i < labels.length; i++) {
+        html += `<th class="text-center" title="${labels[i]}">${shortenedLabels[i]}</th>`;
+    }
+    html += '</tr></thead>';
+    
+    html += '<tbody>';
+    for (let i = 0; i < confusionMatrix.length; i++) {
+        html += `<tr><td class="fw-bold bg-light" title="${labels[i]}">${shortenedLabels[i]}</td>`;
+        for (let j = 0; j < confusionMatrix[i].length; j++) {
+            const value = confusionMatrix[i][j];
+            let cellClass = 'text-center';
+            let textClass = '';
+            let bgColor = '#ffffff';
+            
+            if (i === j && value > 0) {
+                textClass = 'fw-bold';
+                const intensity = Math.min(Math.max(value / 10, 0.1), 0.6);
+                bgColor = `rgba(13, 110, 253, ${intensity})`;
+            } else if (value > 0) {
+                textClass = '';
+                const intensity = Math.min(Math.max(value / 10, 0.1), 0.6);
+                bgColor = `rgba(220, 53, 69, ${intensity})`;
+            } else {
+                bgColor = '#f8f9fa';
+            }
+            
+            html += `<td class="${cellClass}" style="background-color: ${bgColor}"><span class="${textClass}">${value}</span></td>`;
+        }
+        html += '</tr>';
+    }
+    html += '</tbody></table></div>';
+    
+    return html;
+}
+
+/**
+ * Hàm dùng để tải xuống mô hình đã huấn luyện
+ */
+function downloadModel(modelId) {
+    window.location.href = `/api/download_model?model_id=${modelId}`;
+}
+
+/**
+ * Hàm lấy tên thân thiện của loại mô hình
+ */
+function getModelTypeName(modelType) {
+    const modelNames = {
+        'naive_bayes': 'Naive Bayes',
+        'logistic_regression': 'Logistic Regression',
+        'svm': 'Support Vector Machine',
+        'knn': 'K-Nearest Neighbors',
+        'decision_tree': 'Decision Tree',
+        'neural_network': 'Neural Network',
+        'gradient_boosting': 'Gradient Boosting'
+    };
+    
+    return modelNames[modelType] || modelType;
+}
+
+/**
+ * Hàm lấy tên thân thiện của phương pháp vector hóa
+ */
+function getVectorizationName(vectorizationType) {
+    const vectorizationNames = {
+        'bow': 'Bag of Words',
+        'tfidf': 'TF-IDF',
+        'onehot': 'One-Hot Encoding',
+        'ngrams': 'N-Grams'
+    };
+    
+    return vectorizationNames[vectorizationType] || vectorizationType;
+}

@@ -13,7 +13,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
@@ -252,9 +251,25 @@
                                                         <div class="form-check">
                                                             <input class="form-check-input classification-option" type="radio" name="classification" id="svm" value="svm">
                                                             <label class="form-check-label algo-name fw-bold" for="svm">
-                                                                SVM
+                                                                Support Vector Machine
                                                             </label>
-                                                            <div>Support Vector Machine phân loại tuyến tính/phi tuyến</div>
+                                                            <div>Phân loại bằng cách tìm siêu phẳng tối ưu</div>
+                                                        </div>
+                                                        <div class="svm-params mt-1" style="display: none;">
+                                                            <div class="row g-1">
+                                                                <div class="col-6">
+                                                                    <label for="svm-kernel" class="form-label small">Kernel:</label>
+                                                                    <select class="form-select form-select-sm" id="svm-kernel">
+                                                                        <option value="linear" selected>Linear</option>
+                                                                        <option value="rbf">RBF</option>
+                                                                        <option value="poly">Poly</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label for="svm-c" class="form-label small">C (hệ số):</label>
+                                                                    <input type="number" class="form-control form-control-sm" id="svm-c" min="0.1" max="10" step="0.1" value="1.0">
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -268,13 +283,11 @@
                                                             <label class="form-check-label algo-name fw-bold" for="knn">
                                                                 K-Nearest Neighbors
                                                             </label>
-                                                            <div>Phân loại dựa trên các điểm dữ liệu lân cận</div>
-                                                            <div class="knn-params mt-2" style="display: none;">
-                                                                <div class="input-group input-group-sm">
-                                                                    <span class="input-group-text" id="knn-k-label">k =</span>
-                                                                    <input type="number" class="form-control form-control-sm" id="knn-neighbors" name="knn_neighbors" value="5" min="1" aria-describedby="knn-k-label">
-                                                                </div>
-                                                            </div>
+                                                            <div>Phân loại dựa trên k láng giềng gần nhất</div>
+                                                        </div>
+                                                        <div class="knn-params mt-1" style="display: none;">
+                                                            <label for="knn-neighbors" class="form-label small">Số láng giềng (k):</label>
+                                                            <input type="number" class="form-control form-control-sm" id="knn-neighbors" min="1" max="20" value="5">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -288,7 +301,59 @@
                                                             <label class="form-check-label algo-name fw-bold" for="decision_tree">
                                                                 Decision Tree
                                                             </label>
-                                                            <div>Cây quyết định phân loại dựa trên các đặc trưng</div>
+                                                            <div>Phân loại sử dụng cây quyết định</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input classification-option" type="radio" name="classification" id="neural_network" value="neural_network">
+                                                            <label class="form-check-label algo-name fw-bold" for="neural_network">
+                                                                Neural Network
+                                                            </label>
+                                                            <div>Phân loại bằng mạng nơ-ron nhân tạo</div>
+                                                        </div>
+                                                        <div class="neural-network-params mt-1" style="display: none;">
+                                                            <div class="row g-1">
+                                                                <div class="col-6">
+                                                                    <label for="nn-hidden-layers" class="form-label small">Số lớp ẩn:</label>
+                                                                    <input type="number" class="form-control form-control-sm" id="nn-hidden-layers" min="1" max="3" value="1">
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label for="nn-neurons-per-layer" class="form-label small">Số nơ-ron/lớp:</label>
+                                                                    <input type="number" class="form-control form-control-sm" id="nn-neurons-per-layer" min="10" max="100" value="32">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-6">
+                                                <div class="card h-100">
+                                                    <div class="card-body p-1">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input classification-option" type="radio" name="classification" id="gradient_boosting" value="gradient_boosting">
+                                                            <label class="form-check-label algo-name fw-bold" for="gradient_boosting">
+                                                                Gradient Boosting
+                                                            </label>
+                                                            <div>Phân loại bằng kỹ thuật tăng độ dốc</div>
+                                                        </div>
+                                                        <div class="gradient-boosting-params mt-1" style="display: none;">
+                                                            <div class="row g-1">
+                                                                <div class="col-6">
+                                                                    <label for="gb-n-estimators" class="form-label small">Số ước lượng:</label>
+                                                                    <input type="number" class="form-control form-control-sm" id="gb-n-estimators" min="50" max="200" value="100">
+                                                                </div>
+                                                                <div class="col-6">
+                                                                    <label for="gb-learning-rate" class="form-label small">Tốc độ học:</label>
+                                                                    <input type="number" class="form-control form-control-sm" id="gb-learning-rate" min="0.01" max="0.5" step="0.01" value="0.1">
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -159,42 +159,7 @@ class Chatbot:
 
     # --- Bắt đầu mới --- #
     def set_context(self, context_type=None, custom_instruction=None):
-        """
-        Thiết lập ngữ cảnh mới cho chatbot bằng cách thay đổi system instruction.
-        
-        Tham số:
-        ----------
-        context_type : str, tùy chọn
-            Loại ngữ cảnh có sẵn để chọn. Các tùy chọn:
-            - 'default': Ngữ cảnh mặc định của trợ lý VYxAI
-            - 'expert': Trở thành chuyên gia về một lĩnh vực cụ thể
-            - 'creative': Tối ưu hóa cho nội dung sáng tạo và văn học
-            - 'concise': Trả lời ngắn gọn, súc tích
-            - 'technical': Tối ưu hóa cho giải thích kỹ thuật và code
-            - 'educational': Tối ưu hóa cho việc dạy học và giải thích
-            - 'conversational': Tối ưu hóa cho đối thoại thân thiện
-            
-        custom_instruction : str, tùy chọn
-            Hướng dẫn tùy chỉnh cho chatbot. Nếu được cung cấp, sẽ ghi đè lên context_type.
-            
-        Trả về:
-        ----------
-        str
-            Thông báo về việc thay đổi ngữ cảnh thành công và system instruction mới.
-            
-        Ví dụ:
-        ----------
-        # Sử dụng ngữ cảnh có sẵn
-        chatbot.set_context(context_type='expert')
-        
-        # Sử dụng ngữ cảnh tùy chỉnh
-        chatbot.set_context(custom_instruction="Bạn là chuyên gia về trí tuệ nhân tạo. 
-                                             Hãy trả lời các câu hỏi một cách chuyên nghiệp 
-                                             và đầy đủ thông tin.")
-                                             
-        # Quay về ngữ cảnh mặc định
-        chatbot.set_context(context_type='default')
-        """
+
         # Lưu instruction cũ để có thể quay lại nếu cần
         old_instruction = self.system_instruction
         
@@ -230,14 +195,7 @@ class Chatbot:
         return f"Đã thiết lập ngữ cảnh '{context_type}' thành công.\nNgữ cảnh mới: {self.system_instruction}"
     
     def get_available_contexts(self):
-        """
-        Trả về danh sách các ngữ cảnh có sẵn và mô tả của chúng.
-        
-        Trả về:
-        ----------
-        dict
-            Dictionary chứa các loại ngữ cảnh và mô tả của chúng.
-        """
+
         return {
             'default': "Trợ lý AI thông minh VYxAI mặc định",
             'expert': "Chuyên gia cung cấp thông tin chi tiết và chuyên sâu",
@@ -249,37 +207,7 @@ class Chatbot:
         }
         
     def create_custom_context(self, personality=None, expertise=None, response_style=None, extra_instructions=None):
-        """
-        Tạo ngữ cảnh tùy chỉnh dựa trên các tham số được cung cấp.
-        
-        Tham số:
-        ----------
-        personality : str, tùy chọn
-            Tính cách của chatbot (ví dụ: thân thiện, hài hước, nghiêm túc)
-            
-        expertise : str, tùy chọn
-            Lĩnh vực chuyên môn (ví dụ: lập trình, y học, văn học)
-            
-        response_style : str, tùy chọn
-            Phong cách trả lời (ví dụ: ngắn gọn, chi tiết, học thuật)
-            
-        extra_instructions : str, tùy chọn
-            Các hướng dẫn bổ sung cho chatbot
-            
-        Trả về:
-        ----------
-        str
-            System instruction mới được tạo và thiết lập
-            
-        Ví dụ:
-        ----------
-        chatbot.create_custom_context(
-            personality="vui vẻ và thân thiện",
-            expertise="lập trình Python",
-            response_style="chi tiết với ví dụ cụ thể",
-            extra_instructions="luôn cung cấp mã nguồn khi cần thiết"
-        )
-        """
+
         # Xây dựng instruction mới
         new_instruction = "Bạn là trợ lý AI thông minh VYxAI."
         

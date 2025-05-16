@@ -1,16 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-Ứng dụng web đơn giản để xử lý văn bản tiếng Việt
-"""
-
 import os
 import sys
 import logging
 import json
 from datetime import datetime
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, request, jsonify, render_template, send_from_directory, redirect, url_for, send_file, session, Response
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import traceback
@@ -21,20 +14,27 @@ import re
 import pandas as pd
 import numpy as np
 import uuid
+import joblib
+import shutil
+import zipfile
 
 # Import các module đã viết
-from .crawler_synonyms import SynonymsCrawler
-from .data_augmentation import (
+from backend.crawler_synonyms import SynonymsCrawler
+# Initialize the synonyms crawler
+synonyms_crawler = SynonymsCrawler()
+
+from backend.data_augmentation import (
     replace_with_synonyms, load_synonyms_cache, save_synonyms_cache,
-    add_random_words, swap_words, delete_words, create_augmented_samples
+    create_augmented_samples
 )
-from .text_cleaning import clean_text, process_text_as_json, process_request, tokenize_sentences, tokenize_words, tag_parts_of_speech, parse_syntax
-from .text_vectorization import TextVectorizer, one_hot_encode, count_vectorize, tfidf_vectorize
-from .file_processor import FileProcessor
-from .text_classification import TextClassifier
-from .prediction_service import find_latest_model
-from .recommendation_system import get_recommendation_system
-from .chatbot import chatbot
+
+from backend.text_cleaning import clean_text, process_text_as_json, process_request, tokenize_sentences, tokenize_words, tag_parts_of_speech, parse_syntax
+from backend.text_vectorization import TextVectorizer, one_hot_encode, count_vectorize, tfidf_vectorize
+from backend.file_processor import FileProcessor
+from backend.text_classification import TextClassifier
+from backend.prediction_service import find_latest_model
+from backend.recommendation_system import get_recommendation_system
+from backend.chatbot import chatbot, Chatbot
 
 # Văn bản mẫu cho các danh mục
 SAMPLE_TEXTS = {
@@ -66,21 +66,36 @@ logging.basicConfig(
 logger = logging.getLogger('app')
 
 # Cấu hình Flask app
-app = Flask(__name__, static_folder='../frontend/static', template_folder='../frontend/templates')
-CORS(app)
-app.config['UPLOAD_FOLDER'] = os.path.join('backend', 'uploads')
-app.config['OUTPUT_FOLDER'] = os.path.join('backend', 'data', 'outputs')
-app.config['DATA_FOLDER'] = os.path.join('backend', 'data')
-app.config['SYNONYMS_CACHE_FILE'] = os.path.join('backend', 'data', 'synonyms_cache.json')
-app.config['MODEL_FOLDER'] = os.path.join('backend', 'data', 'models')
-app.config['ALLOWED_EXTENSIONS'] = {'txt', 'pdf', 'docx', 'doc', 'csv', 'xlsx', 'xls'}
+app = Flask(__name__, 
+            static_folder='../frontend/static',
+            template_folder='../frontend/templates')
+app.secret_key = "your-secret-key"
+app.config['UPLOAD_FOLDER'] = 'backend/uploads'
+# Kích hoạt CORS cho tất cả route
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-# Khởi tạo các thư mục cần thiết
-for folder in [app.config['UPLOAD_FOLDER'], app.config['OUTPUT_FOLDER'], app.config['DATA_FOLDER'], app.config['MODEL_FOLDER']]:
-    os.makedirs(folder, exist_ok=True)
+# Biến global để lưu trạng thái tiến trình
+training_progress = {
+    "status": "idle",
+    "message": "",
+    "progress": 0
+}
 
-# Khởi tạo crawler cho từ đồng nghĩa
-synonyms_crawler = SynonymsCrawler()
+# Hàm cập nhật tiến trình (sử dụng HTTP polling thay vì WebSocket)
+def update_training_progress(status, message, progress):
+    global training_progress
+    training_progress = {
+        "status": status,
+        "message": message,
+        "progress": progress
+    }
+    
+@app.route('/api/progress_status')
+def get_progress_status():
+    """API endpoint để lấy trạng thái tiến trình hiện tại"""
+    global training_progress
+    return jsonify(training_progress)
+    
 
 # Cấu hình định dạng file cho phép
 ALLOWED_EXTENSIONS = {'txt', 'csv', 'xlsx', 'docx', 'json'}
@@ -1124,11 +1139,47 @@ def api_classify_text():
                         n_neighbors = int(data.get('knn_neighbors', 5))
                         logger.info(f"Sử dụng KNN với n_neighbors={n_neighbors}")
                         
+                    # Thêm xử lý cho Neural Network
+                    nn_hidden_layers = 1
+                    nn_neurons_per_layer = 32
+                    if model_type == 'neural_network':
+                        if 'nn_hidden_layers' in request.form:
+                            nn_hidden_layers = int(request.form.get('nn_hidden_layers', 1))
+                        if 'nn_neurons_per_layer' in request.form:
+                            nn_neurons_per_layer = int(request.form.get('nn_neurons_per_layer', 32))
+                        logger.info(f"Sử dụng Neural Network với {nn_hidden_layers} lớp ẩn, {nn_neurons_per_layer} nơ-ron mỗi lớp")
+                    
+                    # Thêm xử lý cho Gradient Boosting
+                    gb_n_estimators = 100
+                    gb_learning_rate = 0.1
+                    if model_type == 'gradient_boosting':
+                        if 'gb_n_estimators' in request.form:
+                            gb_n_estimators = int(request.form.get('gb_n_estimators', 100))
+                        if 'gb_learning_rate' in request.form:
+                            gb_learning_rate = float(request.form.get('gb_learning_rate', 0.1))
+                        logger.info(f"Sử dụng Gradient Boosting với {gb_n_estimators} ước lượng, learning_rate={gb_learning_rate}")
+                        
+                    # Cấu hình cho SVM nếu được chọn
+                    svm_kernel = 'linear'
+                    svm_c = 1.0
+                    if model_type == 'svm':
+                        if 'svm_kernel' in request.form:
+                            svm_kernel = request.form.get('svm_kernel', 'linear')
+                        if 'svm_c' in request.form:
+                            svm_c = float(request.form.get('svm_c', 1.0))
+                        logger.info(f"Sử dụng SVM với kernel={svm_kernel}, C={svm_c}")
+                        
                     # Khởi tạo bộ phân loại
                     classifier = TextClassifier(
                         model_type=model_type,
                         max_features=data.get('max_features', 5000),
-                        n_neighbors=n_neighbors
+                        n_neighbors=n_neighbors,
+                        nn_hidden_layers=nn_hidden_layers,
+                        nn_neurons_per_layer=nn_neurons_per_layer,
+                        gb_n_estimators=gb_n_estimators, 
+                        gb_learning_rate=gb_learning_rate,
+                        svm_kernel=svm_kernel,
+                        svm_c=svm_c
                     )
                     
                     # Huấn luyện mô hình
@@ -1183,21 +1234,28 @@ def train_model_page():
 
 @app.route('/api/train_model', methods=['POST'])
 def api_train_model():
-    """API endpoint để đào tạo mô hình phân loại văn bản"""
     try:
+        # Khởi tạo trạng thái tiến trình
+        update_training_progress("started", "Bắt đầu quá trình huấn luyện mô hình...", 0)
+        
         # Kiểm tra file đã được tải lên
         if 'dataset' not in request.files:
+            update_training_progress("error", "Không tìm thấy file dataset", 0)
             return jsonify({'status': 'error', 'message': 'Không tìm thấy file dataset'})
         
         file = request.files['dataset']
         
         # Kiểm tra tên file
         if file.filename == '':
+            update_training_progress("error", "Không có file nào được chọn", 0)
             return jsonify({'status': 'error', 'message': 'Không có file nào được chọn'})
         
         # Kiểm tra loại file
         if not file.filename.endswith('.csv'):
+            update_training_progress("error", "Chỉ hỗ trợ file CSV", 0)
             return jsonify({'status': 'error', 'message': 'Chỉ hỗ trợ file CSV'})
+        
+        update_training_progress("loading", "Đang tải và xử lý dataset...", 10)
         
         # Lấy các tham số
         text_column = request.form.get('text_column', 'review')
@@ -1205,7 +1263,7 @@ def api_train_model():
         vectorization_method = request.form.get('vectorization_method', 'bow')
         classification_method = request.form.get('classification_method', 'naive_bayes')
         max_features = int(request.form.get('max_features', 5000))
-        test_size = float(request.form.get('test_size', 0.2))
+        test_size = float(request.form.get('train_test_split', 0.2))
         random_state = int(request.form.get('random_state', 42))
         model_name = request.form.get('model_name', '')
         model_category = request.form.get('model_category', 'general')
@@ -1217,6 +1275,8 @@ def api_train_model():
             ngram_max = int(request.form.get('ngram_max', 3))
             ngram_range = (ngram_min, ngram_max)
         
+        update_training_progress("processing", "Đang chuẩn bị thư mục lưu trữ mô hình...", 20)
+        
         # Tạo thư mục models chính nếu chưa tồn tại
         models_dir = os.path.join('backend', 'data', 'models')
         if not os.path.exists(models_dir):
@@ -1226,6 +1286,8 @@ def api_train_model():
         category_dir = os.path.join(models_dir, model_category)
         if not os.path.exists(category_dir):
             os.makedirs(category_dir)
+        
+        update_training_progress("processing", "Đang lưu file tạm thời...", 30)
         
         # Lưu file tạm thời
         temp_file_path = os.path.join('backend', 'temp', file.filename)
@@ -1248,23 +1310,72 @@ def api_train_model():
         start_time = time.time()
         
         try:
+            update_training_progress("processing", "Đang kiểm tra dataset...", 40)
+            
             # Kiểm tra xem file có chứa dữ liệu NaN hay không
             df = pd.read_csv(temp_file_path)
             if df[text_column].isna().any() or df[label_column].isna().any():
                 logger.warning(f"Dataset có {df[text_column].isna().sum()} giá trị NaN trong cột {text_column} và {df[label_column].isna().sum()} giá trị NaN trong cột {label_column}")
+            
+            update_training_progress("processing", "Đang chuẩn bị tham số mô hình...", 50)
             
             # Thêm xử lý cho tham số knn_neighbors
             n_neighbors = 5  # Giá trị mặc định
             if classification_method == 'knn' and 'knn_neighbors' in request.form:
                 n_neighbors = int(request.form.get('knn_neighbors', 5))
                 logger.info(f"Sử dụng KNN với n_neighbors={n_neighbors}")
+            
+            # Thêm xử lý cho Neural Network
+            nn_hidden_layers = 1
+            nn_neurons_per_layer = 32
+            if classification_method == 'neural_network':
+                if 'nn_hidden_layers' in request.form:
+                    nn_hidden_layers = int(request.form.get('nn_hidden_layers', 1))
+                if 'nn_neurons_per_layer' in request.form:
+                    nn_neurons_per_layer = int(request.form.get('nn_neurons_per_layer', 32))
+                logger.info(f"Sử dụng Neural Network với {nn_hidden_layers} lớp ẩn, {nn_neurons_per_layer} nơ-ron mỗi lớp")
+            
+            # Thêm xử lý cho Gradient Boosting
+            gb_n_estimators = 100
+            gb_learning_rate = 0.1
+            if classification_method == 'gradient_boosting':
+                if 'gb_n_estimators' in request.form:
+                    gb_n_estimators = int(request.form.get('gb_n_estimators', 100))
+                if 'gb_learning_rate' in request.form:
+                    gb_learning_rate = float(request.form.get('gb_learning_rate', 0.1))
+                logger.info(f"Sử dụng Gradient Boosting với {gb_n_estimators} ước lượng, learning_rate={gb_learning_rate}")
+            
+            # Cấu hình cho SVM nếu được chọn
+            svm_kernel = 'linear'
+            svm_c = 1.0
+            if classification_method == 'svm':
+                if 'svm_kernel' in request.form:
+                    svm_kernel = request.form.get('svm_kernel', 'linear')
+                if 'svm_c' in request.form:
+                    svm_c = float(request.form.get('svm_c', 1.0))
+                logger.info(f"Sử dụng SVM với kernel={svm_kernel}, C={svm_c}")
+            
+            update_training_progress("processing", "Đang khởi tạo bộ phân loại...", 60)
                 
             # Khởi tạo bộ phân loại
             classifier = TextClassifier(
                 model_type=classification_method,
                 max_features=max_features,
-                n_neighbors=n_neighbors
+                n_neighbors=n_neighbors,
+                nn_hidden_layers=nn_hidden_layers,
+                nn_neurons_per_layer=nn_neurons_per_layer,
+                gb_n_estimators=gb_n_estimators, 
+                gb_learning_rate=gb_learning_rate,
+                svm_kernel=svm_kernel,
+                svm_c=svm_c
             )
+            
+            update_training_progress("processing", "Đang huấn luyện mô hình...", 70)
+            
+            # Chuẩn bị callback để cập nhật tiến trình
+            def progress_callback(status, message, progress_pct):
+                current_progress = 70 + (progress_pct * 0.2)  # Scale to 70-90%
+                update_training_progress("processing", message, current_progress)
             
             # Huấn luyện mô hình
             training_result = classifier.train_from_file(
@@ -1274,8 +1385,11 @@ def api_train_model():
                 test_size=test_size,
                 random_state=random_state,
                 vectorization_method=vectorization_method,
-                ngram_range=ngram_range
+                ngram_range=ngram_range,
+                progress_callback=progress_callback
             )
+            
+            update_training_progress("processing", "Đang lưu mô hình...", 90)
             
             # Lưu mô hình
             classifier.save_model(model_path, vectorizer_path)
@@ -1283,9 +1397,13 @@ def api_train_model():
             # Tính thời gian xử lý
             processing_time = round(time.time() - start_time, 2)
             
+            update_training_progress("processing", "Đang dọn dẹp tệp tạm...", 95)
+            
             # Xóa file tạm
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
+            
+            update_training_progress("completed", "Huấn luyện mô hình hoàn tất!", 100)
                 
             # Tạo thông tin mô hình để trả về
             model_info = {
@@ -1308,6 +1426,7 @@ def api_train_model():
             
         except Exception as model_error:
             logger.error(f"Lỗi khi đào tạo mô hình: {str(model_error)}")
+            update_training_progress("error", f"Lỗi: {str(model_error)}", 0)
             # Xóa file tạm nếu có lỗi
             if os.path.exists(temp_file_path):
                 os.remove(temp_file_path)
@@ -1318,11 +1437,11 @@ def api_train_model():
             
     except Exception as e:
         logger.error(f"Lỗi: {str(e)}")
+        update_training_progress("error", f"Lỗi: {str(e)}", 0)
         return jsonify({'status': 'error', 'message': str(e)})
 
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
-    """API endpoint để dự đoán phân loại văn bản sử dụng mô hình mới nhất"""
     try:
         start_time = time.time()
         
@@ -1408,9 +1527,6 @@ def api_model_categories():
 
 @app.route('/api/recommend', methods=['POST'])
 def recommend():
-    """
-    API chung để lấy đề xuất phim từ nhiều phương pháp
-    """
     try:
         data = request.get_json()
         if not data or 'method' not in data:
@@ -1554,7 +1670,7 @@ def chat_api():
         if not conversation_id:
             conversation_id = str(uuid.uuid4())
         
-        # Lấy phản hồi từ chatbot
+        # Lấy phản hồi từ chatbot instance
         reply = chatbot.get_response(message, conversation_id)
         
         return jsonify({
@@ -1570,7 +1686,7 @@ def chat_api():
 def new_conversation():
     """API endpoint để tạo cuộc trò chuyện mới"""
     try:
-        # Sử dụng phương thức create_conversation của chatbot để tạo ID mới
+        # Sử dụng phương thức create_conversation của chatbot instance để tạo ID mới
         conversation_id = chatbot.create_conversation()
         
         # Trả về ID cuộc trò chuyện mới
@@ -1627,27 +1743,9 @@ def chatbot_health():
             'message': str(e)
         }), 500
 
-# Thêm endpoint mới để thay đổi ngữ cảnh của chatbot
 @app.route('/api/chat/context', methods=['POST'])
 def change_chatbot_context():
-    """
-    API endpoint để thay đổi ngữ cảnh của chatbot.
-    
-    Yêu cầu POST có thể chứa:
-    - context_type: Loại ngữ cảnh có sẵn ('default', 'expert', 'creative', 'concise', 'technical', 'educational', 'conversational')
-    - custom_instruction: Hướng dẫn tùy chỉnh (ghi đè lên context_type nếu được cung cấp)
-    
-    Hoặc các thành phần để tạo ngữ cảnh tùy chỉnh:
-    - personality: Tính cách của chatbot
-    - expertise: Lĩnh vực chuyên môn
-    - response_style: Phong cách trả lời
-    - extra_instructions: Hướng dẫn bổ sung
-    
-    Trả về:
-    - Status: Trạng thái thành công/thất bại
-    - Message: Thông báo
-    - New context: Ngữ cảnh mới
-    """
+
     try:
         # Lấy dữ liệu từ request
         data = request.get_json()
@@ -1711,17 +1809,11 @@ def change_chatbot_context():
             'message': f'Lỗi khi thay đổi ngữ cảnh: {str(e)}'
         }), 500
 
-# Thêm endpoint để lấy danh sách ngữ cảnh có sẵn
 @app.route('/api/chat/available_contexts', methods=['GET'])
 def get_available_contexts():
-    """
-    API endpoint để lấy danh sách các ngữ cảnh có sẵn.
-    
-    Trả về:
-    - Status: Trạng thái thành công/thất bại
-    - Contexts: Dictionary chứa các loại ngữ cảnh và mô tả
-    """
+
     try:
+        # Sử dụng phương thức get_available_contexts của instance chatbot
         contexts = chatbot.get_available_contexts()
         
         return jsonify({
@@ -1736,18 +1828,177 @@ def get_available_contexts():
             'message': f'Lỗi khi lấy danh sách ngữ cảnh: {str(e)}'
         }), 500
 
+@app.route('/api/test_model', methods=['POST'])
+def api_test_model():
+    """API endpoint để thử nghiệm mô hình với dữ liệu mới"""
+    try:
+        # Cập nhật tiến trình
+        update_training_progress("processing", "Đang phân loại văn bản...", 0)
+        
+        # Nhận dữ liệu từ request
+        data = request.get_json()
+        if not data or 'text' not in data:
+            update_training_progress("error", "Không có văn bản đầu vào", 0)
+            return jsonify({'status': 'error', 'message': 'Không có văn bản đầu vào'}), 400
+        
+        text = data.get('text', '')
+        model_id = data.get('model_id', '')
+        
+        if not model_id:
+            update_training_progress("error", "Không có model_id", 0)
+            return jsonify({'status': 'error', 'message': 'Không có model_id'}), 400
+        
+        update_training_progress("processing", "Đang tìm mô hình...", 20)
+        
+        # model_id có định dạng "category/model_name"
+        parts = model_id.split('/')
+        if len(parts) != 2:
+            update_training_progress("error", "model_id không hợp lệ", 0)
+            return jsonify({'status': 'error', 'message': 'model_id không hợp lệ, định dạng phải là "category/model_name"'}), 400
+        
+        model_category, model_name = parts
+        
+        # Tìm model bằng model_id
+        model_path = os.path.join('backend', 'data', 'models', model_category, f"{model_name}_model")
+        vectorizer_path = os.path.join('backend', 'data', 'models', model_category, f"{model_name}_vectorizer")
+        
+        if not os.path.exists(model_path) or not os.path.exists(vectorizer_path):
+            update_training_progress("error", f"Không tìm thấy model với model_id: {model_id}", 0)
+            return jsonify({'status': 'error', 'message': f'Không tìm thấy model với model_id: {model_id}'}), 404
+        
+        update_training_progress("processing", "Đang tải model và vectorizer...", 40)
+        
+        # Tải model và vectorizer
+        try:
+            model = joblib.load(model_path)
+            vectorizer = joblib.load(vectorizer_path)
+        except Exception as e:
+            update_training_progress("error", f"Lỗi khi tải model: {str(e)}", 0)
+            return jsonify({'status': 'error', 'message': f'Lỗi khi tải model: {str(e)}'}), 500
+        
+        update_training_progress("processing", "Đang vector hóa văn bản...", 60)
+        
+        # Vector hóa văn bản
+        text_vector = vectorizer.transform([text])
+        
+        update_training_progress("processing", "Đang dự đoán nhãn...", 80)
+        
+        # Dự đoán nhãn
+        label = model.predict(text_vector)[0]
+        
+        # Tính xác suất dự đoán cho từng lớp (nếu model hỗ trợ)
+        all_probabilities = {}
+        confidence = 1.0  # Giá trị mặc định
+        
+        try:
+            proba = model.predict_proba(text_vector)[0]
+            max_proba_index = proba.argmax()
+            confidence = float(proba[max_proba_index])
+            
+            for i, class_label in enumerate(model.classes_):
+                all_probabilities[str(class_label)] = float(proba[i])
+        except (AttributeError, NotImplementedError) as e:
+            logger.warning(f"Model không hỗ trợ predict_proba: {str(e)}")
+            # Đối với SVM nếu không có xác suất, chỉ trả về nhãn dự đoán
+            for class_label in model.classes_:
+                all_probabilities[str(class_label)] = 1.0 if class_label == label else 0.0
+        
+        # Trả về kết quả
+        return jsonify({
+            'status': 'success',
+            'label': str(label),
+            'confidence': confidence,
+            'all_probabilities': all_probabilities
+        })
+        
+    except Exception as e:
+        logger.error(f"Lỗi khi thử nghiệm model: {str(e)}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
+# Route cho lấy từ đồng nghĩa
+@app.route('/api/create_augmented_samples', methods=['POST'])
+def api_create_augmented_samples():
+    """API endpoint để tạo các mẫu tăng cường dữ liệu."""
+    try:
+        start_time = time.time()
+        data = request.get_json()
+        
+        if not data or 'text' not in data:
+            return jsonify({
+                'status': 'error',
+                'message': 'Không có văn bản đầu vào'
+            }), 400
+        
+        text = data.get('text', '').strip()
+        
+        if not text:
+            return jsonify({
+                'status': 'error',
+                'message': 'Văn bản đầu vào không được để trống'
+            }), 400
+        
+        # Lấy các tùy chọn tăng cường
+        num_samples = data.get('num_samples', 3)
+        use_synonyms = data.get('use_synonyms', False)
+        add_random_words = data.get('add_random_words', True)
+        swap_random_words = data.get('swap_random_words', True)
+        delete_random_words = data.get('delete_random_words', False)
+        back_translation = data.get('back_translation', False)
+        data_noise = data.get('data_noise', False)
+        
+        # Log các tùy chọn
+        logger.info(f"Yêu cầu tạo {num_samples} mẫu tăng cường cho văn bản")
+        logger.info(f"Các tùy chọn: use_synonyms={use_synonyms}, add_words={add_random_words}, "
+                  f"swap_words={swap_random_words}, delete_words={delete_random_words}, "
+                  f"back_translation={back_translation}, data_noise={data_noise}")
+        
+        # Thiết lập tùy chọn nhiễu nếu được yêu cầu
+        add_typos_enabled = False
+        random_case_enabled = False
+        if data_noise:
+            add_typos_enabled = True
+            random_case_enabled = True
+            logger.info("Đã bật các phương pháp nhiễu dữ liệu")
+        
+        # Tạo các mẫu tăng cường
+        augmented_samples = create_augmented_samples(
+            text,
+            num_samples=num_samples,
+            use_synonyms=use_synonyms,
+            add_words=add_random_words,
+            swap_word_order=swap_random_words,
+            delete_words_enabled=delete_random_words,
+            add_typos_enabled=add_typos_enabled,
+            random_case_enabled=random_case_enabled,
+            back_translation_enabled=back_translation
+        )
+        
+        # Đếm thời gian xử lý
+        processing_time = round(time.time() - start_time, 3)
+        
+        # Trả về kết quả
+        return jsonify({
+            'status': 'success',
+            'original_text': text,
+            'augmented_samples': augmented_samples,
+            'count': len(augmented_samples),
+            'processing_time': processing_time
+        })
+        
+    except Exception as e:
+        logger.error(f"Lỗi khi tạo mẫu tăng cường: {str(e)}", exc_info=True)
+        return jsonify({
+            'status': 'error',
+            'message': f'Lỗi khi tạo mẫu tăng cường: {str(e)}',
+            'traceback': traceback.format_exc()
+        }), 500
+
 # Khởi động app
 if __name__ == '__main__':
     logger.info("Ứng dụng đang khởi động...")
     
-    # Đảm bảo thư mục data tồn tại
-    os.makedirs(app.config['DATA_FOLDER'], exist_ok=True)
+    # Đảm bảo thư mục upload tồn tại
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
     
-    # Khởi tạo file cache nếu chưa tồn tại
-    cache_file = app.config['SYNONYMS_CACHE_FILE']
-    if not os.path.exists(cache_file):
-        empty_cache = {}
-        save_synonyms_cache(empty_cache)
-        logger.info(f"Đã tạo file cache mới: {cache_file}")
-    
+    # Chạy app
     app.run(debug=True, host='0.0.0.0', port=5000) 

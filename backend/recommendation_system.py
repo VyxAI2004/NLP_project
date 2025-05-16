@@ -21,22 +21,9 @@ logging.basicConfig(
 logger = logging.getLogger('recommendation_system')
 
 class RecommendationSystem:
-    """
-    Hệ thống đề xuất phim dựa trên nhiều phương pháp khác nhau:
-    - Content-based: Đề xuất dựa trên các đặc trưng của phim
-    - Collaborative: Đề xuất dựa trên đánh giá của người dùng khác
-    - Context-aware: Đề xuất dựa trên ngữ cảnh hiện tại
-    """
-    
+
     def __init__(self, data_folder='backend/data/dataset'):
-        """
-        Khởi tạo hệ thống đề xuất
-        
-        Parameters:
-        -----------
-        data_folder: str
-            Thư mục chứa dữ liệu phim
-        """
+
         self.data_folder = data_folder
         self.movies = None
         self.ratings = None
@@ -197,14 +184,7 @@ class RecommendationSystem:
             self.movies = pd.DataFrame(columns=['Id', 'Title', 'Genres', 'Vote Average'])
     
     def get_all_movies(self):
-        """
-        Lấy danh sách tất cả các phim có sẵn để đánh giá
-        
-        Returns:
-        --------
-        list:
-            Danh sách các phim dưới dạng dictionary
-        """
+        #Lấy danh sách phim
         if self.movies is None or len(self.movies) == 0:
             return []
             
@@ -220,19 +200,7 @@ class RecommendationSystem:
         return result
     
     def _parse_genres(self, genres_str):
-        """
-        Phân tích chuỗi thể loại thành danh sách
-        
-        Parameters:
-        -----------
-        genres_str: str
-            Chuỗi thể loại có định dạng "['genre1', 'genre2', ...]"
-            
-        Returns:
-        --------
-        list:
-            Danh sách các thể loại
-        """
+        #Phân tích chuỗi thể loại thành danh sách
         if not isinstance(genres_str, str):
             return []
             
@@ -249,9 +217,7 @@ class RecommendationSystem:
                 return [genres_str]
     
     def _create_feature_matrix(self):
-        """
-        Tạo ma trận đặc trưng từ thể loại phim và áp dụng TF-IDF
-        """
+        #Tạo ma trận đặc trưng từ thể loại phim và áp dụng TF-IDF
         if self.movies is None or len(self.movies) == 0:
             logger.warning("Không có dữ liệu phim để tạo ma trận đặc trưng")
             return
@@ -291,20 +257,7 @@ class RecommendationSystem:
             self.item_tfidf = None
     
     def _get_items_rated_by_user(self, user_ratings):
-        """
-        Lấy danh sách các phim và đánh giá của người dùng
-        
-        Parameters:
-        -----------
-        user_ratings: dict
-            Dictionary với khóa là Id phim và giá trị là đánh giá (1-5)
-            
-        Returns:
-        --------
-        tuple:
-            - Danh sách chỉ số của phim trong ma trận đặc trưng
-            - Danh sách đánh giá tương ứng
-        """
+        #Lấy danh sách các phim và đánh giá của người dùng
         movie_ids = []
         ratings = []
         
@@ -324,21 +277,7 @@ class RecommendationSystem:
         return movie_ids, ratings
     
     def _evaluate_rmse(self, predictions, user_ratings):
-        """
-        Tính toán Root Mean Squared Error (RMSE) cho các dự đoán
-        
-        Parameters:
-        -----------
-        predictions: np.ndarray
-            Ma trận dự đoán đánh giá
-        user_ratings: dict
-            Dictionary với khóa là Id phim và giá trị là đánh giá (1-5)
-            
-        Returns:
-        --------
-        float:
-            RMSE
-        """
+        #Tính toán Root Mean Squared Error (RMSE) cho các dự đoán
         ids, actual_ratings = self._get_items_rated_by_user(user_ratings)
         if not ids:
             return float('inf')
@@ -349,22 +288,7 @@ class RecommendationSystem:
         return sqrt(sum(squared_errors) / len(squared_errors))
     
     def content_based_recommend(self, user_ratings, n_recommendations=5):
-        """
-        Đề xuất phim dựa trên đánh giá của người dùng và nội dung phim
-        sử dụng TF-IDF và Ridge Regression
-        
-        Parameters:
-        -----------
-        user_ratings: dict
-            Dictionary với khóa là Id phim và giá trị là đánh giá (1-5)
-        n_recommendations: int
-            Số lượng đề xuất trả về
-            
-        Returns:
-        --------
-        list:
-            Danh sách các phim được đề xuất
-        """
+        #Đề xuất phim dựa trên đánh giá của người dùng và nội dung phim
         if self.item_tfidf is None or len(user_ratings) == 0:
             logger.warning("Không đủ dữ liệu để đề xuất")
             return []
@@ -432,21 +356,6 @@ class RecommendationSystem:
             return []
     
     def collaborative_recommend(self, user_id, n_recommendations=5):
-        """
-        Đề xuất phim dựa trên đánh giá của những người dùng tương tự
-        
-        Parameters:
-        -----------
-        user_id: str
-            ID của người dùng
-        n_recommendations: int
-            Số lượng đề xuất trả về
-            
-        Returns:
-        --------
-        list:
-            Danh sách các phim được đề xuất
-        """
         # Tạo kết quả mẫu dựa trên 10 phim đầu tiên trong dataset
         try:
             if self.movies is None or len(self.movies) == 0:
@@ -471,23 +380,7 @@ class RecommendationSystem:
             return []
     
     def context_aware_recommend(self, location, time=None, n_recommendations=5):
-        """
-        Đề xuất phim dựa trên ngữ cảnh (vị trí, thời gian)
-        
-        Parameters:
-        -----------
-        location: str
-            Vị trí của người dùng
-        time: str
-            Thời gian (tùy chọn)
-        n_recommendations: int
-            Số lượng đề xuất trả về
-            
-        Returns:
-        --------
-        list:
-            Danh sách các phim được đề xuất
-        """
+        #Đề xuất phim dựa trên ngữ cảnh (vị trí, thời gian)
         try:
             if self.movies is None or len(self.movies) == 0:
                 return []
@@ -520,14 +413,6 @@ class RecommendationSystem:
 _recommendation_system = None
 
 def get_recommendation_system():
-    """
-    Lấy đối tượng RecommendationSystem (singleton pattern)
-    
-    Returns:
-    --------
-    RecommendationSystem:
-        Đối tượng RecommendationSystem đã khởi tạo
-    """
     global _recommendation_system
     if _recommendation_system is None:
         _recommendation_system = RecommendationSystem()
